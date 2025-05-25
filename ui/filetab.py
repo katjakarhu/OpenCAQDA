@@ -1,13 +1,14 @@
 from pathlib import Path
 
-from PySide6.QtCore import QDir, QStandardPaths
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QListView, QPushButton, QFileDialog, QDialog, QListWidget
+from PySide6.QtCore import QStandardPaths
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QListWidget
+from data.projectmanager import ProjectManager
 
 
 class FilesTab(QWidget):
-    def __init__(self):
+    def __init__(self, project_manager):
         super().__init__()
-
+        self.project_manager = project_manager
         self.files_layout = QVBoxLayout()
         # File system model for files tab
         self.file_list = QListWidget(self)
@@ -26,9 +27,13 @@ class FilesTab(QWidget):
         dialog = QFileDialog()
         dialog.setDirectory(directory)
         dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
-        dialog.setNameFilter("Text files (*.txt *.pdf)")
+        dialog.setNameFilter("Text and PDF files (*.txt *.pdf)")
         dialog.setViewMode(QFileDialog.ViewMode.List)
         if dialog.exec():
             filenames = dialog.selectedFiles()
             if filenames:
-                self.file_list.addItems([str(Path(filename)) for filename in filenames])
+                self.save_files([str(Path(filename)) for filename in filenames])
+
+    def save_files(self, files):
+        self.file_list.addItems(files)
+        self.project_manager.save_files()

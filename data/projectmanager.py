@@ -1,10 +1,7 @@
-from json import loads
-
-from PySide6.scripts.pyside_tool import project
-from data.database.databaseconnection import DatabaseEngine
-from data.models import Project
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy_utils import database_exists, create_database
+
+from data.database.databaseconnection import DatabaseEngine
+from data.models import Project, Code
 
 
 class ProjectManager:
@@ -14,21 +11,22 @@ class ProjectManager:
         self.name = name
         self.load_or_create_project(name)
 
-    def save_project(self):
-        pass
+    def create_new_db_session(self):
+        database_session = sessionmaker(bind=self.db_engine)
+        session = database_session()
+        return session
 
     def create_project(self, name):
-        # Create a configured "Session" class
-        database_session = sessionmaker(bind=self.db_engine)
-
-        # Create a Session
-        session = database_session()
+        session = self.create_new_db_session()
 
         proj = Project(name=name)
         session.add(proj)
         session.commit()
 
         self.current_project = session.query(Project).filter(Project.name == name).one()
+
+    def save_project(self):
+        pass
 
     def load_or_create_project(self, name):
         # Create a configured "Session" class
@@ -48,4 +46,17 @@ class ProjectManager:
         pass
 
     def import_project(self):
+        pass
+
+    def save_code(self, code_name):
+        session = self.create_new_db_session()
+
+        code = Code()
+        code.name = code_name
+        code.project_id = self.current_project.project_id
+
+        session.add(code)
+        session.commit()
+
+    def save_files(self, file_list):
         pass

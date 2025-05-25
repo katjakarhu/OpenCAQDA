@@ -1,11 +1,17 @@
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QListWidget, QHBoxLayout, QPushButton, QInputDialog, \
-    QMessageBox
-from ui.mainwindow import MainWindow
+from PySide6.QtWidgets import QVBoxLayout, QLabel, QListWidget, QHBoxLayout, QPushButton, QInputDialog, \
+    QMessageBox, QDialog
 
 
 class StartUpDialog(QDialog):
+    """
+    TODO:
+    - set OpenCAQDA location on disk for saving database and additional files
+    - fix opening of projects
+    """
+
     def __init__(self):
         super().__init__()
+        self.selected_project_name = None
         self.setWindowTitle("OpenCAQDA - Select a project")
         self.setGeometry(100, 100, 400, 400)
 
@@ -40,17 +46,17 @@ class StartUpDialog(QDialog):
         add_button.clicked.connect(self.add_project)
         buttons_layout.addWidget(add_button)
 
-        # Edit Database Settings Button
+        # Edit Database Settings Button, see edit_database_settings method for TODO
         # self.edit_db_button = QPushButton("Edit Database Settings")
         # self.edit_db_button.clicked.connect(self.edit_database_settings)
         # buttons_layout.addWidget(self.edit_db_button)
 
         layout.addLayout(buttons_layout)
 
-        self.setLayout(layout)
-
         # Connect project list item click
-        self.project_list.itemDoubleClicked.connect(self.open_project_window)
+        self.project_list.itemDoubleClicked.connect(self.quit_dialog)
+
+        self.setLayout(layout)
 
     def add_project(self):
         # Open a dialog to get project name
@@ -58,13 +64,14 @@ class StartUpDialog(QDialog):
         if ok and project_name:
             self.project_list.addItem(project_name)
 
-    # TODO: add possibility to connect to a shared database (e.g. on shared file location, or e.g. MySQL instance)
-    # TODO: show database name and location in the dialog
     def edit_database_settings(self):
+        """
+        TODO: add possibility to connect to a shared database (e.g. on shared file location, or e.g. MySQL instance)
+        TODO: show database name and location in the dialog
+        """
         # Placeholder for editing database settings
         QMessageBox.information(self, "Edit Database Settings", "Database settings would be edited here.")
 
-    def open_project_window(self, item):
-        # Open a new QMainWindow instance for the selected project
-        project_window = MainWindow(item.text())
-        project_window.show()
+    def quit_dialog(self, item):
+        self.selected_project_name = item.text()
+        self.accept()

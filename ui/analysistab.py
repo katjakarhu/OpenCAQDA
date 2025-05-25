@@ -3,7 +3,6 @@ from PySide6.QtGui import QBrush, QColor
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QTreeWidget, QPushButton, QInputDialog, QTreeWidgetItem, QLineEdit, \
     QTreeWidgetItemIterator
 
-from data.models import *
 from utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
 
 
@@ -52,9 +51,7 @@ class AnalysisTab(QWidget, ):
                 # Add the text as a new item in the tree widget
                 item = QTreeWidgetItem([text])
                 self.analysis_tree.addTopLevelItem(item)
-                code = Code()
-                code.name = text
-                code.project_id = self.project_manager.current_project.project_id
+                self.project_manager.save_new_code(text)
 
     def filter_codes(self):
         filter_text = self.filter_field.text().lower()

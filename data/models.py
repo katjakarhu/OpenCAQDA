@@ -1,7 +1,7 @@
 from enum import unique
 
 from data.database.databaseconnection import DatabaseEngine
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, LargeBinary, Sequence, UniqueConstraint
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, LargeBinary, Sequence, UniqueConstraint, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 
@@ -28,8 +28,10 @@ class DataFile(Base):
     display_name = Column(String)
     name = Column(String)
     file_extension = Column(String)
-    file_content = Column(LargeBinary)  # maybe store files in the file system instead
+    file_as_text = Column(Text)
+    file_content = Column(LargeBinary)  # TODO: maybe store files in the file system instead
     url = Column(String)  # file location on the file system
+    code_id = Column(Integer, ForeignKey('codes.code_id'))  # you can code files as well
     project_id = Column(Integer, ForeignKey("projects.project_id"))
 
 
