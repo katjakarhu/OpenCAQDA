@@ -4,7 +4,8 @@ from pathlib import Path
 
 import yaml
 
-from src.services.configurationservice import ConfigurationService
+from ocaqda.services.configurationservice import ConfigurationService
+from ocaqda.utils.constants import CONFIGURATION_FILE_NAME
 
 
 class NoConfigurationFileTest(unittest.TestCase):

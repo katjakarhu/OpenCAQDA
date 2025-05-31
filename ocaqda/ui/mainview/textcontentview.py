@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QTabWidget
 
-from src.data.enums.supportedfiletypes import SupportedFileTypes
-from src.data.models import DataFile
-from src.ui.mainview.textviewer import TextViewer
+from ocaqda.data.enums.supportedfiletypes import SupportedFileTypes
+from ocaqda.data.models import DataFile
+from ocaqda.ui.mainview.textviewer import TextViewer
 
 
 class TextContentView(QTabWidget):

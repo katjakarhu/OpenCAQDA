@@ -2,10 +2,10 @@
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import *
 
-from src.services.projectservice import ProjectService
-from src.ui.mainview.analysistab import AnalysisTab
-from src.ui.mainview.filetab import FilesTab
-from src.ui.mainview.textcontentview import TextContentView
+from ocaqda.services.projectservice import ProjectService
+from ocaqda.ui.mainview.analysistab import AnalysisTab
+from ocaqda.ui.mainview.filetab import FilesTab
+from ocaqda.ui.mainview.textcontentview import TextContentView
 
 
 class InfoAndNotePanel(QWidget):

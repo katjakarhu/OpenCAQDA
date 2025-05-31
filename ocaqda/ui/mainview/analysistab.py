@@ -3,7 +3,7 @@ from PySide6.QtGui import QBrush, QColor
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QTreeWidget, QPushButton, QTreeWidgetItem, QLineEdit, \
     QTreeWidgetItemIterator, QHBoxLayout
 
-from src.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
+from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
 
 
 # TODO:

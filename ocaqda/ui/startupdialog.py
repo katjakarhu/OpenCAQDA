@@ -2,13 +2,12 @@ import yaml
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QListWidget, QHBoxLayout, QPushButton, QInputDialog, \
     QMessageBox, QDialog, QLineEdit, QWidget
 from sqlalchemy import exists
-from sqlalchemy.orm import sessionmaker
 
-from src.data.database.databaseengine import DatabaseEngine
-from src.data.models import Project, User
-from src.services.configurationservice import ConfigurationService, load_configuration
-from src.ui.newuserdialog import NewUserDialog
-from src.utils.constants import CONFIGURATION_FILE_NAME
+from ocaqda.data.database.databaseconnectivity import DatabaseConnectivity
+from ocaqda.data.models import Project, User
+from ocaqda.services.configurationservice import ConfigurationService, load_configuration
+from ocaqda.ui.newuserdialog import NewUserDialog
+from ocaqda.utils.constants import CONFIGURATION_FILE_NAME
 
 
 def can_proceed():
@@ -109,9 +108,9 @@ class StartUpDialog(QDialog):
             self.accept()
 
     def populate_projects(self):
-        db_engine = DatabaseEngine().engine
-        database_session = sessionmaker(bind=db_engine)
-        session = database_session()
+
+        session = DatabaseConnectivity().create_new_db_session()
+
         existing_projects = session.query(Project).all()
         list_of_projects = []
         for existing_project in existing_projects:
@@ -168,9 +167,7 @@ class StartUpDialog(QDialog):
         # create user
         username = self.username_field.text()
 
-        db_engine = DatabaseEngine().engine
-        database_session = sessionmaker(bind=db_engine)
-        session = database_session()
+        session = DatabaseConnectivity().create_new_db_session()
         user_exists = session.scalar(exists(User).where(User.username is username).select())
 
         if user_exists:

@@ -2,8 +2,8 @@ from pathlib import Path
 
 import yaml
 
-from src.utils.constants import CONFIGURATION_FILE_NAME
-from src.utils.singleton import Singleton
+from ocaqda.utils.constants import CONFIGURATION_FILE_NAME
+from ocaqda.utils.singleton import Singleton
 
 
 class ConfigurationService(metaclass=Singleton):

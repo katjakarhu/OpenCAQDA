@@ -1,21 +1,14 @@
 from sqlalchemy.orm import sessionmaker
 
-from src.data.database.databaseengine import DatabaseEngine
-from src.data.models import Project, Code
-from src.services.userservice import UserService
+from ocaqda.data.models import Project, Code
+from ocaqda.services.userservice import UserService
 
 
 class ProjectService:
     def __init__(self, name):
         self.current_project = None
-        self.db_engine = DatabaseEngine().engine
         self.name = name
         self.load_or_create_project(name)
-
-    def create_new_db_session(self):
-        database_session = sessionmaker(bind=self.db_engine)
-        session = database_session()
-        return session
 
     def create_project(self, name):
         user = UserService().user

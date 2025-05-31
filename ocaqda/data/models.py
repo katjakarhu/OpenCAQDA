@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, LargeBinary, Sequenc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declared_attr
 
-from src.data.enums.coderelationshipenum import CodeRelationshipEnum
+from ocaqda.data.enums.coderelationshipenum import CodeRelationshipEnum
 
 Base = declarative_base()
 

@@ -5,8 +5,8 @@ from PySide6.QtWidgets import QApplication
 from sqlalchemy_utils import create_database
 
 from data.models import Base
-from src.data.database.databaseengine import DatabaseEngine
-from src.services.configurationservice import load_configuration
+from ocaqda.data.database.databaseconnectivity import DatabaseConnectivity
+from ocaqda.services.configurationservice import load_configuration
 from ui.mainview.mainqawindow import MainQAWindow
 from ui.startupdialog import StartUpDialog
 
@@ -17,13 +17,13 @@ def initialize_database(db_url, recreate=False):
         In test mode all tables are dropped and re-created
     """
     database_path = Path(db_url[10])
-    if database_path.exists() == False:
-        db_engine = DatabaseEngine(db_url)
+    if not database_path.exists():
+        db_engine = DatabaseConnectivity(db_url)
         create_database(db_engine.engine.url)
         Base.metadata.create_all(db_engine.engine)
 
     else:
-        db_engine = DatabaseEngine(db_url)
+        db_engine = DatabaseConnectivity(db_url)
         if recreate:
             # TODO: backup database
             # TODO: Recreate database-file instead of dropping and creating

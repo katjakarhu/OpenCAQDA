@@ -35,16 +35,22 @@ The data is stored in an SQLite database locally.
 
 ### Mandatory
 
+- Fix DB url handling
+    - Separate url and path
+    - URL contains e.g. "sqlite:///"
+- Better user flow when:
+    - Settings file does not exist
+    - Database does not exist
 - Coding functionality
 - Configuration
 - User functionality
 - Note functionality
     - For files
     - For codes
--
 
 ### High priority:
 
+- More unit tests
 - Multi-user projects (with shared database)
     - Editable DB settings
     - Storing DB credentials
