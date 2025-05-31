@@ -11,6 +11,7 @@ from ocaqda.ui.mainview.textcontentview import TextContentView
 class InfoAndNotePanel(QWidget):
     def __init__(self, project_manager):
         super().__init__()
+        self.project_manager = project_manager
         layout = QVBoxLayout()
         info_header_label = QLabel("Information:")
         header_style = "font-size: 14px; font-weight: bold;"
@@ -43,7 +44,7 @@ class InfoAndNotePanel(QWidget):
 
 class MainQAWindow(QMainWindow):
 
-    def __init__(self, name, /):
+    def __init__(self, name):
         super().__init__()
 
         self.project_manager = None
@@ -89,7 +90,7 @@ class MainQAWindow(QMainWindow):
         self.setCentralWidget(central_widget)
 
     def set_project(self, name):
-        # Each project has it's own ProjectManager connected to the MainWindow
+        # Each project has its own ProjectManager connected to the MainWindow
         # If project does not exist, it is created
         self.project_manager = ProjectService(name)
 

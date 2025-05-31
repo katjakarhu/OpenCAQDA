@@ -12,7 +12,7 @@ from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
 # drag and drop coding
 
 class AnalysisTab(QWidget, ):
-    def __init__(self, project_manager, /):
+    def __init__(self, project_manager):
         super().__init__()
         self.project_manager = project_manager
         analysis_layout = QVBoxLayout()
@@ -82,7 +82,7 @@ class AnalysisTab(QWidget, ):
                         item.parent().setExpanded(True)
                         parent_text = item.parent().text(0).lower()
                         item.parent().setHidden(filter_text not in parent_text)
-                        if (filter_text not in parent_text):
+                        if filter_text not in parent_text:
                             item.parent().setBackground(0, QBrush(QColor(
                                 STANDARD_BACKGROUND_COLOR)))
                         else:

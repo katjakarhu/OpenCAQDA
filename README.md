@@ -54,7 +54,7 @@ The data is stored in an SQLite database locally.
 - Multi-user projects (with shared database)
     - Editable DB settings
     - Storing DB credentials
-    - Other than SQLite support (MySQL, Postgres, etc)
+    - Other than SQLite support (MySQL, Postgres, etc.)
 - Text search within multiple files
 - Code relationship visualization and editing
 
@@ -74,7 +74,7 @@ The data is stored in an SQLite database locally.
 - Notes to word cloud
 - Video file coding support
 - HTML file coding (can be circumvented by converting to PDF)
-- DOCX coding (can be circumvented by converting to PDF))
+- DOCX coding (can be circumvented by converting to PDF)
 - CSV and Excel file coding
 - Image coding support (e.g. image to text, or other)
 - RTF file coding

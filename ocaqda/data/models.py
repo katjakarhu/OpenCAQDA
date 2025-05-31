@@ -14,8 +14,8 @@ class TimestampColumnMixin(object):
     updated = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
 
     @declared_attr
-    def __tablename__(cls):
-        return cls.__name__.lower()
+    def __tablename__(self):
+        return self.__name__.lower()
 
 
 class UserColumnMixin(object):
@@ -23,8 +23,8 @@ class UserColumnMixin(object):
     updated_by = Column(Integer, ForeignKey("users.user_id"), nullable=False)
 
     @declared_attr
-    def __tablename__(cls):
-        return cls.__name__.lower()
+    def __tablename__(self):
+        return self.__name__.lower()
 
 
 class User(Base, TimestampColumnMixin):

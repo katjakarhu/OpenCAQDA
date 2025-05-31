@@ -10,11 +10,11 @@ from ocaqda.utils.constants import CONFIGURATION_FILE_NAME
 
 class NoConfigurationFileTest(unittest.TestCase):
     def setUp(self):
-        if (Path(CONFIGURATION_FILE_NAME).exists()):
+        if Path(CONFIGURATION_FILE_NAME).exists():
             os.remove(CONFIGURATION_FILE_NAME)
 
     def tearDown(self):
-        if (Path(CONFIGURATION_FILE_NAME).exists()):
+        if Path(CONFIGURATION_FILE_NAME).exists():
             os.remove(CONFIGURATION_FILE_NAME)
 
     def test_shouldReturnEmptyStrings(self):
@@ -29,7 +29,7 @@ class NoConfigurationFileTest(unittest.TestCase):
 
 class ConfigurationFileExistsTest(unittest.TestCase):
     def setUp(self):
-        if (Path(CONFIGURATION_FILE_NAME).exists()):
+        if Path(CONFIGURATION_FILE_NAME).exists():
             os.remove(CONFIGURATION_FILE_NAME)
         conf_file_path = Path(CONFIGURATION_FILE_NAME)
         settings_data = dict(username='test', database_url='sqlite://test.db')

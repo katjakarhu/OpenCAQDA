@@ -1,5 +1,4 @@
-from sqlalchemy.orm import sessionmaker
-
+from ocaqda.data.database.databaseconnectivity import DatabaseConnectivity
 from ocaqda.data.models import Project, Code
 from ocaqda.services.userservice import UserService
 
@@ -12,7 +11,7 @@ class ProjectService:
 
     def create_project(self, name):
         user = UserService().user
-        session = self.create_new_db_session()
+        session = DatabaseConnectivity().create_new_db_session()
 
         proj = Project(name=name)
         proj.created_by = user.user_id
@@ -28,11 +27,7 @@ class ProjectService:
         pass
 
     def load_or_create_project(self, name):
-        # Create a configured "Session" class
-        session_class = sessionmaker(bind=self.db_engine)
-
-        # Create a Session
-        session = session_class()
+        session = DatabaseConnectivity().create_new_db_session()
 
         proj = session.query(Project).filter(Project.name == name).one_or_none()
 
@@ -53,7 +48,7 @@ class ProjectService:
         self.save_codes([code_name])
 
     def save_codes(self, code_list):
-        session = self.create_new_db_session()
+        session = DatabaseConnectivity().create_new_db_session()
 
         for name in code_list:
             code = Code()
@@ -66,3 +61,15 @@ class ProjectService:
 
     def save_files(self, file_list):
         pass
+
+
+def populate_projects():
+    session = DatabaseConnectivity().create_new_db_session()
+
+    existing_projects = session.query(Project).all()
+    list_of_projects = []
+    for existing_project in existing_projects:
+        list_of_projects.append(existing_project.name)
+    session.commit()
+    session.close()
+    return list_of_projects
