@@ -10,7 +10,6 @@ def get_user_from_database(username):
     database_session = sessionmaker(bind=DatabaseEngine().engine)
     session = database_session()
     user = session.query(User).filter_by(username=username).first()
-    print("User: " + user)
     session.close()
     return user
 

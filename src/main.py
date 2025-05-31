@@ -19,7 +19,9 @@ def initialize_database(db_url, recreate=False):
     database_path = Path(db_url[10])
     if database_path.exists() == False:
         db_engine = DatabaseEngine(db_url)
-        create_database(db_engine.url)
+        create_database(db_engine.engine.url)
+        Base.metadata.create_all(db_engine.engine)
+
     else:
         db_engine = DatabaseEngine(db_url)
         if recreate:

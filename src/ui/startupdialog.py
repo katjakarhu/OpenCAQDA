@@ -179,7 +179,7 @@ class StartUpDialog(QDialog):
             dialog = NewUserDialog()
             if dialog.exec():
                 new_user = User()
-                new_user.user_name = username
+                new_user.username = username
                 new_user.password = "whee"
                 session.add(new_user)
                 session.commit()

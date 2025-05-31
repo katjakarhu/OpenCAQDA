@@ -19,7 +19,6 @@ class ProjectService:
 
     def create_project(self, name):
         user = UserService().user
-        print(user.username + " created " + user.user_id)
         session = self.create_new_db_session()
 
         proj = Project(name=name)

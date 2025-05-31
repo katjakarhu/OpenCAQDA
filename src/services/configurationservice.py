@@ -28,7 +28,7 @@ def load_configuration():
         app_configuration = yaml.safe_load(file)
         file.close()
     else:
-        settings_data = dict(username='', database_url='')
+        settings_data = dict(username='', database_url='sqlite:///opencaqda-db.db')
         file = open(conf_file_path, 'w')
         yaml.safe_dump(settings_data, file)
         file.close()

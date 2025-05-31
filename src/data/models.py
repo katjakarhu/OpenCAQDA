@@ -30,9 +30,9 @@ class UserColumnMixin(object):
 class User(Base, TimestampColumnMixin):
     __tablename__ = 'users'
     user_id = Column(Integer, primary_key=True)
-    username = Column(String, unique=True)
+    username = Column(String, unique=True, nullable=False)
     color = Column(String)
-    password = Column(Text)
+    password = Column(Text, nullable=False)
     email = Column(String)
 
     def verify_password(self, password):

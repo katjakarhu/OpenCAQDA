@@ -46,6 +46,9 @@ The data is stored in an SQLite database locally.
 ### High priority:
 
 - Multi-user projects (with shared database)
+    - Editable DB settings
+    - Storing DB credentials
+    - Other than SQLite support (MySQL, Postgres, etc)
 - Text search within multiple files
 - Code relationship visualization and editing
 
