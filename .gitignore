@@ -1,8 +1,5 @@
-#### Project specific ignore
-# Database files:
-*.db
 
-#### Project specific ignore
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -272,3 +269,9 @@ fabric.properties
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
+
+
+#### Project specific ignore
+# Database files:
+*.db
+/opencaqda-settings.yaml

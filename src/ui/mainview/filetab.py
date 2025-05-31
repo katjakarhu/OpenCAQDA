@@ -2,7 +2,6 @@ from pathlib import Path
 
 from PySide6.QtCore import QStandardPaths
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QListWidget
-from data.projectmanager import ProjectManager
 
 
 class FilesTab(QWidget):
@@ -36,4 +35,4 @@ class FilesTab(QWidget):
 
     def save_files(self, files):
         self.file_list.addItems(files)
-        self.project_manager.save_files()
+        self.project_manager.save_files(files)

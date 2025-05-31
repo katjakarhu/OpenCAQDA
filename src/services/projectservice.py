@@ -1,13 +1,14 @@
 from sqlalchemy.orm import sessionmaker
 
-from data.database.databaseconnection import DatabaseEngine
-from data.models import Project, Code
+from src.data.database.databaseengine import DatabaseEngine
+from src.data.models import Project, Code
+from src.services.userservice import UserService
 
 
-class ProjectManager:
+class ProjectService:
     def __init__(self, name):
         self.current_project = None
-        self.db_engine = DatabaseEngine()
+        self.db_engine = DatabaseEngine().engine
         self.name = name
         self.load_or_create_project(name)
 
@@ -17,13 +18,19 @@ class ProjectManager:
         return session
 
     def create_project(self, name):
+        user = UserService().user
+        print(user.username + " created " + user.user_id)
         session = self.create_new_db_session()
 
         proj = Project(name=name)
+        proj.created_by = user.user_id
+        proj.updated_by = user.user_id
         session.add(proj)
         session.commit()
 
         self.current_project = session.query(Project).filter(Project.name == name).one()
+
+        session.close()
 
     def save_project(self):
         pass
@@ -42,6 +49,8 @@ class ProjectManager:
         else:
             self.current_project = proj
 
+        session.close()
+
     def export_project(self):
         pass
 
@@ -49,14 +58,19 @@ class ProjectManager:
         pass
 
     def save_code(self, code_name):
+        self.save_codes([code_name])
+
+    def save_codes(self, code_list):
         session = self.create_new_db_session()
 
-        code = Code()
-        code.name = code_name
-        code.project_id = self.current_project.project_id
+        for name in code_list:
+            code = Code()
+            code.name = name
+            code.project_id = self.current_project.project_id
+            session.add(code)
 
-        session.add(code)
         session.commit()
+        session.close()
 
     def save_files(self, file_list):
         pass

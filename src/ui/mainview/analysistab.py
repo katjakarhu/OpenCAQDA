@@ -1,9 +1,9 @@
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QBrush, QColor
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QTreeWidget, QPushButton, QInputDialog, QTreeWidgetItem, QLineEdit, \
-    QTreeWidgetItemIterator
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QTreeWidget, QPushButton, QTreeWidgetItem, QLineEdit, \
+    QTreeWidgetItemIterator, QHBoxLayout
 
-from utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
+from src.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
 
 
 # TODO:
@@ -35,15 +35,19 @@ class AnalysisTab(QWidget, ):
         analysis_layout.addWidget(self.analysis_tree)
 
         # Button to add new text entries
+        add_code_layout = QHBoxLayout()
+        self.add_code_field = QLineEdit()
         self.add_button = QPushButton("Add codes")
         self.add_button.clicked.connect(self.add_tree_entry)
-        analysis_layout.addWidget(self.add_button)
+        add_code_layout.addWidget(self.add_code_field)
+        add_code_layout.addWidget(self.add_button)
+        analysis_layout.addLayout(add_code_layout)
         self.setLayout(analysis_layout)
 
     def add_tree_entry(self):
         # Open a dialog to get text input
-        text, ok = QInputDialog.getText(self, 'Add Entry', 'Enter text:')
-        if ok and text:
+        text = self.add_code_field.text()
+        if text:
             # Limit the text length to 512 characters
             text = text[:512]
 
@@ -51,7 +55,7 @@ class AnalysisTab(QWidget, ):
                 # Add the text as a new item in the tree widget
                 item = QTreeWidgetItem([text])
                 self.analysis_tree.addTopLevelItem(item)
-                self.project_manager.save_new_code(text)
+                self.project_manager.save_code(text)
 
     def filter_codes(self):
         filter_text = self.filter_field.text().lower()

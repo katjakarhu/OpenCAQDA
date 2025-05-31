@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QTabWidget
 
-from data.models import DataFile
-from data.supportedfiletypes import *
-from ui.textviewer import TextViewer
+from src.data.enums.supportedfiletypes import SupportedFileTypes
+from src.data.models import DataFile
+from src.ui.mainview.textviewer import TextViewer
 
 
 class TextContentView(QTabWidget):
@@ -11,7 +11,7 @@ class TextContentView(QTabWidget):
 
     def add_file(self, datafile):
         data = DataFile(datafile)
-        if supportedfiletypes.is_plain_text(datafile.file_type):
+        if SupportedFileTypes.is_plain_text(datafile.file_type):
             text = data.file_content.decode("utf-8")
             textView = TextViewer()
             textView.set_text(text)
