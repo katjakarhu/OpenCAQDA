@@ -4,12 +4,11 @@ from PySide6.QtCore import QStandardPaths
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QListWidget
 
 
-class FilesTab(QWidget):
-    def __init__(self, project_manager, main_window):
+class FileTab(QWidget):
+    def __init__(self, main_window):
         super().__init__()
         self.main_window = main_window
         self.listed_files = None
-        self.project_manager = project_manager
         self.files_layout = QVBoxLayout()
         # File system model for files tab
         self.file_list = QListWidget(self)
@@ -20,6 +19,10 @@ class FilesTab(QWidget):
         self.add_files_button = QPushButton("Add files")
         self.add_files_button.clicked.connect(self.add_files)
         self.files_layout.addWidget(self.add_files_button)
+        # Button to add new text entries
+        self.manage_files_button = QPushButton("Manage files")
+        self.manage_files_button.clicked.connect(self.manage_files())
+        self.files_layout.addWidget(self.manage_files_button)
         self.setLayout(self.files_layout)
 
     # Adding files copies them to the project location
@@ -50,11 +53,11 @@ class FilesTab(QWidget):
         print(filenames)
         self.file_list.addItems(filenames)
 
-        return self.project_manager.save_files(filenames)
+        return self.main_window.project_manager.save_files(filenames)
 
     def populate_file_list(self):
         self.file_list.clear()
-        self.listed_files = self.project_manager.get_project_files()
+        self.listed_files = self.main_window.project_manager.get_project_files()
         for f in self.listed_files:
             self.file_list.addItem(f.display_name)
 
@@ -67,4 +70,8 @@ class FilesTab(QWidget):
                     print("pdf")
                 elif f.file_extension == '.txt':
                     print("txt")
-                    self.main_window.text_content_panel.add_file(f)
+                    self.main_window.add_file_viewer(f)
+
+    def manage_files(self):
+        # TODO open new view for deleting and renaming files
+        pass

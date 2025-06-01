@@ -1,12 +1,14 @@
 # This Python file uses the following encoding: utf-8
+
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QTabWidget, QSplitter, QWidget
 
 from ocaqda.services.projectservice import ProjectService
 from ocaqda.ui.mainview.analysistab import AnalysisTab
-from ocaqda.ui.mainview.filetab import FilesTab
+from ocaqda.ui.mainview.filetab import FileTab
 from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
 from ocaqda.ui.mainview.textcontentview import TextContentView
+from ocaqda.ui.mainview.textviewer import TextViewer
 
 
 class MainQAWindow(QMainWindow):
@@ -38,18 +40,19 @@ class MainQAWindow(QMainWindow):
         center_layout = QHBoxLayout()
         # Left column with tabs
         tab_widget = QTabWidget()
-        tab_widget.setMaximumWidth(500)
+        tab_widget.setMaximumWidth(300)
         analysis_tab = AnalysisTab(self.project_manager)
-        files_tab = FilesTab(self.project_manager, self)
+        files_tab = FileTab(self)
         # Add tabs to tab widget
         tab_widget.addTab(analysis_tab, "Analysis")
         tab_widget.addTab(files_tab, "Files")
         # Middle panel
-        self.text_content_panel = TextContentView(self.project_manager)
+        self.text_content_panel = TextContentView()
         self.text_content_panel.setMinimumWidth(500)
 
         # Right panel
         right_panel = InfoAndNotePanel(self.project_manager)
+        right_panel.setMaximumWidth(400)
         # Splitter for resizing panels
         splitter = QSplitter()
         splitter.addWidget(tab_widget)
@@ -67,3 +70,18 @@ class MainQAWindow(QMainWindow):
         self.project_manager = ProjectService(name)
 
         self.setWindowTitle("OpenCAQDA - Project: " + name)
+
+    def add_file_viewer(self, datafile):
+        if datafile.file_extension == '.txt':
+            text_view = TextViewer()
+            text_view.set_text(datafile.file_as_text)
+            if not self.is_tab_open(datafile.display_name):
+                self.text_content_panel.addTab(text_view, datafile.display_name)
+        else:
+            pass
+
+    def is_tab_open(self, display_name):
+        for i in range(self.text_content_panel.count()):
+            if display_name == self.text_content_panel.tabText(i):
+                return True
+        return False

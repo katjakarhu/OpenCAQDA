@@ -114,6 +114,28 @@ class ProjectService:
             session.add(content)
         f.close()
 
+        f = open(file_path, 'r')
+        if new_file.file_extension == ".txt":
+            new_file.file_as_text = f.read()
+            print(new_file.file_as_text)
+        elif new_file.file_extension == ".pdf":
+            from pypdf import PdfReader
+
+            # creating a pdf reader object
+            reader = PdfReader(str(file_path))
+
+            text_content = ""
+            for page in reader.pages:
+                text = page.extract_text()
+                print(text)
+                text_content += text
+            new_file.file_as_text = text_content
+            reader.close()
+        f.close()
+
+    def get_text_from_file(self, file_path, new_file):
+        pass
+
 
 def populate_projects():
     session = DatabaseConnectivity().create_new_db_session()

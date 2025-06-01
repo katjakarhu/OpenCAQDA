@@ -4,3 +4,4 @@ sqlalchemy-utils
 bcrypt
 pyyaml
 keyring
+pypdf
