@@ -7,6 +7,7 @@ from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
 
 
 # TODO:
+# LOAD CURRENT CODES FROM DB
 # add quick filter for codes
 # manage codes button and view
 # drag and drop coding
@@ -27,8 +28,8 @@ class AnalysisTab(QWidget, ):
         self.analysis_tree.setHeaderLabel("Codes")
         self.analysis_tree.setHeaderHidden(True)
         # TODO: move this d&d functionality to new view managecdes.py
-        self.analysis_tree.setDragDropMode(QTreeWidget.InternalMove)
-        self.analysis_tree.setSelectionMode(QTreeWidget.ExtendedSelection)
+        self.analysis_tree.setDragDropMode(QTreeWidget.DragDropMode.InternalMove)
+        self.analysis_tree.setSelectionMode(QTreeWidget.SelectionMode.ExtendedSelection)
         self.analysis_tree.setDragEnabled(True)
         self.analysis_tree.setAcceptDrops(True)
         self.analysis_tree.setDropIndicatorShown(True)

@@ -8,6 +8,7 @@ from ocaqda.services.configurationservice import ConfigurationService
 from ocaqda.utils.constants import CONFIGURATION_FILE_NAME
 
 
+# noinspection PyMethodMayBeStatic
 class NoConfigurationFileTest(unittest.TestCase):
     def setUp(self):
         if Path(CONFIGURATION_FILE_NAME).exists():
@@ -27,6 +28,7 @@ class NoConfigurationFileTest(unittest.TestCase):
         assert conf_service is None
 
 
+# noinspection PyMethodMayBeStatic
 class ConfigurationFileExistsTest(unittest.TestCase):
     def setUp(self):
         if Path(CONFIGURATION_FILE_NAME).exists():

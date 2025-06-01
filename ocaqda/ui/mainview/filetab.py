@@ -7,10 +7,12 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QL
 class FilesTab(QWidget):
     def __init__(self, project_manager):
         super().__init__()
+        self.listed_files = None
         self.project_manager = project_manager
         self.files_layout = QVBoxLayout()
         # File system model for files tab
         self.file_list = QListWidget(self)
+        self.populate_file_list()
         self.files_layout.addWidget(self.file_list)
         self.files_layout.addWidget(self.file_list)
         # Button to add new text entries
@@ -32,7 +34,25 @@ class FilesTab(QWidget):
             filenames = dialog.selectedFiles()
             if filenames:
                 self.save_files([str(Path(filename)) for filename in filenames])
+                self.populate_file_list()
+
+    def get_added_files(self):
+        return [x.display_name for x in self.listed_files]
 
     def save_files(self, files):
-        self.file_list.addItems(files)
-        self.project_manager.save_files(files)
+        print(files)
+        items = self.get_added_files()
+        print(items)
+
+        filenames = [f[f.rfind('/') + 1:] for f in files if f
+                     not in items]
+        print(filenames)
+        self.file_list.addItems(filenames)
+
+        return self.project_manager.save_files(filenames)
+
+    def populate_file_list(self):
+        self.file_list.clear()
+        self.listed_files = self.project_manager.get_project_files()
+        for f in self.listed_files:
+            self.file_list.addItem(f.display_name)

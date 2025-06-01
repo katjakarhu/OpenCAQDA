@@ -2,7 +2,7 @@ import bcrypt
 from sqlalchemy import Column, Integer, String, ForeignKey, LargeBinary, Sequence, UniqueConstraint, Text, DateTime, \
     func, Boolean, Enum
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import declared_attr
+from sqlalchemy.orm import declared_attr, relationship
 
 from ocaqda.data.enums.coderelationshipenum import CodeRelationshipEnum
 
@@ -43,28 +43,38 @@ class User(Base, TimestampColumnMixin):
 class Project(Base, TimestampColumnMixin, UserColumnMixin):
     __tablename__ = "projects"
     project_id = Column(Integer, Sequence('project_id_seq'), primary_key=True)
-    name = Column(String, unique=True)
+    name = Column(String, unique=True, nullable=False)
     description = Column(String)
     status = Column(String)
     url = Column(String)
+    data_files = relationship("DataFile", back_populates="project")
 
 
 class DataFile(Base, TimestampColumnMixin, UserColumnMixin):
     __tablename__ = "data_files"
-    file_id = Column(Integer, Sequence('file_id_seq'), primary_key=True)
-    display_name = Column(String)
-    original_name = Column(String)
-    file_extension = Column(String)
+    data_file_id = Column(Integer, Sequence('data_file_id_seq'), primary_key=True)
+    display_name = Column(String, nullable=False)
+    url = Column(String)
+    file_extension = Column(String, nullable=False)
     file_as_text = Column(Text)
-    file_content = Column(LargeBinary)
+    # Store file content as binary only once, same content can be used in many projects
+    file_content_id = Column(Integer, ForeignKey("file_content.file_content_id"), nullable=False)
     code_id = Column(Integer, ForeignKey('codes.code_id'))  # you can code files as well
-    project_id = Column(Integer, ForeignKey("projects.project_id"))
+    project_id = Column(Integer, ForeignKey("projects.project_id"), nullable=False)
+    project = relationship("Project", back_populates="data_files")
+
+
+class FileContent(Base, TimestampColumnMixin, UserColumnMixin):
+    __tablename__ = "file_content"
+    file_content_id = Column(Integer, Sequence('file_content_id_seq'), primary_key=True)
+    file_content = Column(LargeBinary, unique=True, nullable=False)
+    data_files = relationship("DataFile")
 
 
 class Code(Base, TimestampColumnMixin, UserColumnMixin):
     __tablename__ = "codes"
     code_id = Column(Integer, Sequence('code_id_seq'), primary_key=True)
-    name = Column(String)
+    name = Column(String, nullable=False)
     notes = Column(Text)
     project_id = Column(Integer, ForeignKey("projects.project_id"))
 
@@ -74,10 +84,10 @@ class CodeRelationship(Base, TimestampColumnMixin, UserColumnMixin):
     codes in the AnalysisTab on the UI."""
     __tablename__ = "code_connections"
     connection_id = Column(Integer, primary_key=True)
-    type = Column(Enum(CodeRelationshipEnum))
+    type = Column(Enum(CodeRelationshipEnum), nullable=False)
     label = Column(String)
-    from_code_id = Column(Integer, ForeignKey("codes.code_id"))
-    to_code_id = Column(Integer, ForeignKey("codes.code_id"))
+    from_code_id = Column(Integer, ForeignKey("codes.code_id"), nullable=False)
+    to_code_id = Column(Integer, ForeignKey("codes.code_id"), nullable=False)
     has_direction = Column(Boolean)
     __table_args__ = (UniqueConstraint('from_code_id', 'to_code_id', 'label', name='_from_to_label_uc'),)
 
@@ -85,7 +95,7 @@ class CodeRelationship(Base, TimestampColumnMixin, UserColumnMixin):
 class CodedText(Base, TimestampColumnMixin, UserColumnMixin):
     __tablename__ = "coded_texts"
     coded_text_id = Column(Integer, Sequence('coded_text_id_seq'), primary_key=True)
-    text = Column(Text)
+    text = Column(Text, nullable=False)
     position = Column(Integer)  # start position of text in file, with len(text) you can get the end position
     code_id = Column(Integer, ForeignKey("codes.code_id"))
-    file_id = Column(Integer, ForeignKey("data_files.file_id"))
+    data_file_id = Column(Integer, ForeignKey("data_files.data_file_id"))

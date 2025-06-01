@@ -5,41 +5,8 @@ from PySide6.QtWidgets import *
 from ocaqda.services.projectservice import ProjectService
 from ocaqda.ui.mainview.analysistab import AnalysisTab
 from ocaqda.ui.mainview.filetab import FilesTab
+from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
 from ocaqda.ui.mainview.textcontentview import TextContentView
-
-
-class InfoAndNotePanel(QWidget):
-    def __init__(self, project_manager):
-        super().__init__()
-        self.project_manager = project_manager
-        layout = QVBoxLayout()
-        info_header_label = QLabel("Information:")
-        header_style = "font-size: 14px; font-weight: bold;"
-        info_header_label.setStyleSheet(header_style)
-        layout.addWidget(info_header_label)
-
-        # Description text
-        info_label = QLabel(
-            "Info here"
-        )
-        info_label.setWordWrap(True)
-        info_label.setMaximumWidth(380)
-        info_label.setMinimumHeight(100)
-        self.info_label = QLabel("Info")
-        self.note_area = QTextEdit("jdksjdksak")
-        layout.addWidget(self.info_label)
-
-        note_header_label = QLabel("Notes:")
-        note_header_label.setStyleSheet(header_style)
-
-        note_instruction_label = QLabel(
-            "Please select a file or a code to attach notes to. You can view and export notes from the tools menu")
-        note_instruction_label.setWordWrap(True)
-
-        layout.addWidget(note_header_label)
-        layout.addWidget(note_instruction_label)
-        layout.addWidget(self.note_area)
-        self.setLayout(layout)
 
 
 class MainQAWindow(QMainWindow):
@@ -47,6 +14,7 @@ class MainQAWindow(QMainWindow):
     def __init__(self, name):
         super().__init__()
 
+        self.status_bar = self.statusBar()
         self.project_manager = None
         self.set_project(name)
         self.initialize_layout()
@@ -64,8 +32,9 @@ class MainQAWindow(QMainWindow):
         save_action.triggered.connect(self.project_manager.save_project)
         file_menu.addAction(save_action)
         file_menu.addSeparator()
+
         # Main layout
-        main_layout = QHBoxLayout()
+        center_layout = QHBoxLayout()
         # Left column with tabs
         tab_widget = QTabWidget()
         tab_widget.setMaximumWidth(500)
@@ -85,8 +54,8 @@ class MainQAWindow(QMainWindow):
         splitter.addWidget(right_panel)
         # Set the central widget
         central_widget = QWidget()
-        central_widget.setLayout(main_layout)
-        main_layout.addWidget(splitter)
+        central_widget.setLayout(center_layout)
+        center_layout.addWidget(splitter)
         self.setCentralWidget(central_widget)
 
     def set_project(self, name):

@@ -1,6 +1,15 @@
+from pathlib import Path
+
 from ocaqda.data.database.databaseconnectivity import DatabaseConnectivity
-from ocaqda.data.models import Project, Code
+from ocaqda.data.models import Project, Code, DataFile, FileContent
 from ocaqda.services.userservice import UserService
+
+
+def get_file_content_from_db(file_as_bytes):
+    session = DatabaseConnectivity().create_new_db_session()
+    result = session.query(FileContent).filter(FileContent.file_content == file_as_bytes).one_or_none()
+    session.close()
+    return result
 
 
 class ProjectService:
@@ -54,13 +63,56 @@ class ProjectService:
             code = Code()
             code.name = name
             code.project_id = self.current_project.project_id
+            code.created_by = UserService().user.user_id
+            code.updated_by = UserService().user.user_id
             session.add(code)
 
         session.commit()
         session.close()
 
+    def get_project_files(self):
+        session = DatabaseConnectivity().create_new_db_session()
+        result = session.query(DataFile).filter(DataFile.project_id == self.current_project.project_id).all()
+
+        session.close()
+        return result
+
     def save_files(self, file_list):
-        pass
+        session = DatabaseConnectivity().create_new_db_session()
+        user = UserService().user
+
+        for file_path in file_list:
+            file_path = Path(file_path)
+            if file_path.exists():
+                # read file
+                new_file = DataFile()
+                new_file.display_name = file_path.name
+                new_file.url = str(file_path.absolute())
+                new_file.file_extension = file_path.suffix
+                self.add_file_content(file_path, new_file, session, user)
+                new_file.created_by = user.user_id
+                new_file.updated_by = user.user_id
+                new_file.project_id = self.current_project.project_id
+                session.add(new_file)
+
+        session.commit()
+        session.close()
+
+    def add_file_content(self, file_path, new_file, session, user):
+        f = open(file_path, 'rb')
+        file_as_bytes = f.read()
+        content_from_db = get_file_content_from_db(file_as_bytes)
+        if content_from_db is not None:
+            session.add(content_from_db)
+            content_from_db.data_files.append(new_file)
+        else:
+            content = FileContent()
+            content.file_content = file_as_bytes
+            content.created_by = user.user_id
+            content.updated_by = user.user_id
+            content.data_files.append(new_file)
+            session.add(content)
+        f.close()
 
 
 def populate_projects():
