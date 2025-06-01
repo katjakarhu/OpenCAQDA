@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 from PySide6.QtGui import QAction
-from PySide6.QtWidgets import *
+from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QTabWidget, QSplitter, QWidget
 
 from ocaqda.services.projectservice import ProjectService
 from ocaqda.ui.mainview.analysistab import AnalysisTab
@@ -14,6 +14,7 @@ class MainQAWindow(QMainWindow):
     def __init__(self, name):
         super().__init__()
 
+        self.text_content_panel = None
         self.status_bar = self.statusBar()
         self.project_manager = None
         self.set_project(name)
@@ -39,18 +40,20 @@ class MainQAWindow(QMainWindow):
         tab_widget = QTabWidget()
         tab_widget.setMaximumWidth(500)
         analysis_tab = AnalysisTab(self.project_manager)
-        files_tab = FilesTab(self.project_manager)
+        files_tab = FilesTab(self.project_manager, self)
         # Add tabs to tab widget
         tab_widget.addTab(analysis_tab, "Analysis")
         tab_widget.addTab(files_tab, "Files")
         # Middle panel
-        middle_panel = TextContentView(self.project_manager)
+        self.text_content_panel = TextContentView(self.project_manager)
+        self.text_content_panel.setMinimumWidth(500)
+
         # Right panel
         right_panel = InfoAndNotePanel(self.project_manager)
         # Splitter for resizing panels
         splitter = QSplitter()
         splitter.addWidget(tab_widget)
-        splitter.addWidget(middle_panel)
+        splitter.addWidget(self.text_content_panel)
         splitter.addWidget(right_panel)
         # Set the central widget
         central_widget = QWidget()

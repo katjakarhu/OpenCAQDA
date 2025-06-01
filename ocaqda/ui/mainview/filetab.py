@@ -5,15 +5,16 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QL
 
 
 class FilesTab(QWidget):
-    def __init__(self, project_manager):
+    def __init__(self, project_manager, main_window):
         super().__init__()
+        self.main_window = main_window
         self.listed_files = None
         self.project_manager = project_manager
         self.files_layout = QVBoxLayout()
         # File system model for files tab
         self.file_list = QListWidget(self)
+        self.file_list.itemDoubleClicked.connect(self.open_file)
         self.populate_file_list()
-        self.files_layout.addWidget(self.file_list)
         self.files_layout.addWidget(self.file_list)
         # Button to add new text entries
         self.add_files_button = QPushButton("Add files")
@@ -44,7 +45,7 @@ class FilesTab(QWidget):
         items = self.get_added_files()
         print(items)
 
-        filenames = [f[f.rfind('/') + 1:] for f in files if f
+        filenames = [f for f in files if f[f.rfind('/') + 1:]
                      not in items]
         print(filenames)
         self.file_list.addItems(filenames)
@@ -56,3 +57,14 @@ class FilesTab(QWidget):
         self.listed_files = self.project_manager.get_project_files()
         for f in self.listed_files:
             self.file_list.addItem(f.display_name)
+
+    def open_file(self):
+        selected_file = self.file_list.currentItem().text()
+        print(selected_file)
+        for f in self.listed_files:
+            if f.display_name == selected_file:
+                if f.file_extension == '.pdf':
+                    print("pdf")
+                elif f.file_extension == '.txt':
+                    print("txt")
+                    self.main_window.text_content_panel.add_file(f)

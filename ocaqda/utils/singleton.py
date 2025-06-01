@@ -12,6 +12,6 @@ class Singleton(type):
             cls.__instance = super().__call__(*args,
                                               **kwargs)  # Call the __init__ method of the subclass and save the reference
             return cls.__instance
-        else:
-            # if object reference already exists; return it
-            return cls.__instance
+
+        # if object reference already exists; return it
+        return cls.__instance

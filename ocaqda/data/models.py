@@ -9,7 +9,7 @@ from ocaqda.data.enums.coderelationshipenum import CodeRelationshipEnum
 Base = declarative_base()
 
 
-class TimestampColumnMixin(object):
+class TimestampColumnMixin():
     created = Column(DateTime, default=func.now(), nullable=False)
     updated = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
 
@@ -18,7 +18,7 @@ class TimestampColumnMixin(object):
         return self.__name__.lower()
 
 
-class UserColumnMixin(object):
+class UserColumnMixin():
     created_by = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     updated_by = Column(Integer, ForeignKey("users.user_id"), nullable=False)
 
