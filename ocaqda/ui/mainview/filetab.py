@@ -3,15 +3,15 @@ A tab that displays the files on the left side of the screen
 """
 from pathlib import Path
 
-from PySide6.QtCore import QStandardPaths
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QListWidget
+from PySide6.QtCore import QStandardPaths, QEvent
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QListWidget, QMenu
 
 
 class FileTab(QWidget):
     def __init__(self, main_window):
         super().__init__()
         self.main_window = main_window
-        self.listed_files = None
+        self.listed_files = []
         self.files_layout = QVBoxLayout()
         # File system model for files tab
         self.file_list = QListWidget(self)
@@ -22,11 +22,27 @@ class FileTab(QWidget):
         self.add_files_button = QPushButton("Add files")
         self.add_files_button.clicked.connect(self.add_files)
         self.files_layout.addWidget(self.add_files_button)
-        # Button to add new text entries
-        self.manage_files_button = QPushButton("Manage files")
-        self.manage_files_button.clicked.connect(self.manage_files())
-        self.files_layout.addWidget(self.manage_files_button)
+
+        self.file_list.installEventFilter(self)
+
         self.setLayout(self.files_layout)
+
+    def eventFilter(self, widget, event):
+        if event.type() == QEvent.Type.ContextMenu and widget is self.file_list:
+            # Create the context menu and add some actions
+            context_menu = QMenu(self)
+            action1 = context_menu.addAction("Rename")
+            action2 = context_menu.addAction("Delete")
+
+            # Connect the actions to methods
+            action1.triggered.connect(self.rename_file)
+            action2.triggered.connect(self.delete_file)
+
+            context_menu.exec(self.file_list.mapToGlobal(event.pos()))
+
+            return True
+
+        return super().eventFilter(widget, event)
 
     # Adding files copies them to the project location
     # TODO: design project file system structure
@@ -69,12 +85,20 @@ class FileTab(QWidget):
         print(selected_file)
         for f in self.listed_files:
             if f.display_name == selected_file:
-                if f.file_extension == '.pdf':
-                    print("pdf")
-                elif f.file_extension == '.txt':
-                    print("txt")
-                    self.main_window.add_file_viewer(f)
+                self.main_window.add_file_viewer(f)
 
     def manage_files(self):
-        # TODO open new view for deleting and renaming files
-        pass
+        self.file_list.editable = True
+
+    def rename_file(self):
+        print("rename")
+
+    def delete_file(self):
+        print("delete")
+        for f in self.listed_files:
+            if f.display_name == self.file_list.currentItem().text():
+                self.main_window.project_manager.delete_file_from_db(f)
+                self.listed_files.remove(f)
+                break
+        self.file_list.takeItem(self.file_list.currentRow())
+        self.populate_file_list()

@@ -142,6 +142,23 @@ class ProjectService:
     def get_text_from_file(self, file_path, new_file):
         pass
 
+    def delete_file_from_db(self, file):
+        session = DatabaseConnectivity().create_new_db_session()
+
+        session.delete(file)
+        session.commit()
+        session.close()
+
+    def get_project_codes(self):
+        session = DatabaseConnectivity().create_new_db_session()
+        result = session.query(Code).filter(Code.project_id == self.current_project.project_id).all()
+        session.close()
+        return result
+
+    def save_coded_text(self, coded_text):
+        print(coded_text.text)
+        # TODO: save to DB
+
 
 def populate_projects():
     session = DatabaseConnectivity().create_new_db_session()

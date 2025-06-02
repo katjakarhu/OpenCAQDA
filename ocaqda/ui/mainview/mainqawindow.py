@@ -11,7 +11,7 @@ from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QTabWidget, QSplitter, QWidget
 
 from ocaqda.services.projectservice import ProjectService
-from ocaqda.ui.mainview.analysistab import AnalysisTab
+from ocaqda.ui.mainview.codetab import CodeTab
 from ocaqda.ui.mainview.filetab import FileTab
 from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
 from ocaqda.ui.mainview.textcontentview import TextContentView
@@ -48,7 +48,7 @@ class MainQAWindow(QMainWindow):
         # Left column with tabs
         tab_widget = QTabWidget()
         tab_widget.setMaximumWidth(300)
-        analysis_tab = AnalysisTab(self.project_manager)
+        analysis_tab = CodeTab(self.project_manager)
         files_tab = FileTab(self)
         # Add tabs to tab widget
         tab_widget.addTab(analysis_tab, "Analysis")
@@ -80,7 +80,7 @@ class MainQAWindow(QMainWindow):
 
     def add_file_viewer(self, datafile):
         if datafile.file_extension == '.txt':
-            text_view = TextViewer()
+            text_view = TextViewer(self)
             text_view.set_text(datafile.file_as_text)
             if not self.is_tab_open(datafile.display_name):
                 self.text_content_panel.addTab(text_view, datafile.display_name)
