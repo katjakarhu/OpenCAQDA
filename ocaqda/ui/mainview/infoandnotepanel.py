@@ -1,3 +1,6 @@
+"""
+Panel on the right side of the screen displaying notes
+"""
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit
 
 
@@ -19,7 +22,7 @@ class InfoAndNotePanel(QWidget):
         info_label.setMaximumWidth(380)
         info_label.setMinimumHeight(100)
         self.info_label = QLabel("Info")
-        self.note_area = QTextEdit("jdksjdksak")
+        self.note_area = QTextEdit()
         layout.addWidget(self.info_label)
 
         note_header_label = QLabel("Notes:")

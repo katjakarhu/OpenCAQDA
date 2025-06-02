@@ -1,3 +1,9 @@
+"""
+Handles everything within the project: CRUD operations for files, codes and notes
+
+
+"""
+
 from pathlib import Path
 
 from ocaqda.data.database.databaseconnectivity import DatabaseConnectivity

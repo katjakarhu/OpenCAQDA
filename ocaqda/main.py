@@ -1,3 +1,9 @@
+"""
+Main application, loads configuration from opencaqda-settings.yaml,
+initializes database (if specified or does not exist),
+and displays StartUpDialog
+"""
+
 import sys
 from pathlib import Path
 

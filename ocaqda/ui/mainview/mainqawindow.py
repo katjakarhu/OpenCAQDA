@@ -1,3 +1,10 @@
+"""
+The full screen view that contains all the UI elements in three columns.
+Left: codes and files
+Center: file contents
+Right: info and notes
+
+"""
 # This Python file uses the following encoding: utf-8
 
 from PySide6.QtGui import QAction

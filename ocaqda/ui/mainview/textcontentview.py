@@ -1,3 +1,7 @@
+"""
+Component holds all the tabs containing opened files (txt or pdf)
+
+"""
 from PySide6.QtWidgets import QTabWidget
 
 

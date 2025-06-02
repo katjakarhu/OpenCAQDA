@@ -1,3 +1,6 @@
+"""
+A tab that displays the files on the left side of the screen
+"""
 from pathlib import Path
 
 from PySide6.QtCore import QStandardPaths

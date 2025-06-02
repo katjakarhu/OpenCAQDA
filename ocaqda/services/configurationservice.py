@@ -1,3 +1,9 @@
+"""
+ConfigurationService is a singleton that load the configuration from file
+opencaqda-settings.yaml
+
+"""
+
 from pathlib import Path
 
 import yaml

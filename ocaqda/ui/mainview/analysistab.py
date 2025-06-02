@@ -1,3 +1,6 @@
+"""
+A tab on left side of the screen that displays the codes
+"""
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QBrush, QColor
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QTreeWidget, QPushButton, QTreeWidgetItem, QLineEdit, \
@@ -27,7 +30,7 @@ class AnalysisTab(QWidget, ):
         self.analysis_tree = QTreeWidget()
         self.analysis_tree.setHeaderLabel("Codes")
         self.analysis_tree.setHeaderHidden(True)
-        # TODO: move this d&d functionality to new view managecdes.py
+        # TODO: move this d&d functionality to new view managecodes.py
         self.analysis_tree.setDragDropMode(QTreeWidget.DragDropMode.InternalMove)
         self.analysis_tree.setSelectionMode(QTreeWidget.SelectionMode.ExtendedSelection)
         self.analysis_tree.setDragEnabled(True)

@@ -1,3 +1,8 @@
+"""
+A dialog for creating a new user if one is not specified in opencaqda-settings.yaml
+
+"""
+
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QDialog, QPushButton, QMessageBox
 
 

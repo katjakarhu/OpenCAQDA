@@ -17,18 +17,3 @@ class DatabaseConnectivity(metaclass=Singleton):
         session = database_session()
         return session
 
-
-# db_engine = DatabaseEngine()
-# db_session = Session(bind=db_engine)
-
-# with resources.path(
-#        "project.data", "oqcoder.db"
-#    ) as sqlite_filepath:
-#       self = create_engine(f"sqlite:///{sqlite_filepath}")
-
-
-# create a configured "Session" class
-# Session = sessionmaker(bind=some_engine)
-
-# create a Session
-# session = Session()

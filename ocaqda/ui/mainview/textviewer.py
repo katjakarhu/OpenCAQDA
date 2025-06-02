@@ -1,3 +1,7 @@
+"""
+A component for viewing plain text (txt) files
+"""
+
 from PySide6.QtWidgets import QPlainTextEdit
 
 

@@ -1,4 +1,7 @@
-# Source: https://stackoverflow.com/a/63483209
+"""
+A base class for singleton. Source: https://stackoverflow.com/a/63483209
+"""
+
 
 class Singleton(type):
     # Inherit from "type" in order to gain access to method __call__

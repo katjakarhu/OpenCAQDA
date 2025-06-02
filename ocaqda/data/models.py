@@ -1,3 +1,7 @@
+"""
+Entities stored in database
+"""
+
 import bcrypt
 from sqlalchemy import Column, Integer, String, ForeignKey, LargeBinary, Sequence, UniqueConstraint, Text, DateTime, \
     func, Boolean, Enum
@@ -9,7 +13,7 @@ from ocaqda.data.enums.coderelationshipenum import CodeRelationshipEnum
 Base = declarative_base()
 
 
-class TimestampColumnMixin():
+class TimestampColumnMixin:
     created = Column(DateTime, default=func.now(), nullable=False)
     updated = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
 
@@ -18,7 +22,7 @@ class TimestampColumnMixin():
         return self.__name__.lower()
 
 
-class UserColumnMixin():
+class UserColumnMixin:
     created_by = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     updated_by = Column(Integer, ForeignKey("users.user_id"), nullable=False)
 

@@ -1,3 +1,7 @@
+"""
+Dialog shown when starting the program. Contains e.f. project creation and selection
+"""
+
 import yaml
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QListWidget, QHBoxLayout, QPushButton, QInputDialog, \
     QMessageBox, QDialog, QLineEdit, QWidget
