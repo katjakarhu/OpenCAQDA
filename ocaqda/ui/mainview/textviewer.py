@@ -39,44 +39,40 @@ class SyntaxHighlighter(QSyntaxHighlighter):
 class TextViewer(QPlainTextEdit):
     def __init__(self, parent, data_file_name, data_file_id):
         super().__init__()
+        self.highlighter = None
         self.parent = parent
         self.data_file_name = data_file_name
         self.data_file_id = data_file_id
-        self.current_selection = ""
         self.setReadOnly(True)
-        self.selectionChanged.connect(self.set_current_selection)
         self.setAcceptDrops(True)
+        self.refresh_coded_text_highlight()
+
+    def refresh_coded_text_highlight(self):
         coded_texts = self.parent.project_manager.get_coded_texts(self.data_file_id, self.data_file_name)
         self.highlighter = SyntaxHighlighter(self.document(), coded_texts)
 
     def set_text(self, text):
         self.setPlainText(text)
 
-    def set_current_selection(self):
-        self.current_selection = self.createMimeDataFromSelection().text()
-
-    def dropEvent(self, event):
-        print("bar")
-
     def dragEnterEvent(self, event):
         if event.mimeData().hasText():
-            event.accept()
             print(event.mimeData().text())
-            if self.current_selection != "":
+            event.accept()
+            current_selection = self.createMimeDataFromSelection().text()
+            if current_selection != "":
                 coded_text = CodedText()
-                coded_text.file_id = self.data_file_id
+                coded_text.data_file_id = self.data_file_id
                 codes = self.parent.project_manager.get_project_codes()
                 for code in codes:
                     if code.name == event.mimeData().text():
                         coded_text.code_id = code.code_id
                         break
-                coded_text.text = self.current_selection
+                coded_text.text = current_selection
                 coded_text.position = self.textCursor().selectionStart()
                 coded_text.created_by = UserService().user.user_id
                 coded_text.updated_by = UserService().user.user_id
 
-                print(self.cursor())
                 self.parent.project_manager.save_coded_text(coded_text)
+                self.refresh_coded_text_highlight()
         else:
             event.ignore()
-            print("Ignore")
