@@ -11,7 +11,6 @@ class FileTab(QWidget):
     def __init__(self, main_window):
         super().__init__()
         self.main_window = main_window
-        self.listed_files = []
         self.files_layout = QVBoxLayout()
         # File system model for files tab
         self.file_list = QListWidget(self)
@@ -60,7 +59,7 @@ class FileTab(QWidget):
                 self.populate_file_list()
 
     def get_added_files(self):
-        return [x.display_name for x in self.listed_files]
+        return [x.display_name for x in self.main_window.project_manager.get_project_files()]
 
     def save_files(self, files):
         print(files)
@@ -76,14 +75,13 @@ class FileTab(QWidget):
 
     def populate_file_list(self):
         self.file_list.clear()
-        self.listed_files = self.main_window.project_manager.get_project_files()
-        for f in self.listed_files:
+        for f in self.main_window.project_manager.get_project_files():
             self.file_list.addItem(f.display_name)
 
     def open_file(self):
         selected_file = self.file_list.currentItem().text()
         print(selected_file)
-        for f in self.listed_files:
+        for f in self.main_window.project_manager.get_project_files():
             if f.display_name == selected_file:
                 self.main_window.add_file_viewer(f)
 
@@ -95,10 +93,9 @@ class FileTab(QWidget):
 
     def delete_file(self):
         print("delete")
-        for f in self.listed_files:
+        for f in self.main_window.project_manager.get_project_files():
             if f.display_name == self.file_list.currentItem().text():
                 self.main_window.project_manager.delete_file_from_db(f)
-                self.listed_files.remove(f)
                 break
         self.file_list.takeItem(self.file_list.currentRow())
         self.populate_file_list()

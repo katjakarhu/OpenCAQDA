@@ -13,8 +13,8 @@ from sqlalchemy_utils import create_database
 from data.models import Base
 from ocaqda.data.database.databaseconnectivity import DatabaseConnectivity
 from ocaqda.services.configurationservice import load_configuration
-from ui.mainview.mainqawindow import MainQAWindow
-from ui.startupdialog import StartUpDialog
+from ocaqda.ui.mainview.mainqawindow import MainQAWindow
+from ocaqda.ui.startupdialog import StartUpDialog
 
 
 def initialize_database(db_url, recreate=False):
@@ -23,18 +23,18 @@ def initialize_database(db_url, recreate=False):
         In test mode all tables are dropped and re-created
     """
     database_path = Path(db_url[10])
+
+    if recreate and database_path.exists():
+        database_path.unlink()
+
     if not database_path.exists():
         db_engine = DatabaseConnectivity(db_url)
         create_database(db_engine.engine.url)
         Base.metadata.create_all(db_engine.engine)
 
     else:
-        db_engine = DatabaseConnectivity(db_url)
-        if recreate:
-            # TODO: backup database
-            # TODO: Recreate database-file instead of dropping and creating
-            Base.metadata.drop_all(db_engine.engine)
-            Base.metadata.create_all(db_engine.engine)
+        # Initialize the singleton
+        DatabaseConnectivity(db_url)
 
 
 if __name__ == "__main__":

@@ -23,7 +23,7 @@ class MainQAWindow(QMainWindow):
     def __init__(self, name):
         super().__init__()
 
-        self.text_content_panel = None
+        self.text_content_panel = TextContentView()
         self.status_bar = self.statusBar()
         self.project_manager = None
         self.set_project(name)
@@ -54,7 +54,6 @@ class MainQAWindow(QMainWindow):
         tab_widget.addTab(analysis_tab, "Analysis")
         tab_widget.addTab(files_tab, "Files")
         # Middle panel
-        self.text_content_panel = TextContentView()
         self.text_content_panel.setMinimumWidth(500)
 
         # Right panel
@@ -80,7 +79,7 @@ class MainQAWindow(QMainWindow):
 
     def add_file_viewer(self, datafile):
         if datafile.file_extension == '.txt':
-            text_view = TextViewer(self)
+            text_view = TextViewer(self, datafile.display_name, datafile.data_file_id)
             text_view.set_text(datafile.file_as_text)
             if not self.is_tab_open(datafile.display_name):
                 self.text_content_panel.addTab(text_view, datafile.display_name)
@@ -92,3 +91,6 @@ class MainQAWindow(QMainWindow):
             if display_name == self.text_content_panel.tabText(i):
                 return True
         return False
+
+    def get_file_name_from_open_tab(self):
+        return self.text_content_panel.tabText(self.text_content_panel.currentIndex())

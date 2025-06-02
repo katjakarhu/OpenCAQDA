@@ -23,7 +23,6 @@ from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
 class CodeTree(QTreeWidget):
     def __init__(self, project_manager, parent):
         super().__init__(parent)
-        self.codes = None
         self.project_manager = project_manager
         self.setHeaderLabel("Codes")
 
@@ -37,8 +36,7 @@ class CodeTree(QTreeWidget):
 
     def populate_code_list(self):
         self.clear()
-        self.codes = self.project_manager.get_project_codes()
-        for code in self.codes:
+        for code in self.project_manager.get_project_codes():
             self.add_item_to_tree(code.name)
 
     def add_and_save_code(self):
@@ -109,7 +107,6 @@ class CodeTree(QTreeWidget):
 class CodeTab(QWidget):
     def __init__(self, project_manager):
         super().__init__()
-        self.codes = []
 
         self.project_manager = project_manager
         analysis_layout = QVBoxLayout()

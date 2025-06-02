@@ -7,7 +7,7 @@ Handles everything within the project: CRUD operations for files, codes and note
 from pathlib import Path
 
 from ocaqda.data.database.databaseconnectivity import DatabaseConnectivity
-from ocaqda.data.models import Project, Code, DataFile, FileContent
+from ocaqda.data.models import Project, Code, DataFile, FileContent, CodedText
 from ocaqda.services.userservice import UserService
 
 
@@ -158,6 +158,16 @@ class ProjectService:
     def save_coded_text(self, coded_text):
         print(coded_text.text)
         # TODO: save to DB
+        session = DatabaseConnectivity().create_new_db_session()
+        session.add(coded_text)
+        session.commit()
+        session.close()
+
+    def get_coded_texts(self, data_file_id, name):
+        session = DatabaseConnectivity().create_new_db_session()
+        result = session.query(CodedText).filter(CodedText.data_file_id == data_file_id).all()
+        session.close()
+        return result
 
 
 def populate_projects():
