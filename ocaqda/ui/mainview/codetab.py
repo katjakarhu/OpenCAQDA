@@ -24,6 +24,7 @@ class CodeTree(QTreeWidget):
     def __init__(self, project_manager, parent):
         super().__init__(parent)
         self.project_manager = project_manager
+        self.parent = parent
         self.setHeaderLabel("Codes")
 
         self.setHeaderHidden(True)
@@ -89,6 +90,8 @@ class CodeTree(QTreeWidget):
                 iterator += 1
 
     def mousePressEvent(self, event):
+        self.setCurrentItem(self.itemAt(event.pos()))
+
         if event.button() == Qt.MouseButton.LeftButton:
             mime_data = QMimeData()
             mime_data.setText(self.currentItem().text(0))

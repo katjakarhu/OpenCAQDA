@@ -100,6 +100,7 @@ class CodedText(Base, TimestampColumnMixin, UserColumnMixin):
     __tablename__ = "coded_texts"
     coded_text_id = Column(Integer, Sequence('coded_text_id_seq'), primary_key=True)
     text = Column(Text, nullable=False)
-    position = Column(Integer)  # start position of text in file, with len(text) you can get the end position
+    start_position = Column(Integer)  # start position of text in file, with len(text) you can get the end position
+    end_position = Column(Integer)  # start position of text in file, with len(text) you can get the end position
     code_id = Column(Integer, ForeignKey("codes.code_id"))
     data_file_id = Column(Integer, ForeignKey("data_files.data_file_id"))

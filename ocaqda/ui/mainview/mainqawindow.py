@@ -79,8 +79,7 @@ class MainQAWindow(QMainWindow):
 
     def add_file_viewer(self, datafile):
         if datafile.file_extension == '.txt':
-            text_view = TextViewer(self, datafile.display_name, datafile.data_file_id)
-            text_view.set_text(datafile.file_as_text)
+            text_view = TextViewer(self, datafile)
             if not self.is_tab_open(datafile.display_name):
                 self.text_content_panel.addTab(text_view, datafile.display_name)
         else:

@@ -169,6 +169,12 @@ class ProjectService:
         session.close()
         return result
 
+    def get_code(self, code_id):
+        session = DatabaseConnectivity().create_new_db_session()
+        result = session.query(Code).filter(Code.code_id == code_id).one()
+        session.close()
+        return result
+
 
 def populate_projects():
     session = DatabaseConnectivity().create_new_db_session()
