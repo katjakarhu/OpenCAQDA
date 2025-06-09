@@ -35,34 +35,37 @@ The data is stored in an SQLite database locally.
 
 ### Mandatory
 
-- Fix DB url handling
-    - Separate url and path
-    - URL contains e.g. "sqlite:///"
 - Better user flow when:
     - Settings file does not exist
     - Database does not exist
 - Coding functionality
+    - Drag and drop coding: done for text files
+    - Uncoding: TODO
+    - Managing codes: TODO
 - Configuration
-- User functionality
-- Note functionality
-    - For files
+    - User configuration: preliminary version exists
+    - Database configuration: preliminary version exists 
+- Note/memo functionality
     - For codes
+    - For files
+    - For text selection?
+    - For whole project?
+- More unit tests
 
 ### High priority:
 
-- More unit tests
+- Text search within multiple files
 - Multi-user projects (with shared database)
     - Editable DB settings
     - Storing DB credentials
     - Other than SQLite support (MySQL, Postgres, etc.)
-- Text search within multiple files
 - Code relationship visualization and editing
 
 ### Nice to have:
 
 - Importing and exporting:
     - Codes
-    - Notes
+    - Notes/memos
     - Projects
 - Activity log:
     - Who did what
@@ -72,9 +75,11 @@ The data is stored in an SQLite database locally.
 
 - Codes to word cloud
 - Notes to word cloud
+- Sentiment analysis
+- Investigate other data analysis possibilities with Python that could be added here
+- Image coding support (e.g. image to text, or other)
 - Video file coding support
+- CSV and Excel file coding (can be circumvented by converting to PDF)
 - HTML file coding (can be circumvented by converting to PDF)
 - DOCX coding (can be circumvented by converting to PDF)
-- CSV and Excel file coding
-- Image coding support (e.g. image to text, or other)
-- RTF file coding
+- RTF file coding (can be circumvented by converting to PDF)
