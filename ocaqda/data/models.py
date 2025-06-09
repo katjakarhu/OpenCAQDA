@@ -6,7 +6,7 @@ import bcrypt
 from sqlalchemy import Column, Integer, String, ForeignKey, LargeBinary, Sequence, UniqueConstraint, Text, DateTime, \
     func, Boolean, Enum
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import declared_attr, relationship
+from sqlalchemy.orm import declared_attr, relationship, backref
 
 from ocaqda.data.enums.coderelationshipenum import CodeRelationshipEnum
 
@@ -100,7 +100,11 @@ class CodedText(Base, TimestampColumnMixin, UserColumnMixin):
     __tablename__ = "coded_texts"
     coded_text_id = Column(Integer, Sequence('coded_text_id_seq'), primary_key=True)
     text = Column(Text, nullable=False)
-    start_position = Column(Integer)  # start position of text in file, with len(text) you can get the end position
-    end_position = Column(Integer)  # start position of text in file, with len(text) you can get the end position
-    code_id = Column(Integer, ForeignKey("codes.code_id"))
-    data_file_id = Column(Integer, ForeignKey("data_files.data_file_id"))
+    start_position = Column(Integer,
+                            nullable=False)  # start position of text in file, with len(text) you can get the end position
+    end_position = Column(Integer,
+                          nullable=False)  # start position of text in file, with len(text) you can get the end position
+    code_id = Column(Integer, ForeignKey("codes.code_id"), nullable=False)
+    code = relationship("Code", backref=backref("CodedText", uselist=False))
+
+    data_file_id = Column(Integer, ForeignKey("data_files.data_file_id"), nullable=False)

@@ -126,9 +126,16 @@ class CodeTab(QWidget):
         # Button to add new text entries
         add_code_layout = QHBoxLayout()
         self.add_code_field = QLineEdit()
-        self.add_button = QPushButton("Add codes")
+        self.add_button = QPushButton("Add code")
         self.add_button.clicked.connect(self.code_tree.add_and_save_code)
         add_code_layout.addWidget(self.add_code_field)
         add_code_layout.addWidget(self.add_button)
         analysis_layout.addLayout(add_code_layout)
+
+        self.manage_codes_button = QPushButton("Manage codes")
+        self.manage_codes_button.clicked.connect(self.manage_codes)
+        analysis_layout.addWidget(self.manage_codes_button)
         self.setLayout(analysis_layout)
+
+    def manage_codes(self):
+        pass
