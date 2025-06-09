@@ -15,10 +15,8 @@ from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
 
 
 # TODO:
-# LOAD CURRENT CODES FROM DB
-# add quick filter for codes
 # manage codes button and view
-# drag and drop coding
+# drag and drop coding for PDF
 
 class CodeTree(QTreeWidget):
     def __init__(self, project_manager, parent):

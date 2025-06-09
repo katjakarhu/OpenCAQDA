@@ -92,9 +92,10 @@ class FileTab(QWidget):
         print("rename")
 
     def delete_file(self):
-        print("delete")
+
         for f in self.main_window.project_manager.get_project_files():
             if f.display_name == self.file_list.currentItem().text():
+                self.main_window.close_tab(f.display_name)
                 self.main_window.project_manager.delete_file_from_db(f)
                 break
         self.file_list.takeItem(self.file_list.currentRow())

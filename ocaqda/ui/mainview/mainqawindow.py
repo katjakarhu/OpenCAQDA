@@ -91,5 +91,10 @@ class MainQAWindow(QMainWindow):
                 return True
         return False
 
+    def close_tab(self, display_name):
+        for i in range(self.text_content_panel.count()):
+            if display_name == self.text_content_panel.tabText(i):
+                self.text_content_panel.removeTab(i)
+
     def get_file_name_from_open_tab(self):
         return self.text_content_panel.tabText(self.text_content_panel.currentIndex())
