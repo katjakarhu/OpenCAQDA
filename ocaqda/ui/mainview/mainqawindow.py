@@ -25,7 +25,7 @@ class MainQAWindow(QMainWindow):
 
         self.text_content_panel = ContentTabView()
         self.status_bar = self.statusBar()
-        self.project_manager = None
+        self.project_service = None
         self.set_project(name)
         self.initialize_layout()
 
@@ -39,7 +39,7 @@ class MainQAWindow(QMainWindow):
         save_action = QAction('&Save project', self)
         save_action.setStatusTip('Save project')
         save_action.setShortcut('Ctrl+S')
-        save_action.triggered.connect(self.project_manager.save_project)
+        save_action.triggered.connect(self.project_service.save_project)
         file_menu.addAction(save_action)
         file_menu.addSeparator()
 
@@ -48,7 +48,7 @@ class MainQAWindow(QMainWindow):
         # Left column with tabs
         tab_widget = QTabWidget()
         tab_widget.setMaximumWidth(300)
-        code_tab = CodeTab(self.project_manager)
+        code_tab = CodeTab(self.project_service)
         files_tab = FileTab(self)
         # Add tabs to tab widget
         tab_widget.addTab(code_tab, "Codes")
@@ -57,7 +57,7 @@ class MainQAWindow(QMainWindow):
         self.text_content_panel.setMinimumWidth(500)
 
         # Right panel
-        right_panel = InfoAndNotePanel(self.project_manager)
+        right_panel = InfoAndNotePanel(self.project_service)
         right_panel.setMaximumWidth(400)
         # Splitter for resizing panels
         splitter = QSplitter()
@@ -73,7 +73,7 @@ class MainQAWindow(QMainWindow):
     def set_project(self, name):
         # Each project has its own ProjectManager connected to the MainWindow
         # If project does not exist, it is created
-        self.project_manager = ProjectService(name)
+        self.project_service = ProjectService(name)
 
         self.setWindowTitle("OpenCAQDA - Project: " + name)
 

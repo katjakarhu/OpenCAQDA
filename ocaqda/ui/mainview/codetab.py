@@ -19,9 +19,9 @@ from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
 # drag and drop coding for PDF
 
 class CodeTree(QTreeWidget):
-    def __init__(self, project_manager, parent):
+    def __init__(self, project_service, parent):
         super().__init__(parent)
-        self.project_manager = project_manager
+        self.project_service = project_service
         self.parent = parent
         self.setHeaderLabel("Codes")
 
@@ -35,7 +35,7 @@ class CodeTree(QTreeWidget):
 
     def populate_code_list(self):
         self.clear()
-        for code in self.project_manager.get_project_codes():
+        for code in self.project_service.get_project_codes():
             self.add_item_to_tree(code.name)
 
     def add_and_save_code(self):
@@ -44,7 +44,7 @@ class CodeTree(QTreeWidget):
         if text:
             # Limit the text length to 512 characters
             if len(text) > 0 and len(self.findItems(text, Qt.MatchFlag.MatchExactly)) == 0:
-                self.project_manager.save_code(text)
+                self.project_service.save_code(text)
                 self.populate_code_list()
 
     def add_item_to_tree(self, text):
@@ -106,13 +106,13 @@ class CodeTree(QTreeWidget):
 
 
 class CodeTab(QWidget):
-    def __init__(self, project_manager):
+    def __init__(self, project_service):
         super().__init__()
 
-        self.project_manager = project_manager
+        self.project_service = project_service
         analysis_layout = QVBoxLayout()
         # Tree widget for analysis tab
-        self.code_tree = CodeTree(project_manager, self)
+        self.code_tree = CodeTree(project_service, self)
         self.filter_field = QLineEdit()
         self.filter_field.setPlaceholderText("Filter codes...")
 

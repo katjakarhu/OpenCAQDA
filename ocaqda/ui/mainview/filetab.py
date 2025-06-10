@@ -59,44 +59,40 @@ class FileTab(QWidget):
                 self.populate_file_list()
 
     def get_added_files(self):
-        return [x.display_name for x in self.main_window.project_manager.get_project_files()]
+        return [x.display_name for x in self.main_window.project_service.get_project_files()]
 
     def save_files(self, files):
-        print(files)
         items = self.get_added_files()
-        print(items)
 
         filenames = [f for f in files if f[f.rfind('/') + 1:]
                      not in items]
-        print(filenames)
         self.file_list.addItems(filenames)
 
-        return self.main_window.project_manager.save_files(filenames)
+        return self.main_window.project_service.save_files(filenames)
 
     def populate_file_list(self):
         self.file_list.clear()
-        for f in self.main_window.project_manager.get_project_files():
+        for f in self.main_window.project_service.get_project_files():
             self.file_list.addItem(f.display_name)
 
     def open_file(self):
         selected_file = self.file_list.currentItem().text()
-        print(selected_file)
-        for f in self.main_window.project_manager.get_project_files():
+        for f in self.main_window.project_service.get_project_files():
             if f.display_name == selected_file:
                 self.main_window.add_file_viewer(f)
 
     def manage_files(self):
-        self.file_list.editable = True
+        pass
 
     def rename_file(self):
         print("rename")
 
     def delete_file(self):
 
-        for f in self.main_window.project_manager.get_project_files():
+        for f in self.main_window.project_service.get_project_files():
             if f.display_name == self.file_list.currentItem().text():
                 self.main_window.close_tab(f.display_name)
-                self.main_window.project_manager.delete_file_from_db(f)
+                self.main_window.project_service.delete_file_from_db(f)
                 break
         self.file_list.takeItem(self.file_list.currentRow())
         self.populate_file_list()

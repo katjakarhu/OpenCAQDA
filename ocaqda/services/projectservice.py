@@ -125,7 +125,6 @@ class ProjectService:
         f = open(file_path, 'r')
         if new_file.file_extension == ".txt":
             new_file.file_as_text = f.read()
-            print(new_file.file_as_text)
         elif new_file.file_extension == ".pdf":
             from pypdf import PdfReader
 
@@ -135,7 +134,6 @@ class ProjectService:
             text_content = ""
             for page in reader.pages:
                 text = page.extract_text()
-                print(text)
                 text_content += text
             new_file.file_as_text = text_content
             reader.close()
@@ -158,8 +156,6 @@ class ProjectService:
         return result
 
     def save_coded_text(self, coded_text):
-        print(coded_text.text)
-        # TODO: save to DB
         session = DatabaseConnectivity().create_new_db_session()
         session.add(coded_text)
         session.commit()

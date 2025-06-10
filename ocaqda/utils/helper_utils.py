@@ -20,14 +20,6 @@ def convert_and_merge_ranges(input_ranges):
     # Sort the ranges based on the start position
     sorted_ranges = sorted(input_ranges, key=lambda x: x[0])
 
-    print(sorted_ranges)
-
-    # while has_overlap:
-    #    while i < len(sorted_ranges):
-    # s1, e1, labels1 = sorted_ranges[i]
-
-    # Iterate through the sorted ranges
-
     merged_ranges = set_ranges(sorted_ranges)
 
     return merged_ranges
@@ -90,9 +82,9 @@ def set_ranges(sorted_ranges):
         result.append([start_num, max(merged_dict.keys()), current_value])
 
 
+    # Add not overlapping ranges back to the mix and sort
     result = result + not_overlapped_ranges
     merged_ranges = sorted(result, key=lambda x: x[0])
-    print("r", merged_ranges)
 
     return merged_ranges
 
@@ -102,7 +94,6 @@ def find_overlap(sorted_ranges):
     free_items = []
 
     for i in range(len(sorted_ranges)):
-        print(i)
         overlap = False
 
         for j in range(len(sorted_ranges)):

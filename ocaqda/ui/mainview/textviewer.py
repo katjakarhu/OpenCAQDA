@@ -16,8 +16,8 @@ class TextViewer(QPlainTextEdit, QUndoCommand):
         self.parent = parent
         self.data_file = data_file
 
-        self.codes = self.parent.project_manager.get_project_codes()
-        self.coded_texts = self.parent.project_manager.get_coded_texts(self.data_file.data_file_id,
+        self.codes = self.parent.project_service.get_project_codes()
+        self.coded_texts = self.parent.project_service.get_coded_texts(self.data_file.data_file_id,
                                                                        self.data_file.display_name)
         self.highlighter = None
 
@@ -56,17 +56,15 @@ class TextViewer(QPlainTextEdit, QUndoCommand):
 
     def get_used_codes_at_position(self):
         cursor = self.textCursor()
-        print("Cursor position", cursor.selectionStart())
         used_codes = set()
 
-        self.coded_texts = self.parent.project_manager.get_coded_texts(self.data_file.data_file_id,
+        self.coded_texts = self.parent.project_service.get_coded_texts(self.data_file.data_file_id,
                                                                        self.data_file.display_name)
         for coded_text in self.coded_texts:
             if coded_text.start_position <= cursor.position() <= coded_text.end_position:
                 code = next(filter(lambda x: x.code_id == coded_text.code_id, self.codes), None)
                 used_codes.add(code.name)
 
-        print(used_codes)
         return used_codes
 
     def remove_code(self, code):
@@ -92,7 +90,7 @@ class TextViewer(QPlainTextEdit, QUndoCommand):
     def add_code_to_selected_text(self, current_selection, e):
         coded_text = CodedText()
         coded_text.data_file_id = self.data_file.data_file_id
-        self.codes = self.parent.project_manager.get_project_codes()
+        self.codes = self.parent.project_service.get_project_codes()
         for code in self.codes:
             if code.name == e.mimeData().text():
                 coded_text.code_id = code.code_id
@@ -102,11 +100,11 @@ class TextViewer(QPlainTextEdit, QUndoCommand):
         coded_text.end_position = self.textCursor().selectionEnd()
         coded_text.created_by = UserService().user.user_id
         coded_text.updated_by = UserService().user.user_id
-        self.parent.project_manager.save_coded_text(coded_text)
+        self.parent.project_service.save_coded_text(coded_text)
         self.refresh_coded_text_highlight()
 
     def refresh_coded_text_highlight(self):
-        self.coded_texts = self.parent.project_manager.get_coded_texts(self.data_file.data_file_id,
+        self.coded_texts = self.parent.project_service.get_coded_texts(self.data_file.data_file_id,
                                                                        self.data_file.display_name)
         # Ugly solution? Resets all formatting by reloading text and reapplying formatting
         self.setPlainText(self.data_file.file_as_text)

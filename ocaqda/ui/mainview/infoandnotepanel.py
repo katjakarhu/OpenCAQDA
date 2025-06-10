@@ -5,9 +5,9 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit
 
 
 class InfoAndNotePanel(QWidget):
-    def __init__(self, project_manager):
+    def __init__(self, project_service):
         super().__init__()
-        self.project_manager = project_manager
+        self.project_service = project_service
         layout = QVBoxLayout()
         info_header_label = QLabel("Information:")
         header_style = "font-size: 14px; font-weight: bold;"

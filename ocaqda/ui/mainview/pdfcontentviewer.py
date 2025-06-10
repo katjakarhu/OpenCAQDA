@@ -32,7 +32,7 @@ class PDFContentViewer(QPdfView):
         self.pageChanged.emit(page)
 
     def load_binary_file_content(self, datafile):
-        return self.parent.project_manager.load_binary_file_content(datafile)
+        return self.parent.project_service.load_binary_file_content(datafile)
 
     def mousePressEvent(self, e):
         if e.button() == Qt.MouseButton.RightButton:
