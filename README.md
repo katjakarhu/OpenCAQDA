@@ -74,6 +74,8 @@ example in defining themes, sub-themes and categories.
 - Activity log:
     - Who did what
     - Can be used as a basis for reporting your analysis process
+- Case study features:
+    - Cross case analysis view: compare the codes in cases
 
 ### Maybe some day
 
