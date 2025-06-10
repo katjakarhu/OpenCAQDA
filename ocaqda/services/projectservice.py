@@ -11,9 +11,10 @@ from ocaqda.data.models import Project, Code, DataFile, FileContent, CodedText
 from ocaqda.services.userservice import UserService
 
 
+
 def get_file_content_from_db(file_as_bytes):
     session = DatabaseConnectivity().create_new_db_session()
-    result = session.query(FileContent).filter(FileContent.file_content == file_as_bytes).one_or_none()
+    result = session.query(FileContent).filter(FileContent.content == file_as_bytes).one_or_none()
     session.close()
     return result
 
@@ -110,14 +111,15 @@ class ProjectService:
         content_from_db = get_file_content_from_db(file_as_bytes)
         if content_from_db is not None:
             session.add(content_from_db)
-            content_from_db.data_files.append(new_file)
+            new_file.file_content = content_from_db
         else:
             content = FileContent()
-            content.file_content = file_as_bytes
+            content.content = file_as_bytes
             content.created_by = user.user_id
             content.updated_by = user.user_id
-            content.data_files.append(new_file)
+            new_file.file_content = content
             session.add(content)
+
         f.close()
 
         f = open(file_path, 'r')
@@ -175,6 +177,12 @@ class ProjectService:
         session.close()
         return result
 
+    def load_binary_file_content(self, datafile):
+        session = DatabaseConnectivity().create_new_db_session()
+        session.add(datafile)
+        result = datafile.file_content
+        session.close()
+        return result.content
 
 def populate_projects():
     session = DatabaseConnectivity().create_new_db_session()

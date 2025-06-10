@@ -61,8 +61,10 @@ class DataFile(Base, TimestampColumnMixin, UserColumnMixin):
     url = Column(String)
     file_extension = Column(String, nullable=False)
     file_as_text = Column(Text)
-    # Store file content as binary only once, same content can be used in many projects
+    # Store the file content as binary only once, same content can be used in many projects
     file_content_id = Column(Integer, ForeignKey("file_content.file_content_id"), nullable=False)
+    file_content = relationship("FileContent", backref=backref("DataFile", uselist=False))
+
     code_id = Column(Integer, ForeignKey('codes.code_id'))  # you can code files as well
     project_id = Column(Integer, ForeignKey("projects.project_id"), nullable=False)
     project = relationship("Project", back_populates="data_files")
@@ -71,8 +73,7 @@ class DataFile(Base, TimestampColumnMixin, UserColumnMixin):
 class FileContent(Base, TimestampColumnMixin, UserColumnMixin):
     __tablename__ = "file_content"
     file_content_id = Column(Integer, Sequence('file_content_id_seq'), primary_key=True)
-    file_content = Column(LargeBinary, unique=True, nullable=False)
-    data_files = relationship("DataFile")
+    content = Column(LargeBinary, unique=True, nullable=False)
 
 
 class Code(Base, TimestampColumnMixin, UserColumnMixin):

@@ -82,8 +82,11 @@ class MainQAWindow(QMainWindow):
             text_view = TextViewer(self, datafile)
             if not self.is_tab_open(datafile.display_name):
                 self.text_content_panel.addTab(text_view, datafile.display_name)
-        else:
-            pass
+        elif datafile.file_extension == '.pdf':
+            from ocaqda.ui.mainview.pdfviewer import PDFViewer
+            pdf_view = PDFViewer(self, datafile)
+            if not self.is_tab_open(datafile.display_name):
+                self.text_content_panel.addTab(pdf_view, datafile.display_name)
 
     def is_tab_open(self, display_name):
         for i in range(self.text_content_panel.count()):
