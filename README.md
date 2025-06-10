@@ -1,10 +1,10 @@
-# OpenCAQDA
+# OpenCAQDA - Open Source Computer-Assisted Qualitative Data Analysis Tool
 
 WORK-IN-PROGRESS: Use at your own risk! 
 
 If you would like to participate, feel free to tackle unassigned issues! 
 
-OpenCAQDA is an easy to use desktop application for qualitative data analysis. The goal is to provide the user with high visibility and control over the coding process, and therefore no AI feature are planned. 
+OpenCAQDA is an easy to use open source desktop application for qualitative data analysis. The goal is to provide the user with high visibility and control over the coding process, and therefore no AI feature are planned. 
 
 You can:
 
