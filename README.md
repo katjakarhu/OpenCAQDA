@@ -1,5 +1,7 @@
 # OpenCAQDA
 
+WORK-IN-PROGRESS: Use at your own risk
+
 OpenCAQDA is an easy to use desktop application for qualitative data analysis.  
 The goal is to provide high visibility and control over the coding process for the user.
 
