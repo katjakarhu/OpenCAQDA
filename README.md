@@ -6,10 +6,7 @@ The goal is to provide high visibility and control over the coding process for t
 You can:
 
 - Code plain text and PDF files
-- Define hierarchies and relationships between codes
-    - Themes, sub-themes, categories
-    - Relationships can have labels
--
+
 
 ## Features
 
@@ -17,8 +14,6 @@ Create research projects, that contain a set of files and codes.
 
 Drag and drop coding.
 
-You can define parent-child hierarchies with codes that you can use for
-example in defining themes, sub-themes and categories.
 
 Quick filter codes.
 
@@ -35,6 +30,10 @@ The data is stored in an SQLite database locally.
 
 ### Mandatory
 
+- Define hierarchies and relationships between codes
+    - Relationships can have labels
+    - You can define parent-child hierarchies with codes that you can use for
+example in defining themes, sub-themes and categories.
 - Better user flow when:
     - Settings file does not exist
     - Database does not exist
