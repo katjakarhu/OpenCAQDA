@@ -12,10 +12,11 @@ You can:
 
 Create research projects, that contain a set of files and codes.
 
-Drag and drop coding.
+Drag and drop coding: select text and drag code over it (left mouse button=.
+Drag and drop code hierarchy: with right button, drag and drop codes over each other to create a hierarchy (TODO: save relationship to database, now this resets everytime you restart the application)
 
+Quick filter codes: find the relevant codes easily
 
-Quick filter codes.
 
 ### Supported file formats:
 
@@ -31,6 +32,7 @@ The data is stored in an SQLite database locally.
 ### Mandatory
 
 - Define hierarchies and relationships between codes
+    - Save drag and drop code relationships to database
     - Relationships can have labels
     - You can define parent-child hierarchies with codes that you can use for
 example in defining themes, sub-themes and categories.
