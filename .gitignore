@@ -274,4 +274,4 @@ fabric.properties
 #### Project specific ignore
 # Database files:
 *.db
-/opencaqda-settings.yaml
+opencaqda/opencaqda-settings.yaml
