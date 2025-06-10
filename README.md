@@ -28,7 +28,21 @@ Quick filter codes: find the relevant codes easily
 
 ## Technical details
 
-The data is stored in an SQLite database locally.
+The data is stored in an SQLite database locally (TODO: add possibility for user the change the URL to database for shared database use)
+
+
+### Running the application
+
+You will need to have Python 3 installed.
+
+Install requirements:
+
+`pip install -r requirements.txt`
+
+Run app
+
+`python main.py`
+
 
 ## Planned features
 
