@@ -14,7 +14,7 @@ from ocaqda.services.projectservice import ProjectService
 from ocaqda.ui.mainview.codetab import CodeTab
 from ocaqda.ui.mainview.filetab import FileTab
 from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
-from ocaqda.ui.mainview.textcontentview import TextContentView
+from ocaqda.ui.mainview.contenttabview import ContentTabView
 from ocaqda.ui.mainview.textviewer import TextViewer
 
 
@@ -23,7 +23,7 @@ class MainQAWindow(QMainWindow):
     def __init__(self, name):
         super().__init__()
 
-        self.text_content_panel = TextContentView()
+        self.text_content_panel = ContentTabView()
         self.status_bar = self.statusBar()
         self.project_manager = None
         self.set_project(name)

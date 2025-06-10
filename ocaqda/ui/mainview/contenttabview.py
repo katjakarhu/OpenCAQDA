@@ -5,7 +5,7 @@ Component holds all the tabs containing opened files (txt or pdf)
 from PySide6.QtWidgets import QTabWidget
 
 
-class TextContentView(QTabWidget):
+class ContentTabView(QTabWidget):
     def __init__(self):
         super().__init__()
         self.setTabsClosable(True)

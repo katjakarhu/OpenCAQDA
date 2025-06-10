@@ -1,21 +1,20 @@
-from PySide6.QtCore import QByteArray, QBuffer, QIODevice
-from PySide6.QtPdf import QPdfDocument
-from PySide6.QtPdfWidgets import QPdfView
+from PySide6.QtWidgets import QWidget, QHBoxLayout
+
+from ocaqda.ui.mainview.pdfcontentviewer import PDFContentViewer
+from ocaqda.ui.mainview.textviewer import TextViewer
 
 
-class PDFViewer(QPdfView):
+class PDFViewer(QWidget):
     def __init__(self, parent, datafile):
         super(PDFViewer, self).__init__(parent)
         self.parent = parent
-        self.data_file = datafile
-        self.document = QPdfDocument()
-        self.file_content = self.load_binary_file_content(datafile)
-        ba = QByteArray(self.file_content)
-        device = QBuffer(ba)
-        device.open(QIODevice.OpenModeFlag.ReadOnly)
-        self.document.load(device)
-        device.close()
-        self.setDocument(self.document)
+        self.datafile = datafile
 
-    def load_binary_file_content(self, datafile):
-        return self.parent.project_manager.load_binary_file_content(datafile)
+        layout = QHBoxLayout()
+        pdf_content = PDFContentViewer(parent, datafile)
+        text_content = TextViewer(parent, datafile)
+
+        layout.addWidget(pdf_content)
+        layout.addWidget(text_content)
+
+        self.setLayout(layout)
