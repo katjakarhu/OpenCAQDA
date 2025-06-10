@@ -1,10 +1,12 @@
-from PySide6.QtCore import QByteArray, QBuffer, QIODevice, Slot, QPoint
+from PySide6.QtCore import QByteArray, QBuffer, QIODevice, Slot, QPoint, Signal
 from PySide6.QtGui import Qt
 from PySide6.QtPdf import QPdfDocument
 from PySide6.QtPdfWidgets import QPdfView
 
 
 class PDFContentViewer(QPdfView):
+    pageChanged = Signal(int)  # Signal emitted when page changes
+
     def __init__(self, parent, datafile):
         super(PDFContentViewer, self).__init__(parent)
         self.parent = parent
@@ -15,7 +17,6 @@ class PDFContentViewer(QPdfView):
         self.device = QBuffer(ba)
         self.device.open(QIODevice.OpenModeFlag.ReadOnly)
         self.document.load(self.device)
-        # device.close()
         self.setDocument(self.document)
         self.setAcceptDrops(True)
         self.setMouseTracking(True)
@@ -25,6 +26,10 @@ class PDFContentViewer(QPdfView):
             self.setPageMode(QPdfView.PageMode.MultiPage)
 
         nav = self.pageNavigator()
+        nav.currentPageChanged.connect(self.on_page_changed)
+
+    def on_page_changed(self, page):
+        self.pageChanged.emit(page)
 
     def load_binary_file_content(self, datafile):
         return self.parent.project_manager.load_binary_file_content(datafile)
