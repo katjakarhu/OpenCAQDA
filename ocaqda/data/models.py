@@ -53,6 +53,9 @@ class Project(Base, TimestampColumnMixin, UserColumnMixin):
     url = Column(String)
     data_files = relationship("DataFile", back_populates="project")
 
+    note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=False)
+    note = relationship("Note", backref=backref("Project", uselist=False))
+
 
 class DataFile(Base, TimestampColumnMixin, UserColumnMixin):
     __tablename__ = "data_files"
@@ -66,6 +69,10 @@ class DataFile(Base, TimestampColumnMixin, UserColumnMixin):
     file_content = relationship("FileContent", backref=backref("DataFile", uselist=False))
 
     code_id = Column(Integer, ForeignKey('codes.code_id'))  # you can code files as well
+
+    note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=False)
+    note = relationship("Note", backref=backref("DataFile", uselist=False))
+
     project_id = Column(Integer, ForeignKey("projects.project_id"), nullable=False)
     project = relationship("Project", back_populates="data_files")
 
@@ -80,7 +87,8 @@ class Code(Base, TimestampColumnMixin, UserColumnMixin):
     __tablename__ = "codes"
     code_id = Column(Integer, Sequence('code_id_seq'), primary_key=True)
     name = Column(String, nullable=False)
-    notes = Column(Text)
+    note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=False)
+    note = relationship("Note", backref=backref("Code", uselist=False))
     project_id = Column(Integer, ForeignKey("projects.project_id"))
 
 
@@ -94,6 +102,10 @@ class CodeRelationship(Base, TimestampColumnMixin, UserColumnMixin):
     from_code_id = Column(Integer, ForeignKey("codes.code_id"), nullable=False)
     to_code_id = Column(Integer, ForeignKey("codes.code_id"), nullable=False)
     has_direction = Column(Boolean)
+
+    note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=False)
+    note = relationship("Note", backref=backref("CodeRelationship", uselist=False))
+
     __table_args__ = (UniqueConstraint('from_code_id', 'to_code_id', 'label', name='_from_to_label_uc'),)
 
 
@@ -109,3 +121,9 @@ class CodedText(Base, TimestampColumnMixin, UserColumnMixin):
     code = relationship("Code", backref=backref("CodedText", uselist=False))
 
     data_file_id = Column(Integer, ForeignKey("data_files.data_file_id"), nullable=False)
+
+
+class Note(Base, TimestampColumnMixin, UserColumnMixin):
+    __tablename__ = "notes"
+    note_id = Column(Integer, Sequence('note_id_seq'), primary_key=True)
+    text = Column(Text, nullable=False)
