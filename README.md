@@ -45,11 +45,11 @@ Run app:
 
 ### Architecture
 
-- database/        contains classes related to database connectivity 
-- data/            contains enums, entities (models.py)
-- services/        handles fetching and saving data
-- ui/              contains the views 
-- utils/           contains useful methods that can be used anywhere
+- **database/**       contains classes related to database connectivity 
+- **data/**           contains enums, entities (models.py)
+- **services/**       handles fetching and saving data, call these methods from the UI
+- **ui/**             contains the views 
+- **utils/**          contains useful methods that can be used anywhere
 
 
 ## Planned features
@@ -102,6 +102,7 @@ example in defining themes, sub-themes and categories.
 
 ### Maybe some day
 
+- Many projects open at the same time
 - Codes to word cloud
 - Notes to word cloud
 - Sentiment analysis
