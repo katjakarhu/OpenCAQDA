@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QVBoxLayout, QLabel, QListWidget, QHBoxLayout, QPu
     QMessageBox, QDialog, QLineEdit, QWidget
 from sqlalchemy import exists
 
-from ocaqda.data.database.databaseconnectivity import DatabaseConnectivity
+from ocaqda.database import DatabaseConnectivity
 from ocaqda.data.models import User
 from ocaqda.services.configurationservice import ConfigurationService, load_configuration
 from ocaqda.services.projectservice import populate_projects

@@ -6,7 +6,7 @@ Handles everything within the project: CRUD operations for files, codes and note
 
 from pathlib import Path
 
-from ocaqda.data.database.databaseconnectivity import DatabaseConnectivity
+from ocaqda.database import DatabaseConnectivity
 from ocaqda.data.models import Project, Code, DataFile, FileContent, CodedText
 from ocaqda.services.userservice import UserService
 

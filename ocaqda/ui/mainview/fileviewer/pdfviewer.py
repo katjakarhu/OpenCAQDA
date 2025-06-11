@@ -1,8 +1,17 @@
-from PySide6.QtWidgets import QWidget, QHBoxLayout
-from PySide6.QtCore import Qt, Signal
+"""
+PDFViewer displays the original PDF (PDFContentViewer) and plain text version (textviewer) side by side.
+This is because Qt's PDF implementation does not directly support selecting text.
 
-from ocaqda.ui.mainview.pdfcontentviewer import PDFContentViewer
-from ocaqda.ui.mainview.textviewer import TextViewer
+To enable the drag and drop coding for selected text in PDF, the alternative was to display the text-only version
+side-by-side with the original PDF. Original PDF may contain important contextual information such as figures that
+lost with the text conversion, therefore it was important to have it visible as well.
+
+"""
+
+from PySide6.QtWidgets import QWidget, QHBoxLayout
+
+from ocaqda.ui.mainview.fileviewer.pdfcontentviewer import PDFContentViewer
+from ocaqda.ui.mainview.fileviewer.textviewer import TextViewer
 
 
 class PDFViewer(QWidget):
@@ -31,7 +40,7 @@ class PDFViewer(QWidget):
         text_length = len(self.text_content.toPlainText())
         chars_per_page = text_length / total_pages
         target_position = int(page * chars_per_page)
-        
+
         # Scroll text to the calculated position
         cursor = self.text_content.textCursor()
         cursor.setPosition(target_position)
@@ -43,12 +52,12 @@ class PDFViewer(QWidget):
         text_length = len(self.text_content.toPlainText())
         total_pages = self.pdf_content.document.pageCount()
         chars_per_page = text_length / total_pages
-        
+
         # Get current cursor position
         cursor_pos = self.text_content.textCursor().position()
         target_page = int(cursor_pos / chars_per_page)
-        
+
         # Update PDF view if page changed
         if target_page != self.pdf_content.pageNavigator().currentPage():
-            self.pdf_content.pageNavigator().jump(target_page, self.pdf_content.pageNavigator().currentLocation(), 
-                                                self.pdf_content.pageNavigator().currentZoom())
+            self.pdf_content.pageNavigator().jump(target_page, self.pdf_content.pageNavigator().currentLocation(),
+                                                  self.pdf_content.pageNavigator().currentZoom())

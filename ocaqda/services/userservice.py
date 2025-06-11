@@ -2,7 +2,7 @@
 Provides access to the current user object
 """
 
-from ocaqda.data.database.databaseconnectivity import DatabaseConnectivity
+from ocaqda.database import DatabaseConnectivity
 from ocaqda.data.models import User
 from ocaqda.services.configurationservice import ConfigurationService
 from ocaqda.utils.singleton import Singleton

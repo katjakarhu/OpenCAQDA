@@ -1,5 +1,5 @@
 """
-A component for viewing plain text (txt) files
+A component for viewing plain text files
 """
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QTextCharFormat, QTextCursor, QColor, QUndoCommand, QAction
@@ -27,8 +27,7 @@ class TextViewer(QPlainTextEdit, QUndoCommand):
 
         self.setPlainText(data_file.file_as_text)
         self.refresh_coded_text_highlight()
-        # menu = QMenu().addAction()
-        # self.createStandardContextMenu().add
+
 
     def mousePressEvent(self, e):
         if e.button() == Qt.MouseButton.RightButton:
@@ -39,18 +38,17 @@ class TextViewer(QPlainTextEdit, QUndoCommand):
     def contextMenuEvent(self, event):
         menu = self.createStandardContextMenu()
         menu.addSeparator()
-        remove_submenu = QMenu("Uncode", self)
-        # remove_action.triggered.connect(self.remove_code_from_area)
-        # TODO: list used codes in submenu!
-        for a in remove_submenu.actions():
-            remove_submenu.removeAction(a)
-        c = []
+
+        uncode_submenu = QMenu("Uncode", self)
+        for a in uncode_submenu.actions():
+            uncode_submenu.removeAction(a)
+
         c = self.get_used_codes_at_position()
         for code in c:
             code_action = QAction(code, self.remove_code(code))
-            remove_submenu.addAction(code_action)
+            uncode_submenu.addAction(code_action)
 
-        menu.addMenu(remove_submenu)
+        menu.addMenu(uncode_submenu)
 
         menu.exec(event.globalPos())
 
@@ -112,9 +110,6 @@ class TextViewer(QPlainTextEdit, QUndoCommand):
         string_format = QTextCharFormat()
         string_format.setBackground(QColor("yellow"))
 
-        # TODO handle multiple codes in same location, comma separated list to tooltip?
-
-        # positions = {["x","x"]: "code1, code2"}
         positions = []
 
         for coded_text in self.coded_texts:
@@ -129,12 +124,3 @@ class TextViewer(QPlainTextEdit, QUndoCommand):
             string_format.setToolTip(str(item[2]))
             cursor.mergeCharFormat(string_format)
 
-        overlap_positions = []
-        # for p1 in positions:
-        #     for p2 in positions:
-        #         if p1[0] == p2[0] and p1[1] == p2[1] and p1[2] == p2[2]:
-        #             pass
-        #         else:
-        #             rs, re = find_range_overlap(range(p1[0], p1[1]), range(p2[0], p2[1]))
-        #             if rs is not None:
-        #                 overlap_positions.append([ol[0], ]

@@ -136,4 +136,4 @@ class CodeTab(QWidget):
         self.setLayout(analysis_layout)
 
     def manage_codes(self):
-        pass
+        raise "Implement me!"

@@ -82,10 +82,10 @@ class FileTab(QWidget):
                 self.main_window.add_file_viewer(f)
 
     def manage_files(self):
-        pass
+        raise "Implement me!"
 
     def rename_file(self):
-        print("rename")
+        raise "Implement me!"
 
     def delete_file(self):
 

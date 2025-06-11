@@ -12,10 +12,10 @@ from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QTabWidget, QSplitter, Q
 
 from ocaqda.services.projectservice import ProjectService
 from ocaqda.ui.mainview.codetab import CodeTab
-from ocaqda.ui.mainview.contenttabview import ContentTabView
+from ocaqda.ui.mainview.fileviewer.contenttabview import ContentTabView
 from ocaqda.ui.mainview.filetab import FileTab
 from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
-from ocaqda.ui.mainview.textviewer import TextViewer
+from ocaqda.ui.mainview.fileviewer.textviewer import TextViewer
 
 
 class MainQAWindow(QMainWindow):
@@ -83,7 +83,7 @@ class MainQAWindow(QMainWindow):
             if not self.is_tab_open(datafile.display_name):
                 self.text_content_panel.addTab(text_view, datafile.display_name)
         elif datafile.file_extension == '.pdf':
-            from ocaqda.ui.mainview.pdfviewer import PDFViewer
+            from ocaqda.ui.mainview.fileviewer.pdfviewer import PDFViewer
             pdf_view = PDFViewer(self, datafile)
             if not self.is_tab_open(datafile.display_name):
                 self.text_content_panel.addTab(pdf_view, datafile.display_name)

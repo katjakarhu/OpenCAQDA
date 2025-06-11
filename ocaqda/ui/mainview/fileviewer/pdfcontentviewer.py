@@ -1,3 +1,8 @@
+"""
+This component displays PDF content. The PDF file is stored as a binary to database, see DataFile.file_content
+
+"""
+
 from PySide6.QtCore import QByteArray, QBuffer, QIODevice, Slot, QPoint, Signal
 from PySide6.QtGui import Qt
 from PySide6.QtPdf import QPdfDocument
