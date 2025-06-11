@@ -45,12 +45,12 @@ class PDFContentViewer(QPdfView):
 
         super().mousePressEvent(e)
 
-    def on_actionPrevious_Page_triggered(self):
+    def on_action_previous_page_triggered(self):
         nav = self.pageNavigator()
         nav.jump(nav.currentPage() - 1, QPoint(), nav.currentZoom())
 
     @Slot()
-    def on_actionNext_Page_triggered(self):
+    def on_action_next_page_triggered(self):
         nav = self.pageNavigator()
         nav.jump(nav.currentPage() + 1, QPoint(), nav.currentZoom())
 

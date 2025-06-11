@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QApplication
 from sqlalchemy_utils import create_database
 
 from data.models import Base
-from ocaqda.database import DatabaseConnectivity
+from ocaqda.database.databaseconnectivity import DatabaseConnectivity
 from ocaqda.services.configurationservice import load_configuration
 from ocaqda.ui.mainview.mainqawindow import MainQAWindow
 from ocaqda.ui.startupdialog import StartUpDialog

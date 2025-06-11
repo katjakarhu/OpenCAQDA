@@ -25,7 +25,6 @@ class ConfigurationService(metaclass=Singleton):
 
 
 def load_configuration():
-    home_dir = Path.home()
     conf_file_path = Path(CONFIGURATION_FILE_NAME)
     print(conf_file_path.absolute())
     if conf_file_path.exists():

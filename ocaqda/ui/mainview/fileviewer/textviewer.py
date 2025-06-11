@@ -73,7 +73,7 @@ class TextViewer(QPlainTextEdit, QUndoCommand):
                     print("remove code")
         else:
             for coded_text in self.coded_texts:
-                if cursor.position() >= coded_text.start_position and cursor.position() <= coded_text.end_position:
+                if coded_text.start_position <= cursor.position() <= coded_text.end_position:
                     print("remove codes that match the cursor position")
 
     def dragEnterEvent(self, e):

@@ -13,11 +13,6 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QTreeWidget, QPushButton, QT
 
 from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
 
-
-# TODO:
-# manage codes button and view
-# drag and drop coding for PDF
-
 class CodeTree(QTreeWidget):
     def __init__(self, project_service, parent):
         super().__init__(parent)

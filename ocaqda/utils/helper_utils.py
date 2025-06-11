@@ -1,21 +1,3 @@
-from intervaltree import IntervalTree
-
-
-def find_range_overlap(a, b):
-    ol = range(max(a[0], b[0]), min(a[-1], b[-1]) + 1)
-    if len(ol) == 0:
-        return None, None
-    return ol[0], ol[-1]
-
-
-def find_overlapping_intervals(intervals):
-    tree = IntervalTree()
-    for interval in intervals:
-        tree[interval[0]:interval[1]] = True
-    tree.merge_overlaps()  # Merge overlapping intervals
-    return sorted((int(begin), int(end)) for begin, end, _ in tree)
-
-
 def convert_and_merge_ranges(input_ranges):
     # Sort the ranges based on the start position
     sorted_ranges = sorted(input_ranges, key=lambda x: x[0])
@@ -81,7 +63,6 @@ def set_ranges(sorted_ranges):
 
         result.append([start_num, max(merged_dict.keys()), current_value])
 
-
     # Add not overlapping ranges back to the mix and sort
     result = result + not_overlapped_ranges
     merged_ranges = sorted(result, key=lambda x: x[0])
@@ -107,4 +88,3 @@ def find_overlap(sorted_ranges):
             free_items.append(sorted_ranges[i])
 
     return overlapped_items, free_items
-
