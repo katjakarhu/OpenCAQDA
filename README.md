@@ -45,12 +45,12 @@ Run app:
 
 ### Architecture
 
-`database/        contains classes related to database connectivity 
-data/            contains enums, entities (models.py)
-services/        handles fetching and saving data
-ui/              contains the views 
-utils/           contains useful methods that can be used anywhere
-`
+> database/        contains classes related to database connectivity 
+> data/            contains enums, entities (models.py)
+> services/        handles fetching and saving data
+> ui/              contains the views 
+> utils/           contains useful methods that can be used anywhere
+
 
 ## Planned features
 
