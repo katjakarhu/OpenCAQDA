@@ -4,7 +4,7 @@ WORK-IN-PROGRESS: Use at your own risk!
 
 If you would like to participate, feel free to tackle unassigned issues! 
 
-OpenCAQDA is an easy to use open source desktop application for qualitative data analysis. The goal is to provide the user with high visibility and control over the coding process, and therefore no AI feature are planned. 
+OpenCAQDA is an easy-to-use open source desktop application for qualitative data analysis. The goal is to provide the user with high visibility and control over the coding process, and therefore no AI feature are planned. 
 
 You can:
 
@@ -15,7 +15,7 @@ You can:
 
 Create research projects, that contain a set of files and codes.
 
-Drag and drop coding: select text and drag code over it (left mouse button=.
+Drag and drop coding: select text and drag code over it (left mouse button).
 Drag and drop code hierarchy: with right button, drag and drop codes over each other to create a hierarchy (TODO: save relationship to database, now this resets everytime you restart the application)
 
 Quick filter codes: find the relevant codes easily

@@ -12,10 +12,10 @@ from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QTabWidget, QSplitter, Q
 
 from ocaqda.services.projectservice import ProjectService
 from ocaqda.ui.mainview.codetab import CodeTab
-from ocaqda.ui.mainview.fileviewer.contenttabview import ContentTabView
 from ocaqda.ui.mainview.filetab import FileTab
-from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
+from ocaqda.ui.mainview.fileviewer.contenttabview import ContentTabView
 from ocaqda.ui.mainview.fileviewer.textviewer import TextViewer
+from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
 
 
 class MainQAWindow(QMainWindow):
@@ -33,8 +33,7 @@ class MainQAWindow(QMainWindow):
         self.setGeometry(100, 100, 800, 600)
         menu_bar = self.menuBar()
         file_menu = menu_bar.addMenu('&File')
-        edit_menu = menu_bar.addMenu('&Edit')
-        help_menu = menu_bar.addMenu('&Help')
+        tools_menu = menu_bar.addMenu('&Tools')
         # save menu item
         save_action = QAction('&Save project', self)
         save_action.setStatusTip('Save project')
@@ -63,7 +62,7 @@ class MainQAWindow(QMainWindow):
         splitter = QSplitter()
         splitter.addWidget(tab_widget)
         splitter.addWidget(self.text_content_panel)
-        splitter.addWidget(right_panel)
+        # splitter.addWidget(right_panel)
         # Set the central widget
         central_widget = QWidget()
         central_widget.setLayout(center_layout)
