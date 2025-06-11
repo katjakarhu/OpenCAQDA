@@ -53,6 +53,8 @@ utils/           contains useful methods that can be used anywhere
 
 ## Planned features
 
+See also "Issues" for open issues.
+
 ### Mandatory
 
 - Define hierarchies and relationships between codes
@@ -64,9 +66,8 @@ example in defining themes, sub-themes and categories.
     - Settings file does not exist
     - Database does not exist
 - Coding functionality
-    - Drag and drop coding: done for text files
-    - Uncoding: TODO
-    - Managing codes: TODO
+    - Uncoding: TODO, see issues
+    - Managing codes: TODO, see issues
 - Configuration
     - User configuration: preliminary version exists
     - Database configuration: preliminary version exists 
