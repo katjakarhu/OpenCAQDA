@@ -39,10 +39,17 @@ Install requirements:
 
 `pip install -r requirements.txt`
 
-Run app
+Run app:
 
 `python main.py`
 
+### Architecture
+
+database/        contains classes related to database connectivity 
+data/            contains enums, entities (models.py)
+services/        handles fetching and saving data
+ui/              contains the views 
+utils/           contains useful methods that can be used anywhere
 
 ## Planned features
 
