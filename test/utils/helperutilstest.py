@@ -43,7 +43,6 @@ class ConvertAndMergeRangesTest(unittest.TestCase):
         expected = [[20, 129, 'Lorem'], [130, 134, {"Dolor", "Lorem"}],
                     [135, 135, {"Lorem", "Dolor", "Ipsum"}], [136, 200, {"Dolor", "Ipsum"}],
                     [201, 201, "Ipsum"]]
-        print(expected)
         TestCase.assertListEqual(self, result, expected)
 
     def test_convert_and_merge_ranges5(self):

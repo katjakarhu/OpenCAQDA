@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="opencaqda-db" uuid="34624446-4ef5-4079-9de5-5726fae7beeb">
+    <data-source source="LOCAL" name="opencaqda-db" uuid="65166036-4b8f-4d7d-9e79-6639443feec3">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/opencaqda-db.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/ocaqda/opencaqda-db.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>

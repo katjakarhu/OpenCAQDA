@@ -6,7 +6,10 @@ Handles everything within the project: CRUD operations for files, codes and note
 
 from pathlib import Path
 
-from ocaqda.data.models import Project, Code, DataFile, FileContent, CodedText
+from sqlalchemy import Table, MetaData
+
+from ocaqda.data.enums.coderelationshipenum import CodeRelationshipEnum
+from ocaqda.data.models import Project, Code, DataFile, FileContent, CodedText, CodeRelationship
 from ocaqda.database.databaseconnectivity import DatabaseConnectivity
 from ocaqda.services.userservice import UserService
 
@@ -179,6 +182,49 @@ class ProjectService:
         session.close()
         return result.content
 
+    def update_code_relationships(self, code_relationships):
+        session = DatabaseConnectivity().create_new_db_session()
+        metadata_obj = MetaData()
+        code_relationship_table = Table(CodeRelationship.__tablename__, metadata_obj)
+
+        if isinstance(code_relationships, str):
+            code_relationship_table.delete().where(
+            CodeRelationship.type == CodeRelationshipEnum.PARENT and CodeRelationship.from_code_id == code_relationships.keys())
+        else:
+            code_relationship_table.delete().where(
+            CodeRelationship.type == CodeRelationshipEnum.PARENT and CodeRelationship.from_code_id.in_(code_relationships.keys()))
+
+        self.add_new_relationships(code_relationships, session)
+        session.commit()
+        session.close()
+
+    def add_new_relationships(self, code_relationships, session):
+        parent_child_list = []
+        for parent_item in code_relationships.keys():
+            parent_id = session.query(Code).filter(Code.name == parent_item).one()
+            children = code_relationships[parent_item]
+            if isinstance(children, str):
+                child_ids = session.query(Code.code_id).filter(Code.name == children).all()
+            else:
+                child_ids = session.query(Code.code_id).filter(Code.name.in_(children)).all()
+
+            for child_id in child_ids:
+                r = CodeRelationship()
+                r.from_code_id = parent_id.code_id
+                r.to_code_id = child_id[0]
+                r.type = CodeRelationshipEnum.PARENT
+                r.created_by = UserService().user.user_id
+                r.updated_by = UserService().user.user_id
+                parent_child_list.append(r)
+
+        if len(parent_child_list) > 0:
+            session.add_all(parent_child_list)
+
+    def get_parent_child_relationships(self):
+        session = DatabaseConnectivity().create_new_db_session()
+        result = session.query(CodeRelationship.from_code_id, CodeRelationship.to_code_id).filter(CodeRelationship.type == CodeRelationshipEnum.PARENT).all()
+        session.close()
+        return result
 
 def populate_projects():
     session = DatabaseConnectivity().create_new_db_session()

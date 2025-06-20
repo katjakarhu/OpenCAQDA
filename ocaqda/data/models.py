@@ -94,14 +94,14 @@ class Code(Base, TimestampColumnMixin, UserColumnMixin):
 
 class CodeRelationship(Base, TimestampColumnMixin, UserColumnMixin):
     """Relationships between codes. Note that Parent relationship (label = 'parent') is a special case that is used when displaying
-    codes in the AnalysisTab on the UI."""
-    __tablename__ = "code_connections"
+    codes in the code tab on the UI."""
+    __tablename__ = "code_relationships"
     connection_id = Column(Integer, primary_key=True)
     type = Column(Enum(CodeRelationshipEnum), nullable=False)
     label = Column(String)
     from_code_id = Column(Integer, ForeignKey("codes.code_id"), nullable=False)
     to_code_id = Column(Integer, ForeignKey("codes.code_id"), nullable=False)
-    has_direction = Column(Boolean)
+    has_direction = Column(Boolean) #this is unnecessary, remove
 
     note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=True)
     note = relationship("Note", backref=backref("CodeRelationship", uselist=False))

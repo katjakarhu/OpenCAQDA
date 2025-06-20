@@ -1,24 +1,18 @@
-"""
-A tab on left side of the screen that displays the codes
-
-Right mouse button: Codes can be arranged to a hierarchy by drag and drop
-
-Left mouse button: Coding is done by dragging the code over a selected text in the center text component
-
-"""
-from PySide6.QtCore import Qt, QMimeData
+from PySide6.QtCore import QMimeData, Qt
 from PySide6.QtGui import QBrush, QColor, QDrag
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QTreeWidget, QPushButton, QTreeWidgetItem, QLineEdit, \
-    QTreeWidgetItemIterator, QHBoxLayout
+from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem, QTreeWidgetItemIterator
 
+from ocaqda.data.models import CodeRelationship
 from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
+from ocaqda.utils.helper_utils import build_tree
+
 
 class CodeTree(QTreeWidget):
     def __init__(self, project_service, parent):
         super().__init__(parent)
         self.project_service = project_service
         self.parent = parent
-        self.setHeaderLabel("Codes")
+        self.setHeaderLabel("Code")
 
         self.setHeaderHidden(True)
         self.setDragDropMode(QTreeWidget.DragDropMode.InternalMove)
@@ -30,8 +24,46 @@ class CodeTree(QTreeWidget):
 
     def populate_code_list(self):
         self.clear()
-        for code in self.project_service.get_project_codes():
-            self.add_item_to_tree(code.name)
+
+        code_relationships = self.project_service.get_parent_child_relationships()
+
+        ids = []
+        for cr in code_relationships:
+            ids.append(cr.from_code_id)
+            ids.append(cr.to_code_id)
+
+        codes = self.project_service.get_project_codes()
+
+        for code in codes:
+            if code.code_id not in ids:
+                nr = CodeRelationship()
+                nr.from_code_id = code.code_id
+                code_relationships.append(nr)
+
+        t = build_tree(code_relationships)
+
+        for item in t:
+            c = list(filter(lambda x: x.code_id == item.name, codes))
+            item.name = c[0].name
+
+            for child in item.children:
+                if child.name is not None:
+                    c = list(filter(lambda x: x.code_id == child.name, codes))
+                    if len(c) > 0:
+                        child.name = c[0].name
+                    print("pc:", item.name, child.name)
+
+        items = []
+        for node in t:
+            item = QTreeWidgetItem([node.name])
+            for c in node.children:
+                if c.name is not None:
+                    child = QTreeWidgetItem()
+                    child.setText(0, c.name)
+                    item.addChild(child)
+            items.append(item)
+
+        self.insertTopLevelItems(0, items)
 
     def add_and_save_code(self):
         # Open a dialog to get text input
@@ -44,9 +76,12 @@ class CodeTree(QTreeWidget):
 
     def add_item_to_tree(self, text):
         if len(text) > 0 and len(self.findItems(text, Qt.MatchFlag.MatchExactly)) == 0:
-            # Add the text as a new item in the tree widget
+            # Add the text as a new item in the tree widget, if one item select, add new item as its child
             item = QTreeWidgetItem([text])
-            self.addTopLevelItem(item)
+            if len(self.selectedItems()) == 1:
+                self.selectedItems()[0].addChild(item)
+            else:
+                self.addTopLevelItem(item)
 
     def filter_codes(self):
         filter_text = self.parent.filter_field.text().lower()
@@ -78,7 +113,6 @@ class CodeTree(QTreeWidget):
                                 STANDARD_BACKGROUND_COLOR)))
                         else:
                             item.parent().setBackground(0, QBrush(QColor(HIGHLIGHT_COLOR)))
-
                         item = item.parent()
                 iterator += 1
 
@@ -86,12 +120,13 @@ class CodeTree(QTreeWidget):
         self.setCurrentItem(self.itemAt(event.pos()))
 
         if event.button() == Qt.MouseButton.LeftButton:
-            mime_data = QMimeData()
-            mime_data.setText(self.currentItem().text(0))
+            if self.currentItem():
+                mime_data = QMimeData()
+                mime_data.setText(self.currentItem().text(0))
 
-            drag = QDrag(self)
-            drag.setMimeData(mime_data)
-            drag.exec(Qt.DropAction.CopyAction)
+                drag = QDrag(self)
+                drag.setMimeData(mime_data)
+                drag.exec(Qt.DropAction.CopyAction)
         else:
             super().mousePressEvent(event)
 
@@ -99,36 +134,12 @@ class CodeTree(QTreeWidget):
         if event.source() == self:
             super().dropEvent(event)
 
+            relations = dict()
+            iterator = QTreeWidgetItemIterator(self)
+            while iterator.value():
+                itm = iterator.value()
+                if itm.parent():
+                    relations[itm.parent().text(0)] = itm.text(0)
+                iterator += 1
 
-class CodeTab(QWidget):
-    def __init__(self, project_service):
-        super().__init__()
-
-        self.project_service = project_service
-        analysis_layout = QVBoxLayout()
-        # Tree widget for analysis tab
-        self.code_tree = CodeTree(project_service, self)
-        self.filter_field = QLineEdit()
-        self.filter_field.setPlaceholderText("Filter codes...")
-
-        self.filter_field.textChanged.connect(self.code_tree.filter_codes)
-        analysis_layout.addWidget(self.filter_field)
-
-        analysis_layout.addWidget(self.code_tree)
-
-        # Button to add new text entries
-        add_code_layout = QHBoxLayout()
-        self.add_code_field = QLineEdit()
-        self.add_button = QPushButton("Add code")
-        self.add_button.clicked.connect(self.code_tree.add_and_save_code)
-        add_code_layout.addWidget(self.add_code_field)
-        add_code_layout.addWidget(self.add_button)
-        analysis_layout.addLayout(add_code_layout)
-
-        self.manage_codes_button = QPushButton("Manage codes")
-        self.manage_codes_button.clicked.connect(self.manage_codes)
-        analysis_layout.addWidget(self.manage_codes_button)
-        self.setLayout(analysis_layout)
-
-    def manage_codes(self):
-        raise "Implement me!"
+            self.project_service.update_code_relationships(relations)

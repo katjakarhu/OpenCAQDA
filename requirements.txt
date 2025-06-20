@@ -5,3 +5,4 @@ bcrypt
 pyyaml
 keyring
 pypdf
+anytree

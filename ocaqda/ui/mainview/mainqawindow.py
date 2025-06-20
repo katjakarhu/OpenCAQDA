@@ -11,8 +11,8 @@ from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QTabWidget, QSplitter, QWidget
 
 from ocaqda.services.projectservice import ProjectService
-from ocaqda.ui.mainview.codetab import CodeTab
-from ocaqda.ui.mainview.filetab import FileTab
+from ocaqda.ui.mainview.coding.codetab import CodeTab
+from ocaqda.ui.mainview.fileselectiontab import FileSelectionTab
 from ocaqda.ui.mainview.fileviewer.contenttabview import ContentTabView
 from ocaqda.ui.mainview.fileviewer.textviewer import TextViewer
 from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
@@ -42,13 +42,16 @@ class MainQAWindow(QMainWindow):
         file_menu.addAction(save_action)
         file_menu.addSeparator()
 
+        visualize_action = QAction('&Visualize project', self)
+        #tools_menu.addAction(visualize_action)
+
         # Main layout
         center_layout = QHBoxLayout()
         # Left column with tabs
         tab_widget = QTabWidget()
         tab_widget.setMaximumWidth(300)
         code_tab = CodeTab(self.project_service)
-        files_tab = FileTab(self)
+        files_tab = FileSelectionTab(self)
         # Add tabs to tab widget
         tab_widget.addTab(code_tab, "Codes")
         tab_widget.addTab(files_tab, "Files")

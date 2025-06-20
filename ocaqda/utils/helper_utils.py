@@ -1,3 +1,6 @@
+from ocaqda.utils.tree import Tree
+
+
 def convert_and_merge_ranges(input_ranges):
     # Sort the ranges based on the start position
     sorted_ranges = sorted(input_ranges, key=lambda x: x[0])
@@ -88,3 +91,36 @@ def find_overlap(sorted_ranges):
             free_items.append(sorted_ranges[i])
 
     return overlapped_items, free_items
+
+
+
+def build_tree(records):
+    """
+    Note that this method is vibe-coded with Mistral.ai
+    """
+    # Create a dictionary to map code_id to TreeNode
+    node_map = {}
+
+    # Create TreeNodes for each unique code_id
+    for record in records:
+        from_code_id = record.from_code_id
+        to_code_id = record.to_code_id
+        if from_code_id not in node_map:
+            node_map[from_code_id] = Tree(from_code_id)
+        if to_code_id not in node_map:
+            node_map[to_code_id] = Tree(to_code_id)
+
+    # Build the tree structure
+    for record in records:
+        from_code_id = record.from_code_id
+        to_code_id = record.to_code_id
+        parent_node = node_map[from_code_id]
+        child_node = node_map[to_code_id]
+        parent_node.add_child(child_node)
+
+    # Find and return the root nodes (nodes with no parents)
+    all_nodes = set(node_map.keys())
+    child_nodes = {r.to_code_id for r in records}
+    root_nodes = all_nodes - child_nodes
+
+    return [node_map[root_id] for root_id in root_nodes]
