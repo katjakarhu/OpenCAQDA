@@ -2,9 +2,8 @@ from PySide6.QtCore import QMimeData, Qt
 from PySide6.QtGui import QBrush, QColor, QDrag
 from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem, QTreeWidgetItemIterator
 
-from ocaqda.data.models import CodeRelationship
 from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
-from ocaqda.utils.helper_utils import build_tree
+from ocaqda.utils.helper_utils import create_tree
 
 
 class CodeTree(QTreeWidget):
@@ -26,22 +25,9 @@ class CodeTree(QTreeWidget):
         self.clear()
 
         code_relationships = self.project_service.get_parent_child_relationships()
-
-        ids = []
-        for cr in code_relationships:
-            ids.append(cr.from_code_id)
-            ids.append(cr.to_code_id)
-
         codes = self.project_service.get_project_codes()
 
-        for code in codes:
-            if code.code_id not in ids:
-                nr = CodeRelationship()
-                nr.from_code_id = code.code_id
-                code_relationships.append(nr)
-
-        tree = build_tree(code_relationships)
-
+        tree = create_tree(code_relationships, codes)
 
         items = []
         for node in tree:

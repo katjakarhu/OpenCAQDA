@@ -1,3 +1,4 @@
+from ocaqda.data.models import CodeRelationship
 from ocaqda.utils.tree import Tree
 
 
@@ -124,3 +125,17 @@ def build_tree(records):
     root_nodes = all_nodes - child_nodes
 
     return [node_map[root_id] for root_id in root_nodes]
+
+
+def create_tree(code_relationships, codes):
+    ids = []
+    for cr in code_relationships:
+        ids.append(cr.from_code_id)
+        ids.append(cr.to_code_id)
+    for code in codes:
+        if code.code_id not in ids:
+            nr = CodeRelationship()
+            nr.from_code_id = code.code_id
+            code_relationships.append(nr)
+    tree = build_tree(code_relationships)
+    return tree
