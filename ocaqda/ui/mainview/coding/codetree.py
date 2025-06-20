@@ -40,26 +40,18 @@ class CodeTree(QTreeWidget):
                 nr.from_code_id = code.code_id
                 code_relationships.append(nr)
 
-        t = build_tree(code_relationships)
+        tree = build_tree(code_relationships)
 
-        for item in t:
-            c = list(filter(lambda x: x.code_id == item.name, codes))
-            item.name = c[0].name
-
-            for child in item.children:
-                if child.name is not None:
-                    c = list(filter(lambda x: x.code_id == child.name, codes))
-                    if len(c) > 0:
-                        child.name = c[0].name
-                    print("pc:", item.name, child.name)
 
         items = []
-        for node in t:
-            item = QTreeWidgetItem([node.name])
+        for node in tree:
+            code = list(filter(lambda x: x.code_id == node.name, codes))
+            item = QTreeWidgetItem([code[0].name])
             for c in node.children:
                 if c.name is not None:
+                    code = list(filter(lambda x: x.code_id == c.name, codes))
                     child = QTreeWidgetItem()
-                    child.setText(0, c.name)
+                    child.setText(0, code[0].name)
                     item.addChild(child)
             items.append(item)
 
