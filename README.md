@@ -1,6 +1,6 @@
 # OpenCAQDA - Open Source Computer-Assisted Qualitative Data Analysis Tool
 
-WORK-IN-PROGRESS: Use at your own risk! 
+WORK-IN-PROGRESS: Use at your own risk! See open issues for known defects and missing features: https://github.com/katjakarhu/OpenCAQDA/issues 
 
 If you would like to participate, feel free to tackle unassigned issues! 
 
