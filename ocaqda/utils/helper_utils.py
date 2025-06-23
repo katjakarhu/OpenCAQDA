@@ -94,8 +94,7 @@ def find_overlap(sorted_ranges):
     return overlapped_items, free_items
 
 
-
-def build_tree(records):
+def build_tree(relationships, codes):
     """
     Note that this method is vibe-coded with Mistral.ai
     """
@@ -103,39 +102,48 @@ def build_tree(records):
     node_map = {}
 
     # Create TreeNodes for each unique code_id
-    for record in records:
+    for record in relationships:
         from_code_id = record.from_code_id
         to_code_id = record.to_code_id
+        from_code = list(filter(lambda x: x.code_id == from_code_id, codes))
+        to_code = list(filter(lambda x: x.code_id == to_code_id, codes))
         if from_code_id not in node_map:
-            node_map[from_code_id] = Tree(from_code_id)
-        if to_code_id not in node_map:
-            node_map[to_code_id] = Tree(to_code_id)
+            node_map[from_code_id] = Tree(from_code_id, from_code[0].name)
+        if to_code_id is not None and to_code_id not in node_map:
+            node_map[to_code_id] = Tree(to_code_id, to_code[0].name)
 
     # Build the tree structure
-    for record in records:
+    for record in relationships:
         from_code_id = record.from_code_id
         to_code_id = record.to_code_id
         parent_node = node_map[from_code_id]
-        child_node = node_map[to_code_id]
-        parent_node.add_child(child_node)
+        if to_code_id is not None:
+            child_node = node_map[to_code_id]
+            parent_node.add_child(child_node)
 
     # Find and return the root nodes (nodes with no parents)
     all_nodes = set(node_map.keys())
-    child_nodes = {r.to_code_id for r in records}
+    child_nodes = {r.to_code_id for r in relationships}
     root_nodes = all_nodes - child_nodes
 
     return [node_map[root_id] for root_id in root_nodes]
 
 
 def create_tree(code_relationships, codes):
+    """Add parents without children to code relationship list and build the tree"""
+
+    # Ids that have parent-child relationships
     ids = []
     for cr in code_relationships:
         ids.append(cr.from_code_id)
         ids.append(cr.to_code_id)
+
+    # Add parents without children to code_relationship
     for code in codes:
         if code.code_id not in ids:
             nr = CodeRelationship()
             nr.from_code_id = code.code_id
             code_relationships.append(nr)
-    tree = build_tree(code_relationships)
+
+    tree = build_tree(code_relationships, codes)
     return tree

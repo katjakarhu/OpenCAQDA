@@ -31,13 +31,12 @@ class CodeTree(QTreeWidget):
 
         items = []
         for node in tree:
-            code = list(filter(lambda x: x.code_id == node.name, codes))
-            item = QTreeWidgetItem([code[0].name])
+            item = QTreeWidgetItem()
+            item.setText(0, node.name)
             for c in node.children:
                 if c.name is not None:
-                    code = list(filter(lambda x: x.code_id == c.name, codes))
                     child = QTreeWidgetItem()
-                    child.setText(0, code[0].name)
+                    child.setText(0, c.name)
                     item.addChild(child)
             items.append(item)
 

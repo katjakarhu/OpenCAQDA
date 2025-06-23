@@ -1,7 +1,7 @@
 class Tree(object):
-    "Generic tree node."
-    def __init__(self, name='root', children=None):
+    def __init__(self, identifier = None, name='root',  children=None):
         self.name = name
+        self.identifier = identifier
         self.children = []
         if children is not None:
             for child in children:
