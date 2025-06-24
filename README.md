@@ -8,7 +8,7 @@ OpenCAQDA is an easy-to-use open source desktop application for qualitative data
 
 You can:
 
-- Code plain text and PDF files
+- Code plain text, PDF and HTML files
 
 <img width="1000" alt="Screenshot 2025-06-12 at 12 08 01" src="https://github.com/user-attachments/assets/601e591b-51cb-4665-a2a5-3bd7fe3233bc" />
 
@@ -28,6 +28,7 @@ Quick filter codes: find the relevant codes easily
 
 - Plain text (*.txt)
 - PDF (*.pdf)
+- HTML (*.html)
 
 ## Technical details
 
@@ -112,7 +113,6 @@ example in defining themes, sub-themes and categories.
 - Investigate other data analysis possibilities with Python that could be added here
 - Image coding support (e.g. image to text, or other)
 - Video file coding support
-- CSV and Excel file coding (can be circumvented by converting to PDF)
-- HTML file coding (can be circumvented by converting to PDF)
-- DOCX coding (can be circumvented by converting to PDF)
-- RTF file coding (can be circumvented by converting to PDF)
+- CSV and Excel file coding (can be circumvented by converting to PDF or HTML)
+- DOCX coding (can be circumvented by converting to PDF or HTML)
+- RTF file coding (can be circumvented by converting to PDF ot HTML)

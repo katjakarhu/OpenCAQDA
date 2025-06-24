@@ -25,6 +25,8 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.setAcceptDrops(True)
         self.setMouseTracking(True)
 
+        self.setOpenExternalLinks(False)
+
         self.setText(data_file.file_as_text)
         self.refresh_coded_text_highlight()
 

@@ -14,7 +14,8 @@ from ocaqda.services.projectservice import ProjectService
 from ocaqda.ui.mainview.coding.codetab import CodeTab
 from ocaqda.ui.mainview.fileselectiontab import FileSelectionTab
 from ocaqda.ui.mainview.fileviewer.contenttabview import ContentTabView
-from ocaqda.ui.mainview.fileviewer.textviewer import TextViewer
+from ocaqda.ui.mainview.fileviewer.htmlviewer import HTMLViewer
+from ocaqda.ui.mainview.fileviewer.pdfviewer import PDFViewer
 from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
 
 
@@ -43,7 +44,7 @@ class MainQAWindow(QMainWindow):
         file_menu.addSeparator()
 
         visualize_action = QAction('&Visualize project', self)
-        #tools_menu.addAction(visualize_action)
+        # tools_menu.addAction(visualize_action)
 
         # Main layout
         center_layout = QHBoxLayout()
@@ -80,21 +81,32 @@ class MainQAWindow(QMainWindow):
         self.setWindowTitle("OpenCAQDA - Project: " + name)
 
     def add_file_viewer(self, datafile):
-        if datafile.file_extension == '.txt':
-            text_view = TextViewer(self, datafile)
+        if datafile.file_extension in ('.txt', '.html'):
+            text_view = HTMLViewer(self, datafile)
             if not self.is_tab_open(datafile.display_name):
                 self.text_content_panel.addTab(text_view, datafile.display_name)
+
+            self.text_content_panel.setCurrentIndex(self.get_tab_index(datafile.display_name))
+
+
         elif datafile.file_extension == '.pdf':
-            from ocaqda.ui.mainview.fileviewer.pdfviewer import PDFViewer
             pdf_view = PDFViewer(self, datafile)
             if not self.is_tab_open(datafile.display_name):
                 self.text_content_panel.addTab(pdf_view, datafile.display_name)
+
+            self.text_content_panel.setCurrentIndex(self.get_tab_index(datafile.display_name))
 
     def is_tab_open(self, display_name):
         for i in range(self.text_content_panel.count()):
             if display_name == self.text_content_panel.tabText(i):
                 return True
         return False
+
+    def get_tab_index(self, display_name):
+        for i in range(self.text_content_panel.count()):
+            if display_name == self.text_content_panel.tabText(i):
+                return int(i)
+        return None
 
     def close_tab(self, display_name):
         for i in range(self.text_content_panel.count()):

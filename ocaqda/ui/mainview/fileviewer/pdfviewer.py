@@ -28,8 +28,8 @@ class PDFViewer(QWidget):
         self.pdf_content.pageChanged.connect(self.on_pdf_page_changed)
         self.text_content.verticalScrollBar().valueChanged.connect(self.on_text_scrolled)
 
-        layout.addWidget(self.pdf_content)
         layout.addWidget(self.text_content)
+        layout.addWidget(self.pdf_content)
 
         self.setLayout(layout)
 

@@ -12,7 +12,7 @@ from ocaqda.data.enums.coderelationshipenum import CodeRelationshipEnum
 from ocaqda.data.models import Project, Code, DataFile, FileContent, CodedText, CodeRelationship
 from ocaqda.database.databaseconnectivity import DatabaseConnectivity
 from ocaqda.services.userservice import UserService
-from ocaqda.utils import pdftotext
+from ocaqda.utils.pdfutils import convert_pdf_to_html
 
 
 def get_file_content_from_db(file_as_bytes):
@@ -126,11 +126,11 @@ class ProjectService:
         f.close()
 
         f = open(file_path, 'r')
-        if new_file.file_extension == ".txt":
+        if new_file.file_extension in (".txt", ".html"):
             new_file.file_as_text = f.read()
         elif new_file.file_extension == ".pdf":
 
-            result = pdftotext.convert_pdf_to_html(str(file_path))
+            result = convert_pdf_to_html(str(file_path))
             new_file.file_as_text = result
         f.close()
 
