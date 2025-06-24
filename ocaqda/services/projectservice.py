@@ -12,6 +12,7 @@ from ocaqda.data.enums.coderelationshipenum import CodeRelationshipEnum
 from ocaqda.data.models import Project, Code, DataFile, FileContent, CodedText, CodeRelationship
 from ocaqda.database.databaseconnectivity import DatabaseConnectivity
 from ocaqda.services.userservice import UserService
+from ocaqda.utils import pdftotext
 
 
 def get_file_content_from_db(file_as_bytes):
@@ -128,17 +129,9 @@ class ProjectService:
         if new_file.file_extension == ".txt":
             new_file.file_as_text = f.read()
         elif new_file.file_extension == ".pdf":
-            from pypdf import PdfReader
 
-            # creating a pdf reader object
-            reader = PdfReader(str(file_path))
-
-            text_content = ""
-            for page in reader.pages:
-                text = page.extract_text()
-                text_content += text
-            new_file.file_as_text = text_content
-            reader.close()
+            result = pdftotext.convert_pdf_to_html(str(file_path))
+            new_file.file_as_text = result
         f.close()
 
     def get_text_from_file(self, file_path, new_file):
@@ -189,10 +182,11 @@ class ProjectService:
 
         if isinstance(code_relationships, str):
             code_relationship_table.delete().where(
-            CodeRelationship.type == CodeRelationshipEnum.PARENT and CodeRelationship.from_code_id == code_relationships.keys())
+                CodeRelationship.type == CodeRelationshipEnum.PARENT and CodeRelationship.from_code_id == code_relationships.keys())
         else:
             code_relationship_table.delete().where(
-            CodeRelationship.type == CodeRelationshipEnum.PARENT and CodeRelationship.from_code_id.in_(code_relationships.keys()))
+                CodeRelationship.type == CodeRelationshipEnum.PARENT and CodeRelationship.from_code_id.in_(
+                    code_relationships.keys()))
 
         self.add_new_relationships(code_relationships, session)
         session.commit()
@@ -222,9 +216,11 @@ class ProjectService:
 
     def get_parent_child_relationships(self):
         session = DatabaseConnectivity().create_new_db_session()
-        result = session.query(CodeRelationship.from_code_id, CodeRelationship.to_code_id).filter(CodeRelationship.type == CodeRelationshipEnum.PARENT).all()
+        result = session.query(CodeRelationship.from_code_id, CodeRelationship.to_code_id).filter(
+            CodeRelationship.type == CodeRelationshipEnum.PARENT).all()
         session.close()
         return result
+
 
 def populate_projects():
     session = DatabaseConnectivity().create_new_db_session()

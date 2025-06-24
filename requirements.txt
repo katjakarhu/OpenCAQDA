@@ -6,3 +6,5 @@ pyyaml
 keyring
 pypdf
 anytree
+pdfminer.six
+

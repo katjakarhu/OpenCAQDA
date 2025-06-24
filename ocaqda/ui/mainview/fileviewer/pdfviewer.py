@@ -10,8 +10,8 @@ lost with the text conversion, therefore it was important to have it visible as 
 
 from PySide6.QtWidgets import QWidget, QHBoxLayout
 
+from ocaqda.ui.mainview.fileviewer.htmlviewer import HTMLViewer
 from ocaqda.ui.mainview.fileviewer.pdfcontentviewer import PDFContentViewer
-from ocaqda.ui.mainview.fileviewer.textviewer import TextViewer
 
 
 class PDFViewer(QWidget):
@@ -22,7 +22,7 @@ class PDFViewer(QWidget):
 
         layout = QHBoxLayout()
         self.pdf_content = PDFContentViewer(parent, datafile)
-        self.text_content = TextViewer(parent, datafile)
+        self.text_content = HTMLViewer(parent, datafile)
 
         # Connect scroll signals
         self.pdf_content.pageChanged.connect(self.on_pdf_page_changed)
