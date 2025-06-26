@@ -50,7 +50,7 @@ class FileSelectionTab(QWidget):
         dialog = QFileDialog()
         dialog.setDirectory(directory)
         dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
-        dialog.setNameFilter("Text and PDF files (*.txt *.pdf *.html)")
+        dialog.setNameFilter("Text and PDF files (*.txt *.pdf *.html *.md)")
         dialog.setViewMode(QFileDialog.ViewMode.List)
         if dialog.exec():
             filenames = dialog.selectedFiles()

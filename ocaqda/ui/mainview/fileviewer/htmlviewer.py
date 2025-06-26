@@ -19,6 +19,8 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.codes = self.parent.project_service.get_project_codes()
         self.coded_texts = self.parent.project_service.get_coded_texts(self.data_file.data_file_id,
                                                                        self.data_file.display_name)
+        self.update_text(data_file)
+
         self.highlighter = None
 
         self.setReadOnly(True)
@@ -26,9 +28,15 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.setMouseTracking(True)
 
         self.setOpenExternalLinks(False)
+        self.setOpenLinks(False)
 
-        self.setText(data_file.file_as_text)
         self.refresh_coded_text_highlight()
+
+    def update_text(self, data_file):
+        if data_file.file_extension == '.md':
+            self.setMarkdown(data_file.file_as_text)
+        else:
+            self.setText(data_file.file_as_text)
 
     def mousePressEvent(self, e):
         if e.button() == Qt.MouseButton.RightButton:
@@ -106,7 +114,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.coded_texts = self.parent.project_service.get_coded_texts(self.data_file.data_file_id,
                                                                        self.data_file.display_name)
         # Ugly solution? Resets all formatting by reloading text and reapplying formatting
-        self.setText(self.data_file.file_as_text)
+        self.update_text(self.data_file)
         cursor = QTextCursor(self.document())
         string_format = QTextCharFormat()
         string_format.setBackground(QColor("yellow"))

@@ -81,7 +81,7 @@ class MainQAWindow(QMainWindow):
         self.setWindowTitle("OpenCAQDA - Project: " + name)
 
     def add_file_viewer(self, datafile):
-        if datafile.file_extension in ('.txt', '.html'):
+        if datafile.file_extension in ('.txt', '.html', '.md'):
             text_view = HTMLViewer(self, datafile)
             if not self.is_tab_open(datafile.display_name):
                 self.text_content_panel.addTab(text_view, datafile.display_name)

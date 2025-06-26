@@ -126,7 +126,7 @@ class ProjectService:
         f.close()
 
         f = open(file_path, 'r')
-        if new_file.file_extension in (".txt", ".html"):
+        if new_file.file_extension in (".txt", ".html", ".md"):
             new_file.file_as_text = f.read()
         elif new_file.file_extension == ".pdf":
 
