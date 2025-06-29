@@ -79,11 +79,11 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         if cursor.hasSelection():
             for coded_text in self.coded_texts:
                 if coded_text.text == cursor.selectedText():
-                    print("remove code")
+                    print("TODO: remove code")
         else:
             for coded_text in self.coded_texts:
                 if coded_text.start_position <= cursor.position() <= coded_text.end_position:
-                    print("remove codes that match the cursor position")
+                    print("TODO: remove codes that match the cursor position")
 
     def dragEnterEvent(self, e):
         if e.mimeData().hasText():
@@ -111,10 +111,10 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.refresh_coded_text_highlight()
 
     def refresh_coded_text_highlight(self):
+        # self.scroll
+
         self.coded_texts = self.parent.project_service.get_coded_texts(self.data_file.data_file_id,
                                                                        self.data_file.display_name)
-        # Ugly solution? Resets all formatting by reloading text and reapplying formatting
-        self.update_text(self.data_file)
         cursor = QTextCursor(self.document())
         string_format = QTextCharFormat()
         string_format.setBackground(QColor("yellow"))
