@@ -30,11 +30,6 @@ class PDFContentViewer(QPdfView):
         else:
             self.setPageMode(QPdfView.PageMode.MultiPage)
 
-        nav = self.pageNavigator()
-        nav.currentPageChanged.connect(self.on_page_changed)
-
-    def on_page_changed(self, page):
-        self.pageChanged.emit(page)
 
     def load_binary_file_content(self, datafile):
         return self.parent.project_service.load_binary_file_content(datafile)

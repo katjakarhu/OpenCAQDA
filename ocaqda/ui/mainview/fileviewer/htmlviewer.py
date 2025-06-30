@@ -28,9 +28,14 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.setMouseTracking(True)
 
         self.setOpenExternalLinks(False)
-        self.setOpenLinks(False)
+        # self.setOpenLinks(False)
 
         self.refresh_coded_text_highlight()
+
+        if data_file.file_extension == ".pdf":
+            print(self.toHtml())
+
+
 
     def update_text(self, data_file):
         if data_file.file_extension == '.md':
