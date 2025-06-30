@@ -32,11 +32,6 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
 
         self.refresh_coded_text_highlight()
 
-        if data_file.file_extension == ".pdf":
-            print(self.toHtml())
-
-
-
     def update_text(self, data_file):
         if data_file.file_extension == '.md':
             self.setMarkdown(data_file.file_as_text)
