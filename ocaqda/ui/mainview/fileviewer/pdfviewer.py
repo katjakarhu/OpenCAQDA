@@ -23,9 +23,7 @@ class PDFViewer(QWidget):
 
         layout = QHBoxLayout()
         self.pdf_content = PDFContentViewer(parent, datafile)
-        self.pdf_content.setAccessibleName("PDFContentViewer")
         self.text_content = HTMLViewer(parent, datafile)
-        self.text_content.setAccessibleName("HTMLViewer")
 
         layout.addWidget(self.text_content)
         layout.addWidget(self.pdf_content)
@@ -81,10 +79,7 @@ class PDFViewer(QWidget):
             chars_per_page = text_length / total_pages
             target_position = int(page * chars_per_page)
 
-            print(page, total_pages, target_position)
-
             # Scroll text to the calculated position
-
             cursor.setPosition(target_position)
             self.text_content.setTextCursor(cursor)
             self.text_content.ensureCursorVisible()
