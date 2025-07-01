@@ -57,6 +57,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.setOpenExternalLinks(False)
         # self.setOpenLinks(False)
 
+
         self.refresh_coded_text_highlight()
 
     def update_text(self, data_file):

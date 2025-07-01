@@ -21,7 +21,7 @@ class ContentTabView(QTabWidget):
             if not self.is_tab_open(datafile.display_name):
                 self.addTab(text_view, datafile.display_name)
 
-            self.setCurrentIndex(self.get_tab_index(datafile.display_name))
+            self.focus_tab_by_name(datafile.display_name)
 
 
         elif datafile.file_extension == '.pdf':
@@ -29,7 +29,10 @@ class ContentTabView(QTabWidget):
             if not self.is_tab_open(datafile.display_name):
                 self.addTab(pdf_view, datafile.display_name)
 
-            self.setCurrentIndex(self.get_tab_index(datafile.display_name))
+            self.focus_tab_by_name(datafile.display_name)
+
+    def focus_tab_by_name(self, name):
+        self.setCurrentIndex(self.get_tab_index(name))
 
     def is_tab_open(self, display_name):
         for i in range(self.count()):
@@ -50,3 +53,7 @@ class ContentTabView(QTabWidget):
 
     def get_file_name_from_open_tab(self):
         return self.tabText(self.currentIndex())
+
+
+    def get_open_tab(self):
+        return self.currentWidget()

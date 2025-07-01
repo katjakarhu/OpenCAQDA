@@ -1,18 +1,19 @@
 import re
 
+from PySide6.QtGui import QColor, QTextCharFormat, QTextCursor
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QTreeWidget, QLineEdit, QPushButton, QHBoxLayout, QTreeWidgetItem
 
 from ocaqda.utils.general_utils import remove_html_tags
 
 
 class SearchItem(QTreeWidgetItem):
-    def __init__(self, parent, search_data):
+    def __init__(self, parent, id_number, search_data):
         super(SearchItem, self).__init__(parent)
-        self.location = [search_data[0], search_data[1]]
-        self.original_text = search_data[2]
+        self.id_number = id_number
+        self.surrounding_text = search_data[2]
+        self.searched_text = search_data[3]
 
-        print(self.location, self.original_text, search_data)
-        self.setText(0, "..." + self.original_text.replace('\n', ' ') + "...")
+        self.setText(0, "..." + self.surrounding_text.replace('\n', ' ') + "...")
 
 
 class SearchTree(QTreeWidget):
@@ -23,13 +24,14 @@ class SearchTree(QTreeWidget):
 class SearchTab(QWidget):
     def __init__(self, main_window):
         super().__init__()
+        self.files = None
         self.main_window = main_window
         self.layout = QVBoxLayout()
 
         self.search_list = SearchTree()
         self.search_list.itemDoubleClicked.connect(self.open_file_at_text_location)
         self.search_list.setColumnCount(2)
-        self.search_list.setColumnWidth(0, 200)
+        self.search_list.setColumnWidth(0, 400)
         self.search_list.setHeaderLabels(['Name', 'Count'])
 
         self.layout.addWidget(self.search_list)
@@ -51,17 +53,18 @@ class SearchTab(QWidget):
     def search_files(self):
         search_string = self.search_field.text()
 
-        files = self.main_window.project_service.get_project_files()
+        self.files = self.main_window.project_service.get_project_files()
         results = dict()
-        for f in files:
+        for f in self.files:
             if search_string in f.file_as_text:
                 plain_text = remove_html_tags(f.file_as_text)
-                find_the_word = re.finditer(search_string, plain_text)
+                found_search_items = re.finditer(search_string, plain_text)
                 count = 0
                 location = []
-                for match in find_the_word:
+                for match in found_search_items:
                     count += 1
-                    location.append([match.start(), match.end(), plain_text[match.start() - 10:match.end() + 10]])
+                    location.append(
+                        [match.start(), match.end(), plain_text[match.start() - 10:match.end() + 30], match.group()])
 
                 print(f.display_name, count)
                 results.update({f.display_name: [count, location]})
@@ -74,19 +77,44 @@ class SearchTab(QWidget):
             item.setText(1, str(v[0]))
 
             for i in range(len(v[1])):
-                child = SearchItem(item, v[1][i])
+                child = SearchItem(item, i, v[1][i])
                 child.setExpanded(True)
 
             self.search_list.addTopLevelItem(item)
 
     def open_file_at_text_location(self):
-        if  self.search_list.currentItem().parent() is None:
-            self.open_file()
+        if self.search_list.currentItem().parent() is None:
+            selected_file = self.search_list.currentItem().text(0)
+            self.open_file(selected_file)
         else:
-            self.search_list.currentItem()
+            selected_file = self.search_list.currentItem().parent().text(0)
+            search_result = self.search_list.currentItem()
+            self.open_file(selected_file)
+            tab = self.main_window.text_content_panel.get_open_tab()
+            text = ""
+            if selected_file.endswith('.pdf'):
+                text = tab.text_content.viewer.toPlainText()
 
-    def open_file(self):
-        selected_file = self.search_list.currentItem().text(0)
+                found_search_items = re.finditer(search_result.searched_text, text)
+                location = list()
+                for match in found_search_items:
+                    location.append(
+                        [match.start(), match.end()])
+
+                print(location[search_result.id_number], search_result.id_number)
+                # tab.text_content.viewer.find(search_result.searched_text)
+                string_format = QTextCharFormat()
+                string_format.setBackground(QColor("pink"))
+                tab.text_content.viewer.textCursor().setPosition(location[search_result.id_number][0])
+                tab.text_content.viewer.textCursor().setPosition(location[search_result.id_number][1],
+                                                                 QTextCursor.MoveMode.MoveAnchor)
+                tab.text_content.viewer.textCursor().mergeCharFormat(string_format)
+
+
+            else:
+                text = tab.viewer.toPlainText()
+
+    def open_file(self, selected_file):
         for f in self.main_window.project_service.get_project_files():
             if f.display_name == selected_file:
-                self.main_window.text_add_file_viewer(f)
+                self.main_window.text_content_panel.add_file_viewer(f)

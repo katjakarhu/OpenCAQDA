@@ -1,7 +1,7 @@
 import unittest
 from unittest import TestCase
 
-from ocaqda.utils.helper_utils import convert_and_merge_ranges
+from ocaqda.utils.coding_utils import convert_and_merge_ranges
 
 
 # noinspection PyMethodMayBeStatic
@@ -12,13 +12,11 @@ class ConvertAndMergeRangesTest(unittest.TestCase):
         result = convert_and_merge_ranges(l)
         TestCase.assertListEqual(self, result, [[0, 1, "Lorem"], [2, 3, "Dolor"]])
 
-
     def test_convert_and_merge_ranges_no_overlap2(self):
         l = [[0, 1, "Lorem"], [2, 3, "Dolor"], [20, 30, "Dolor"], [31, 9000000000000000, "Whee"]]
         result = convert_and_merge_ranges(l)
-        TestCase.assertListEqual(self, result, [[0, 1, "Lorem"], [2, 3, "Dolor"], [20, 30, "Dolor"], [31, 9000000000000000, "Whee"]])
-
-
+        TestCase.assertListEqual(self, result,
+                                 [[0, 1, "Lorem"], [2, 3, "Dolor"], [20, 30, "Dolor"], [31, 9000000000000000, "Whee"]])
 
     def test_convert_and_merge_ranges1(self):
         l = [[0, 1, "Lorem"], [1, 2, "Dolor"]]

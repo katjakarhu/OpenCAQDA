@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QMenu
 
 from ocaqda.data.models import CodedText
 from ocaqda.services.userservice import UserService
-from ocaqda.utils.helper_utils import convert_and_merge_ranges
+from ocaqda.utils.coding_utils import convert_and_merge_ranges
 
 
 class CodingTarget:
