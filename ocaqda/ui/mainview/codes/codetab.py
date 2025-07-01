@@ -9,7 +9,7 @@ Left mouse button: Coding is done by dragging the code over a selected text in t
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLineEdit, \
     QHBoxLayout
 
-from ocaqda.ui.mainview.coding.codetree import CodeTree
+from ocaqda.ui.mainview.codes.codetree import CodeTree
 
 
 class CodeTab(QWidget):

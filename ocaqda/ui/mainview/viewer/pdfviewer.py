@@ -11,8 +11,8 @@ from PySide6.QtCore import QPoint
 from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import QWidget, QHBoxLayout
 
-from ocaqda.ui.mainview.fileviewer.textandhtmlviewer import TextAndHTMLViewer
-from ocaqda.ui.mainview.fileviewer.pdfcontentviewer import PDFContentViewer
+from ocaqda.ui.mainview.viewer.pdfcontentviewer import PDFContentViewer
+from ocaqda.ui.mainview.viewer.textandhtmlviewer import TextAndHTMLViewer
 
 
 class PDFViewer(QWidget):
@@ -42,7 +42,8 @@ class PDFViewer(QWidget):
 
             # Calculate the cursor position based on the scroll value
             cursor = self.text_content.viewer.cursorForPosition(
-                self.text_content.viewer.viewport().mapFrom(self.text_content, self.text_content.viewport().rect().topLeft()))
+                self.text_content.viewer.viewport().mapFrom(self.text_content.viewer,
+                                                            self.text_content.viewer.viewport().rect().topLeft()))
 
             cursor.movePosition(QTextCursor.MoveOperation.Down)
 

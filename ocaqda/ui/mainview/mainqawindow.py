@@ -11,12 +11,13 @@ from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QTabWidget, QSplitter, QWidget
 
 from ocaqda.services.projectservice import ProjectService
-from ocaqda.ui.mainview.coding.codetab import CodeTab
-from ocaqda.ui.mainview.fileselectiontab import FileSelectionTab
-from ocaqda.ui.mainview.fileviewer.contenttabview import ContentTabView
-from ocaqda.ui.mainview.fileviewer.textandhtmlviewer import TextAndHTMLViewer
-from ocaqda.ui.mainview.fileviewer.pdfviewer import PDFViewer
+from ocaqda.ui.mainview.codes.codetab import CodeTab
+from ocaqda.ui.mainview.files.fileselectiontab import FileSelectionTab
 from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
+from ocaqda.ui.mainview.search.searchtab import SearchTab
+from ocaqda.ui.mainview.viewer.contenttabview import ContentTabView
+from ocaqda.ui.mainview.viewer.pdfviewer import PDFViewer
+from ocaqda.ui.mainview.viewer.textandhtmlviewer import TextAndHTMLViewer
 
 
 class MainQAWindow(QMainWindow):
@@ -53,9 +54,11 @@ class MainQAWindow(QMainWindow):
         tab_widget.setMaximumWidth(300)
         code_tab = CodeTab(self.project_service)
         files_tab = FileSelectionTab(self)
+        search_tab = SearchTab(self)
         # Add tabs to tab widget
         tab_widget.addTab(code_tab, "Codes")
         tab_widget.addTab(files_tab, "Files")
+        tab_widget.addTab(search_tab, "Search")
         # Middle panel
         self.text_content_panel.setMinimumWidth(500)
 
