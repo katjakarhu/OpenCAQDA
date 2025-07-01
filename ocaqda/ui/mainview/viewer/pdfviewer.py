@@ -41,7 +41,6 @@ class PDFViewer(QWidget):
         """
         text_content_edge = self.mapToGlobal(self.text_content.rect().topRight()).x()
         if self.cursor().pos().x() <= text_content_edge:
-            print("!!!!!!!")
             # Calculate the cursor position based on the scroll value
             cursor = self.text_content.viewer.cursorForPosition(
                 self.text_content.viewer.viewport().mapFrom(self.text_content.viewer,
@@ -64,7 +63,6 @@ class PDFViewer(QWidget):
                         page_number = page_number + c
                     else:
                         break
-                print(page_number)
                 self.pdf_content.pageNavigator().jump(int(page_number), QPoint(),
                                                       self.pdf_content.pageNavigator().currentZoom())
 
