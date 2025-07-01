@@ -16,14 +16,15 @@ from ocaqda.ui.mainview.viewer.textandhtmlviewer import TextAndHTMLViewer
 
 
 class PDFViewer(QWidget):
-    def __init__(self, parent, datafile):
+    def __init__(self, parent, main_window, datafile):
         super(PDFViewer, self).__init__(parent)
         self.parent = parent
+        self.main_window = main_window
         self.datafile = datafile
 
         layout = QHBoxLayout()
-        self.pdf_content = PDFContentViewer(parent, datafile)
-        self.text_content = TextAndHTMLViewer(parent, datafile)
+        self.pdf_content = PDFContentViewer(parent, main_window, datafile)
+        self.text_content = TextAndHTMLViewer(parent, main_window, datafile)
 
         layout.addWidget(self.text_content)
         layout.addWidget(self.pdf_content)
@@ -38,8 +39,9 @@ class PDFViewer(QWidget):
         """
         If the cursor is on the text content side, then we know that the text is scrolled
         """
-        if self.cursor().pos().x() <= self.text_content.viewer.viewport().rect().topRight().x():
-
+        text_content_edge = self.mapToGlobal(self.text_content.rect().topRight()).x()
+        if self.cursor().pos().x() <= text_content_edge:
+            print("!!!!!!!")
             # Calculate the cursor position based on the scroll value
             cursor = self.text_content.viewer.cursorForPosition(
                 self.text_content.viewer.viewport().mapFrom(self.text_content.viewer,
@@ -62,7 +64,7 @@ class PDFViewer(QWidget):
                         page_number = page_number + c
                     else:
                         break
-
+                print(page_number)
                 self.pdf_content.pageNavigator().jump(int(page_number), QPoint(),
                                                       self.pdf_content.pageNavigator().currentZoom())
 
@@ -70,7 +72,9 @@ class PDFViewer(QWidget):
         """
         If cursor is on the PDF content side, then the PDF is scrolled
         """
-        if self.cursor().pos().x() > self.text_content.viewer.viewport().rect().topRight().x():
+        text_content_edge = self.mapToGlobal(self.text_content.rect().topRight()).x()
+
+        if self.cursor().pos().x() > text_content_edge:
             cursor = self.text_content.viewer.textCursor()
             page = self.pdf_content.pageNavigator().currentPage()
             # Calculate approximate text position based on page number

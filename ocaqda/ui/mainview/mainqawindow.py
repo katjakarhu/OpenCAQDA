@@ -16,8 +16,6 @@ from ocaqda.ui.mainview.files.fileselectiontab import FileSelectionTab
 from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
 from ocaqda.ui.mainview.search.searchtab import SearchTab
 from ocaqda.ui.mainview.viewer.contenttabview import ContentTabView
-from ocaqda.ui.mainview.viewer.pdfviewer import PDFViewer
-from ocaqda.ui.mainview.viewer.textandhtmlviewer import TextAndHTMLViewer
 
 
 class MainQAWindow(QMainWindow):
@@ -25,7 +23,7 @@ class MainQAWindow(QMainWindow):
     def __init__(self, name):
         super().__init__()
 
-        self.text_content_panel = ContentTabView()
+        self.text_content_panel = ContentTabView(self)
         self.status_bar = self.statusBar()
         self.project_service = None
         self.set_project(name)
@@ -51,7 +49,7 @@ class MainQAWindow(QMainWindow):
         center_layout = QHBoxLayout()
         # Left column with tabs
         tab_widget = QTabWidget()
-        tab_widget.setMaximumWidth(300)
+        tab_widget.setMaximumWidth(500)
         code_tab = CodeTab(self.project_service)
         files_tab = FileSelectionTab(self)
         search_tab = SearchTab(self)
@@ -82,39 +80,3 @@ class MainQAWindow(QMainWindow):
         self.project_service = ProjectService(name)
 
         self.setWindowTitle("OpenCAQDA - Project: " + name)
-
-    def add_file_viewer(self, datafile):
-        if datafile.file_extension in ('.txt', '.html', '.md'):
-            text_view = TextAndHTMLViewer(self, datafile)
-            if not self.is_tab_open(datafile.display_name):
-                self.text_content_panel.addTab(text_view, datafile.display_name)
-
-            self.text_content_panel.setCurrentIndex(self.get_tab_index(datafile.display_name))
-
-
-        elif datafile.file_extension == '.pdf':
-            pdf_view = PDFViewer(self, datafile)
-            if not self.is_tab_open(datafile.display_name):
-                self.text_content_panel.addTab(pdf_view, datafile.display_name)
-
-            self.text_content_panel.setCurrentIndex(self.get_tab_index(datafile.display_name))
-
-    def is_tab_open(self, display_name):
-        for i in range(self.text_content_panel.count()):
-            if display_name == self.text_content_panel.tabText(i):
-                return True
-        return False
-
-    def get_tab_index(self, display_name):
-        for i in range(self.text_content_panel.count()):
-            if display_name == self.text_content_panel.tabText(i):
-                return int(i)
-        return None
-
-    def close_tab(self, display_name):
-        for i in range(self.text_content_panel.count()):
-            if display_name == self.text_content_panel.tabText(i):
-                self.text_content_panel.removeTab(i)
-
-    def get_file_name_from_open_tab(self):
-        return self.text_content_panel.tabText(self.text_content_panel.currentIndex())

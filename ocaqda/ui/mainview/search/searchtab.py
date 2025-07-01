@@ -5,6 +5,16 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QTreeWidget, QLineEdit, QPus
 from ocaqda.utils.general_utils import remove_html_tags
 
 
+class SearchItem(QTreeWidgetItem):
+    def __init__(self, parent, search_data):
+        super(SearchItem, self).__init__(parent)
+        self.location = [search_data[0], search_data[1]]
+        self.original_text = search_data[2]
+
+        print(self.location, self.original_text, search_data)
+        self.setText(0, "..." + self.original_text.replace('\n', ' ') + "...")
+
+
 class SearchTree(QTreeWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -17,10 +27,11 @@ class SearchTab(QWidget):
         self.layout = QVBoxLayout()
 
         self.search_list = SearchTree()
-        self.search_list.itemDoubleClicked.connect(self.open_file)
+        self.search_list.itemDoubleClicked.connect(self.open_file_at_text_location)
         self.search_list.setColumnCount(2)
         self.search_list.setColumnWidth(0, 200)
         self.search_list.setHeaderLabels(['Name', 'Count'])
+
         self.layout.addWidget(self.search_list)
         self.search_field = QLineEdit()
         self.search_button = QPushButton("Search files")
@@ -63,14 +74,19 @@ class SearchTab(QWidget):
             item.setText(1, str(v[0]))
 
             for i in range(len(v[1])):
-                child = QTreeWidgetItem(item)
-                child.setText(0, "..." + str(v[1][i][2]).replace('\n', ' ') + "...")
+                child = SearchItem(item, v[1][i])
+                child.setExpanded(True)
 
             self.search_list.addTopLevelItem(item)
 
+    def open_file_at_text_location(self):
+        if  self.search_list.currentItem().parent() is None:
+            self.open_file()
+        else:
+            self.search_list.currentItem()
+
     def open_file(self):
-        if self.search_list.currentItem() is not None and self.search_list.currentItem().parent() is None:
-            selected_file = self.search_list.currentItem().text(0)
-            for f in self.main_window.project_service.get_project_files():
-                if f.display_name == selected_file:
-                    self.main_window.add_file_viewer(f)
+        selected_file = self.search_list.currentItem().text(0)
+        for f in self.main_window.project_service.get_project_files():
+            if f.display_name == selected_file:
+                self.main_window.text_add_file_viewer(f)

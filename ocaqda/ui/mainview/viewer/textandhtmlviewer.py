@@ -11,11 +11,12 @@ from ocaqda.utils.coding_utils import convert_and_merge_ranges
 
 
 class TextAndHTMLViewer(QWidget):
-    def __init__(self, parent, datafile):
+    def __init__(self, parent, main_window, datafile):
         super(TextAndHTMLViewer, self).__init__(parent)
         self.parent = parent
         self.datafile = datafile
-        self.viewer = HTMLViewer(self.parent, self.datafile)
+        self.main_window = main_window
+        self.viewer = HTMLViewer(self.parent, self.main_window, self.datafile)
         self.search_field = QLineEdit()
         self.search_button = QPushButton('Search')
         self.search_button.clicked.connect(self.search_text)
@@ -36,14 +37,15 @@ class TextAndHTMLViewer(QWidget):
 
 
 class HTMLViewer(QTextBrowser, QUndoCommand):
-    def __init__(self, parent, data_file):
+    def __init__(self, parent, main_window, data_file):
         super().__init__()
         self.parent = parent
+        self.main_window = main_window
         self.data_file = data_file
 
-        self.codes = self.parent.project_service.get_project_codes()
-        self.coded_texts = self.parent.project_service.get_coded_texts(self.data_file.data_file_id,
-                                                                       self.data_file.display_name)
+        self.codes = self.main_window.project_service.get_project_codes()
+        self.coded_texts = self.main_window.project_service.get_coded_texts(self.data_file.data_file_id,
+                                                                            self.data_file.display_name)
         self.update_text(data_file)
 
         self.highlighter = None
@@ -90,8 +92,8 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         cursor = self.textCursor()
         used_codes = set()
 
-        self.coded_texts = self.parent.project_service.get_coded_texts(self.data_file.data_file_id,
-                                                                       self.data_file.display_name)
+        self.coded_texts = self.main_window.project_service.get_coded_texts(self.data_file.data_file_id,
+                                                                            self.data_file.display_name)
         for coded_text in self.coded_texts:
             if coded_text.start_position <= cursor.position() <= coded_text.end_position:
                 code = next(filter(lambda x: x.code_id == coded_text.code_id, self.codes), None)
@@ -122,7 +124,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
     def add_code_to_selected_text(self, current_selection, e):
         coded_text = CodedText()
         coded_text.data_file_id = self.data_file.data_file_id
-        self.codes = self.parent.project_service.get_project_codes()
+        self.codes = self.main_window.project_service.get_project_codes()
         for code in self.codes:
             if code.name == e.mimeData().text():
                 coded_text.code_id = code.code_id
@@ -132,14 +134,13 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         coded_text.end_position = self.textCursor().selectionEnd()
         coded_text.created_by = UserService().user.user_id
         coded_text.updated_by = UserService().user.user_id
-        self.parent.project_service.save_coded_text(coded_text)
+        self.main_window.project_service.save_coded_text(coded_text)
         self.refresh_coded_text_highlight()
 
     def refresh_coded_text_highlight(self):
-        # self.scroll
 
-        self.coded_texts = self.parent.project_service.get_coded_texts(self.data_file.data_file_id,
-                                                                       self.data_file.display_name)
+        self.coded_texts = self.main_window.project_service.get_coded_texts(self.data_file.data_file_id,
+                                                                            self.data_file.display_name)
         cursor = QTextCursor(self.document())
         string_format = QTextCharFormat()
         string_format.setBackground(QColor("yellow"))

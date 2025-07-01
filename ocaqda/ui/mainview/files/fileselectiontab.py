@@ -79,7 +79,7 @@ class FileSelectionTab(QWidget):
         selected_file = self.file_list.currentItem().text()
         for f in self.main_window.project_service.get_project_files():
             if f.display_name == selected_file:
-                self.main_window.add_file_viewer(f)
+                self.main_window.text_content_panel.add_file_viewer(f)
 
     def manage_files(self):
         raise "Implement me!"
@@ -91,7 +91,7 @@ class FileSelectionTab(QWidget):
 
         for f in self.main_window.project_service.get_project_files():
             if f.display_name == self.file_list.currentItem().text():
-                self.main_window.close_tab(f.display_name)
+                self.main_window.text_content_panel.close_tab(f.display_name)
                 self.main_window.project_service.delete_file_from_db(f)
                 break
         self.file_list.takeItem(self.file_list.currentRow())
