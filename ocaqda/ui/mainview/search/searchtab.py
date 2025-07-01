@@ -105,11 +105,13 @@ class SearchTab(QWidget):
                 # tab.text_content.viewer.find(search_result.searched_text)
                 string_format = QTextCharFormat()
                 string_format.setBackground(QColor("pink"))
-                tab.text_content.viewer.textCursor().setPosition(location[search_result.id_number][0])
-                tab.text_content.viewer.textCursor().setPosition(location[search_result.id_number][1],
-                                                                 QTextCursor.MoveMode.MoveAnchor)
-                tab.text_content.viewer.textCursor().mergeCharFormat(string_format)
 
+                cursor = tab.text_content.viewer.textCursor()
+                cursor.setPosition(location[search_result.id_number][0])
+                cursor.setPosition(location[search_result.id_number][1],
+                                   QTextCursor.MoveMode.KeepAnchor)
+                cursor.mergeCharFormat(string_format)
+                tab.text_content.viewer.setTextCursor(cursor)
 
             else:
                 text = tab.viewer.toPlainText()
