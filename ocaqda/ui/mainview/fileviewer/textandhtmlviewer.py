@@ -1,13 +1,38 @@
 """
-A component for viewing plain text files
+A component for viewing text or HTML content
 """
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QTextCharFormat, QTextCursor, QColor, QUndoCommand, QAction
-from PySide6.QtWidgets import QMenu, QTextBrowser
+from PySide6.QtWidgets import QMenu, QTextBrowser, QWidget, QVBoxLayout, QLineEdit, QHBoxLayout, QPushButton
 
 from ocaqda.data.models import CodedText
 from ocaqda.services.userservice import UserService
 from ocaqda.utils.helper_utils import convert_and_merge_ranges
+
+
+class TextAndHTMLViewer(QWidget):
+    def __init__(self, parent, datafile):
+        super(TextAndHTMLViewer, self).__init__(parent)
+        self.parent = parent
+        self.datafile = datafile
+        self.viewer = HTMLViewer(self.parent, self.datafile)
+        self.search_field = QLineEdit()
+        self.search_button = QPushButton('Search')
+        self.search_button.clicked.connect(self.search_text)
+        layout = QVBoxLayout()
+
+        search_layout = QHBoxLayout()
+
+        search_layout.addWidget(self.search_field)
+        search_layout.addWidget(self.search_button)
+
+        layout.addWidget(self.viewer)
+        layout.addLayout(search_layout)
+        self.setLayout(layout)
+
+    def search_text(self):
+        text = self.search_field.text()
+        self.viewer.find(text)
 
 
 class HTMLViewer(QTextBrowser, QUndoCommand):

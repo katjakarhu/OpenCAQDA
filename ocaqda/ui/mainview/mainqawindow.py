@@ -14,7 +14,7 @@ from ocaqda.services.projectservice import ProjectService
 from ocaqda.ui.mainview.coding.codetab import CodeTab
 from ocaqda.ui.mainview.fileselectiontab import FileSelectionTab
 from ocaqda.ui.mainview.fileviewer.contenttabview import ContentTabView
-from ocaqda.ui.mainview.fileviewer.htmlviewer import HTMLViewer
+from ocaqda.ui.mainview.fileviewer.textandhtmlviewer import TextAndHTMLViewer
 from ocaqda.ui.mainview.fileviewer.pdfviewer import PDFViewer
 from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
 
@@ -82,7 +82,7 @@ class MainQAWindow(QMainWindow):
 
     def add_file_viewer(self, datafile):
         if datafile.file_extension in ('.txt', '.html', '.md'):
-            text_view = HTMLViewer(self, datafile)
+            text_view = TextAndHTMLViewer(self, datafile)
             if not self.is_tab_open(datafile.display_name):
                 self.text_content_panel.addTab(text_view, datafile.display_name)
 
