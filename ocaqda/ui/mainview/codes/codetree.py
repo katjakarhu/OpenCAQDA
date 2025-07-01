@@ -2,8 +2,8 @@ from PySide6.QtCore import QMimeData, Qt
 from PySide6.QtGui import QBrush, QColor, QDrag
 from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem, QTreeWidgetItemIterator
 
+from ocaqda.utils.coding_utils import create_tree
 from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
-from ocaqda.utils.helper_utils import create_tree
 
 
 class CodeTree(QTreeWidget):

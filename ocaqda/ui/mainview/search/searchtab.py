@@ -2,7 +2,7 @@ import re
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QTreeWidget, QLineEdit, QPushButton, QHBoxLayout, QTreeWidgetItem
 
-CLEANR = re.compile('<.*?>')
+from ocaqda.utils.general_utils import remove_html_tags
 
 
 class SearchTree(QTreeWidget):
@@ -44,13 +44,13 @@ class SearchTab(QWidget):
         results = dict()
         for f in files:
             if search_string in f.file_as_text:
-                plain_text = self.cleanhtml(f.file_as_text)
+                plain_text = remove_html_tags(f.file_as_text)
                 find_the_word = re.finditer(search_string, plain_text)
                 count = 0
                 location = []
                 for match in find_the_word:
                     count += 1
-                    location.append([match.start(), match.end(), match.group()])
+                    location.append([match.start(), match.end(), plain_text[match.start() - 10:match.end() + 10]])
 
                 print(f.display_name, count)
                 results.update({f.display_name: [count, location]})
@@ -64,16 +64,12 @@ class SearchTab(QWidget):
 
             for i in range(len(v[1])):
                 child = QTreeWidgetItem(item)
-                child.setText(0, str(v[1][i]))
+                child.setText(0, "..." + str(v[1][i][2]).replace('\n', ' ') + "...")
 
             self.search_list.addTopLevelItem(item)
 
-    def cleanhtml(self, raw_html):
-        cleantext = re.sub(CLEANR, '', raw_html)
-        return cleantext
-
     def open_file(self):
-        if self.search_list.currentItem() is not None:
+        if self.search_list.currentItem() is not None and self.search_list.currentItem().parent() is None:
             selected_file = self.search_list.currentItem().text(0)
             for f in self.main_window.project_service.get_project_files():
                 if f.display_name == selected_file:
