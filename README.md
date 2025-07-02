@@ -1,6 +1,6 @@
 # OpenCAQDA - Open Source Computer-Assisted Qualitative Data Analysis Tool
 
-Current status: [![Python application](https://github.com/katjakarhu/OpenCAQDA/actions/workflows/python-app.yml/badge.svg)](https://github.com/katjakarhu/OpenCAQDA/actions/workflows/python-app.yml)
+[![Python application](https://github.com/katjakarhu/OpenCAQDA/actions/workflows/python-app.yml/badge.svg)](https://github.com/katjakarhu/OpenCAQDA/actions/workflows/python-app.yml)
 
 WORK-IN-PROGRESS: Use at your own risk! See open issues for known defects and missing features: https://github.com/katjakarhu/OpenCAQDA/issues 
 
