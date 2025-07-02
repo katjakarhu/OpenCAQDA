@@ -22,7 +22,7 @@ class NoConfigurationFileTest(unittest.TestCase):
         if Path(CONFIGURATION_FILE_NAME).exists():
             os.remove(CONFIGURATION_FILE_NAME)
 
-    def test_shouldReturnEmptyStrings(self):
+    def test_configuration_service_is_none(self):
         conf_service = None
         try:
             conf_service = ConfigurationService()
