@@ -5,4 +5,4 @@ bcrypt~=4.3.0
 pyyaml~=6.0.2
 keyring
 anytree
-pdfminer-six~=20250506
+pdfminer-six
