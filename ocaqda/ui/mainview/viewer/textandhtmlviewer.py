@@ -46,7 +46,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.codes = self.main_window.project_service.get_project_codes()
         self.coded_texts = self.main_window.project_service.get_coded_texts(self.data_file.data_file_id,
                                                                             self.data_file.display_name)
-        self.update_text(data_file)
+        self.update_text()
 
         self.highlighter = None
 
@@ -57,14 +57,15 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.setOpenExternalLinks(False)
         # self.setOpenLinks(False)
 
-
         self.refresh_coded_text_highlight()
 
-    def update_text(self, data_file):
-        if data_file.file_extension == '.md':
-            self.setMarkdown(data_file.file_as_text)
+    def update_text(self):
+        if self.data_file.file_extension == '.md':
+            self.setMarkdown(self.data_file.file_as_text)
+        elif self.data_file.file_extension == '.html':
+            self.setHtml(self.data_file.file_as_text)
         else:
-            self.setText(data_file.file_as_text)
+            self.setText(self.data_file.file_as_text)
 
     def mousePressEvent(self, e):
         if e.button() == Qt.MouseButton.RightButton:

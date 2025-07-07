@@ -53,6 +53,10 @@ class SearchTab(QWidget):
     def search_files(self):
         search_string = self.search_field.text()
 
+        if search_string == "":
+            self.search_list.clear()
+            return
+
         self.files = self.main_window.project_service.get_project_files()
         results = dict()
         for f in self.files:
@@ -90,31 +94,42 @@ class SearchTab(QWidget):
             selected_file = self.search_list.currentItem().parent().text(0)
             search_result = self.search_list.currentItem()
             self.open_file(selected_file)
-            tab = self.main_window.text_content_panel.get_open_tab()
-            text = ""
-            if selected_file.endswith('.pdf'):
-                text = tab.text_content.viewer.toPlainText()
+            self.scroll_to_found_item(search_result, selected_file)
 
-                found_search_items = re.finditer(search_result.searched_text, text)
-                location = list()
-                for match in found_search_items:
-                    location.append(
-                        [match.start(), match.end()])
+    def scroll_to_found_item(self, search_result, selected_file):
+        tab = self.main_window.text_content_panel.get_open_tab()
+        text = ""
+        if selected_file.endswith('.pdf'):
+            text = tab.text_content.viewer.toPlainText()
 
-                print(location[search_result.id_number], search_result.id_number)
-                # tab.text_content.viewer.find(search_result.searched_text)
-                string_format = QTextCharFormat()
-                string_format.setBackground(QColor("pink"))
+            location = self.find_locations_in_text(search_result, text)
+            cursor = tab.text_content.viewer.textCursor()
+            self.set_cursor_to_found_text_with_highlight(cursor, location, search_result)
+            tab.text_content.viewer.setTextCursor(cursor)
 
-                cursor = tab.text_content.viewer.textCursor()
-                cursor.setPosition(location[search_result.id_number][0])
-                cursor.setPosition(location[search_result.id_number][1],
-                                   QTextCursor.MoveMode.KeepAnchor)
-                cursor.mergeCharFormat(string_format)
-                tab.text_content.viewer.setTextCursor(cursor)
+        else:
+            text = tab.viewer.toPlainText()
+            location = self.find_locations_in_text(search_result, text)
 
-            else:
-                text = tab.viewer.toPlainText()
+            cursor = tab.viewer.textCursor()
+            self.set_cursor_to_found_text_with_highlight(cursor, location, search_result)
+            tab.viewer.setTextCursor(cursor)
+
+    def find_locations_in_text(self, search_result, text):
+        found_search_items = re.finditer(search_result.searched_text, text)
+        location = list()
+        for match in found_search_items:
+            location.append(
+                [match.start(), match.end()])
+        return location
+
+    def set_cursor_to_found_text_with_highlight(self, cursor, location, search_result):
+        string_format = QTextCharFormat()
+        string_format.setBackground(QColor("pink"))
+        cursor.setPosition(location[search_result.id_number][0])
+        cursor.setPosition(location[search_result.id_number][1],
+                           QTextCursor.MoveMode.KeepAnchor)
+        cursor.mergeCharFormat(string_format)
 
     def open_file(self, selected_file):
         for f in self.main_window.project_service.get_project_files():
