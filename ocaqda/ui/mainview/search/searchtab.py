@@ -36,8 +36,9 @@ class SearchTab(QWidget):
 
         self.layout.addWidget(self.search_list)
         self.search_field = QLineEdit()
-        self.search_button = QPushButton("Search files")
+        self.search_button = QPushButton("Search")
         self.search_button.clicked.connect(self.search_files)
+        # TODO: add search options for notes, files, codes
 
         self.search_layout = QHBoxLayout()
 
@@ -70,7 +71,6 @@ class SearchTab(QWidget):
                     location.append(
                         [match.start(), match.end(), plain_text[match.start() - 10:match.end() + 30], match.group()])
 
-                print(f.display_name, count)
                 results.update({f.display_name: [count, location]})
 
         self.search_list.clear()
@@ -126,10 +126,11 @@ class SearchTab(QWidget):
     def set_cursor_to_found_text_with_highlight(self, cursor, location, search_result):
         string_format = QTextCharFormat()
         string_format.setBackground(QColor("pink"))
-        cursor.setPosition(location[search_result.id_number][0])
-        cursor.setPosition(location[search_result.id_number][1],
-                           QTextCursor.MoveMode.KeepAnchor)
-        cursor.mergeCharFormat(string_format)
+        if len(location) > 0:
+            cursor.setPosition(location[search_result.id_number][0])
+            cursor.setPosition(location[search_result.id_number][1],
+                               QTextCursor.MoveMode.KeepAnchor)
+            cursor.mergeCharFormat(string_format)
 
     def open_file(self, selected_file):
         for f in self.main_window.project_service.get_project_files():

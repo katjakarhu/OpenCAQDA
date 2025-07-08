@@ -85,20 +85,18 @@ class CodingTarget:
     def refresh_coded_text_highlight(self):
         self.coded_texts = self.parent.project_service.get_coded_texts(self.data_file.data_file_id,
                                                                        self.data_file.display_name)
-        # Ugly solution? Resets all formatting by reloading text and reapplying formatting
         self.setText(self.data_file.file_as_text)
         cursor = QTextCursor(self.document())
+        self.highlight_and_set_codes_to_tooltip(cursor)
+
+    def highlight_and_set_codes_to_tooltip(self, cursor):
         string_format = QTextCharFormat()
         string_format.setBackground(QColor("yellow"))
-
         positions = []
-
         for coded_text in self.coded_texts:
             code = next(filter(lambda x: x.code_id == coded_text.code_id, self.codes), None)
             positions.append([coded_text.start_position, coded_text.end_position, code.name])
-
         merged_positions = convert_and_merge_ranges(positions)
-
         for item in merged_positions:
             cursor.setPosition(item[0])
             cursor.setPosition(item[1], QTextCursor.MoveMode.KeepAnchor)

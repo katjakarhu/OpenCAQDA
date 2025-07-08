@@ -5,9 +5,9 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit
 
 
 class InfoAndNotePanel(QWidget):
-    def __init__(self, project_service):
+    def __init__(self, main_window):
         super().__init__()
-        self.project_service = project_service
+        self.main_window = main_window
         layout = QVBoxLayout()
         info_header_label = QLabel("Information:")
         header_style = "font-size: 14px; font-weight: bold;"
@@ -15,12 +15,11 @@ class InfoAndNotePanel(QWidget):
         layout.addWidget(info_header_label)
 
         # Description text
-        info_label = QLabel(
-            "Info here"
+        self.info_label = QLabel(
         )
-        info_label.setWordWrap(True)
-        info_label.setMaximumWidth(380)
-        info_label.setMinimumHeight(100)
+        self.info_label.setWordWrap(True)
+        self.info_label.setMaximumWidth(380)
+        self.info_label.setMinimumHeight(100)
         self.info_label = QLabel("Info")
         self.note_area = QTextEdit()
         layout.addWidget(self.info_label)
@@ -36,3 +35,6 @@ class InfoAndNotePanel(QWidget):
         layout.addWidget(note_instruction_label)
         layout.addWidget(self.note_area)
         self.setLayout(layout)
+
+    def set_selected_item_info(self, name, type):
+        self.info_label.setText(name)

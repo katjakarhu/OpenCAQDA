@@ -7,9 +7,9 @@ from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
 
 
 class CodeTree(QTreeWidget):
-    def __init__(self, project_service, parent):
+    def __init__(self, main_window, parent):
         super().__init__(parent)
-        self.project_service = project_service
+        self.main_window = main_window
         self.parent = parent
         self.setHeaderLabel("Code")
 
@@ -24,8 +24,8 @@ class CodeTree(QTreeWidget):
     def populate_code_list(self):
         self.clear()
 
-        code_relationships = self.project_service.get_parent_child_relationships()
-        codes = self.project_service.get_project_codes()
+        code_relationships = self.main_window.project_service.get_parent_child_relationships()
+        codes = self.main_window.project_service.get_project_codes()
 
         tree = create_tree(code_relationships, codes)
 
@@ -48,7 +48,7 @@ class CodeTree(QTreeWidget):
         if text:
             # Limit the text length to 512 characters
             if len(text) > 0 and len(self.findItems(text, Qt.MatchFlag.MatchExactly)) == 0:
-                self.project_service.save_code(text)
+                self.main_window.project_service.save_code(text)
                 self.populate_code_list()
 
     def add_item_to_tree(self, text):
@@ -95,6 +95,8 @@ class CodeTree(QTreeWidget):
 
     def mousePressEvent(self, event):
         self.setCurrentItem(self.itemAt(event.pos()))
+        if self.itemAt(event.pos()) is not None:
+            self.main_window.info_tab.set_selected_item_info(self.itemAt(event.pos()).text(0), "code")
 
         if event.button() == Qt.MouseButton.LeftButton:
             if self.currentItem():
@@ -119,4 +121,4 @@ class CodeTree(QTreeWidget):
                     relations[itm.parent().text(0)] = itm.text(0)
                 iterator += 1
 
-            self.project_service.update_code_relationships(relations)
+            self.main_window.project_service.update_code_relationships(relations)

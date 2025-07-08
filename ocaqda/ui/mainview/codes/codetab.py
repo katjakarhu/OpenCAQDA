@@ -13,13 +13,13 @@ from ocaqda.ui.mainview.codes.codetree import CodeTree
 
 
 class CodeTab(QWidget):
-    def __init__(self, project_service):
+    def __init__(self, main_window):
         super().__init__()
 
-        self.project_service = project_service
+        self.main_window = main_window
         analysis_layout = QVBoxLayout()
         # Tree widget for analysis tab
-        self.code_tree = CodeTree(project_service, self)
+        self.code_tree = CodeTree(main_window, self)
         self.filter_field = QLineEdit()
         self.filter_field.setPlaceholderText("Filter codes...")
 
@@ -44,3 +44,5 @@ class CodeTab(QWidget):
 
     def manage_codes(self):
         raise "Implement me!"
+
+

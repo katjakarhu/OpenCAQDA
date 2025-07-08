@@ -23,6 +23,9 @@ class MainQAWindow(QMainWindow):
     def __init__(self, name):
         super().__init__()
 
+        self.info_tab = None
+        self.files_tab = None
+        self.code_tab = None
         self.text_content_panel = ContentTabView(self)
         self.status_bar = self.statusBar()
         self.project_service = None
@@ -48,26 +51,30 @@ class MainQAWindow(QMainWindow):
         # Main layout
         center_layout = QHBoxLayout()
         # Left column with tabs
-        tab_widget = QTabWidget()
-        tab_widget.setMaximumWidth(500)
-        code_tab = CodeTab(self.project_service)
-        files_tab = FileSelectionTab(self)
-        search_tab = SearchTab(self)
+        left_tab_widget = QTabWidget()
+        left_tab_widget.setMaximumWidth(500)
+        self.code_tab = CodeTab(self)
+        self.files_tab = FileSelectionTab(self)
         # Add tabs to tab widget
-        tab_widget.addTab(code_tab, "Codes")
-        tab_widget.addTab(files_tab, "Files")
-        tab_widget.addTab(search_tab, "Search")
+        left_tab_widget.addTab(self.code_tab, "Codes")
+        left_tab_widget.addTab(self.files_tab, "Files")
         # Middle panel
         self.text_content_panel.setMinimumWidth(500)
 
         # Right panel
-        right_panel = InfoAndNotePanel(self.project_service)
-        right_panel.setMaximumWidth(400)
+        right_tab_widget = QTabWidget(self)
+        self.info_tab = InfoAndNotePanel(self)
+
+        search_tab = SearchTab(self)
+        right_tab_widget.addTab(self.info_tab, "Notes")
+        right_tab_widget.addTab(search_tab, "Search")
+
+        right_tab_widget.setMaximumWidth(400)
         # Splitter for resizing panels
         splitter = QSplitter()
-        splitter.addWidget(tab_widget)
+        splitter.addWidget(left_tab_widget)
         splitter.addWidget(self.text_content_panel)
-        # splitter.addWidget(right_panel)
+        splitter.addWidget(right_tab_widget)
         # Set the central widget
         central_widget = QWidget()
         central_widget.setLayout(center_layout)
