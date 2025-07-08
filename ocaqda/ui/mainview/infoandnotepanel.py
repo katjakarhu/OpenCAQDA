@@ -7,6 +7,8 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit
 class InfoAndNotePanel(QWidget):
     def __init__(self, main_window):
         super().__init__()
+        self.note = None
+        self.selected_item = None
         self.main_window = main_window
         layout = QVBoxLayout()
         info_header_label = QLabel("Information:")
@@ -27,14 +29,46 @@ class InfoAndNotePanel(QWidget):
         note_header_label = QLabel("Notes:")
         note_header_label.setStyleSheet(header_style)
 
-        note_instruction_label = QLabel(
-            "Please select a file or a code to attach notes to. You can view and export notes from the tools menu")
-        note_instruction_label.setWordWrap(True)
+        self.note_instruction_label = QLabel(
+            "Please select a file or a code to attach notes to")
+        self.note_instruction_label.setWordWrap(True)
 
         layout.addWidget(note_header_label)
-        layout.addWidget(note_instruction_label)
+        layout.addWidget(self.note_instruction_label)
         layout.addWidget(self.note_area)
         self.setLayout(layout)
 
     def set_selected_item_info(self, name, type):
-        self.info_label.setText(name)
+        self.save_current_note()
+
+        self.selected_item = [name, type]
+        self.info_label.setText("Selected " + type + " : " + name)
+        self.note_instruction_label.setText("")
+
+        self.note_area.clear()
+        self.load_note(name)
+
+    def load_note(self, name):
+        if self.selected_item[1] == "code":
+            note = self.load_note_for_code(name)
+            if note is not None:
+                self.note_area.setText(note.text)
+        else:
+            pass
+
+    def save_current_note(self):
+        if self.selected_item is not None:
+            if self.selected_item[1] == "code":
+                self.save_note_for_code(self.selected_item[0])
+            else:
+                pass
+
+    def load_note_for_code(self, name):
+        if self.selected_item is not None:
+            if self.selected_item[1] == "code":
+                self.note = self.main_window.project_service.load_note_for_code(name)
+                if self.note is not None:
+                    self.note_area.setText(self.note.text)
+
+    def save_note_for_code(self, name):
+        self.main_window.project_service.save_note_for_code(name, self.note_area.toPlainText())

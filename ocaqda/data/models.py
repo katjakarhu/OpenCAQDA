@@ -101,7 +101,7 @@ class CodeRelationship(Base, TimestampColumnMixin, UserColumnMixin):
     label = Column(String)
     from_code_id = Column(Integer, ForeignKey("codes.code_id"), nullable=False)
     to_code_id = Column(Integer, ForeignKey("codes.code_id"), nullable=False)
-    has_direction = Column(Boolean) #this is unnecessary, remove
+    has_direction = Column(Boolean)  # this is unnecessary, remove
 
     note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=True)
     note = relationship("Note", backref=backref("CodeRelationship", uselist=False))

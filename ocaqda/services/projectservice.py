@@ -9,7 +9,7 @@ from pathlib import Path
 from sqlalchemy import Table, MetaData
 
 from ocaqda.data.enums.coderelationshipenum import CodeRelationshipEnum
-from ocaqda.data.models import Project, Code, DataFile, FileContent, CodedText, CodeRelationship
+from ocaqda.data.models import Project, Code, DataFile, FileContent, CodedText, CodeRelationship, Note
 from ocaqda.database.databaseconnectivity import DatabaseConnectivity
 from ocaqda.services.userservice import UserService
 from ocaqda.utils.pdfutils import convert_pdf_to_html
@@ -220,6 +220,31 @@ class ProjectService:
             CodeRelationship.type == CodeRelationshipEnum.PARENT).all()
         session.close()
         return result
+
+    def load_note_for_code(self, name):
+        session = DatabaseConnectivity().create_new_db_session()
+        code = session.query(Code).where(
+            Code.project_id == self.current_project.project_id).filter(Code.name == name).one()
+        note = code.note
+        session.close()
+        return note
+
+    def save_note_for_code(self, name, note_text):
+        session = DatabaseConnectivity().create_new_db_session()
+        code = session.query(Code).where(
+            Code.project_id == self.current_project.project_id).filter(Code.name == name).one()
+        if code.note is None:
+            note = Note()
+            note.text = note_text
+            note.created_by = UserService().user.user_id
+            note.updated_by = UserService().user.user_id
+            code.note = note
+        else:
+            code.note.text = note_text
+            code.note.updated_by = UserService().user.user_id
+
+        session.commit()
+        session.close()
 
 
 def populate_projects():
