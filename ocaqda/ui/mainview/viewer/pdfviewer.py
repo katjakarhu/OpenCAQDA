@@ -63,8 +63,9 @@ class PDFViewer(QWidget):
                         page_number = page_number + c
                     else:
                         break
-                self.pdf_content.pageNavigator().jump(int(page_number), QPoint(),
-                                                      self.pdf_content.pageNavigator().currentZoom())
+                if page_number.isdigit():
+                    self.pdf_content.pageNavigator().jump(int(page_number), QPoint(),
+                                                          self.pdf_content.pageNavigator().currentZoom())
 
     def on_pdf_scrolled(self, value):
         """

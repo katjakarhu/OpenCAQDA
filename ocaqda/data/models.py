@@ -75,6 +75,7 @@ class DataFile(Base, TimestampColumnMixin, UserColumnMixin):
 
     project_id = Column(Integer, ForeignKey("projects.project_id"), nullable=False)
     project = relationship("Project", back_populates="data_files")
+    __table_args__ = (UniqueConstraint('display_name', 'project_id', name='_filename_project_uc'),)
 
 
 class FileContent(Base, TimestampColumnMixin, UserColumnMixin):
@@ -90,6 +91,7 @@ class Code(Base, TimestampColumnMixin, UserColumnMixin):
     note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=True)
     note = relationship("Note", backref=backref("Code", uselist=False))
     project_id = Column(Integer, ForeignKey("projects.project_id"))
+    __table_args__ = (UniqueConstraint('name', 'project_id', name='_name_project_uc'),)
 
 
 class CodeRelationship(Base, TimestampColumnMixin, UserColumnMixin):

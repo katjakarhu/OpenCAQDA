@@ -4,7 +4,9 @@ A tab that displays the files on the left side of the screen
 from pathlib import Path
 
 from PySide6.QtCore import QStandardPaths, QEvent
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QListWidget, QMenu
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QMenu
+
+from ocaqda.ui.mainview.files.filelist import FileList
 
 
 class FileSelectionTab(QWidget):
@@ -13,8 +15,7 @@ class FileSelectionTab(QWidget):
         self.main_window = main_window
         self.files_layout = QVBoxLayout()
         # File system model for files tab
-        self.file_list = QListWidget(self)
-        self.file_list.itemDoubleClicked.connect(self.open_file)
+        self.file_list = FileList(main_window, self)
         self.populate_file_list()
         self.files_layout.addWidget(self.file_list)
         # Button to add new text entries

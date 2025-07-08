@@ -113,8 +113,7 @@ class ProjectService:
         file_as_bytes = f.read()
         content_from_db = get_file_content_from_db(file_as_bytes)
         if content_from_db is not None:
-            session.add(content_from_db)
-            new_file.file_content = content_from_db
+            new_file.file_content_id = content_from_db.file_content_id
         else:
             content = FileContent()
             content.content = file_as_bytes
@@ -229,6 +228,14 @@ class ProjectService:
         session.close()
         return note
 
+    def load_note_for_file(self, name):
+        session = DatabaseConnectivity().create_new_db_session()
+        code = session.query(DataFile).where(
+            DataFile.project_id == self.current_project.project_id).filter(DataFile.display_name == name).one()
+        note = code.note
+        session.close()
+        return note
+
     def save_note_for_code(self, name, note_text):
         session = DatabaseConnectivity().create_new_db_session()
         code = session.query(Code).where(
@@ -242,6 +249,23 @@ class ProjectService:
         else:
             code.note.text = note_text
             code.note.updated_by = UserService().user.user_id
+
+        session.commit()
+        session.close()
+
+    def save_note_for_file(self, name, note_text):
+        session = DatabaseConnectivity().create_new_db_session()
+        file = session.query(DataFile).where(
+            DataFile.project_id == self.current_project.project_id).filter(DataFile.display_name == name).one()
+        if file.note is None:
+            note = Note()
+            note.text = note_text
+            note.created_by = UserService().user.user_id
+            note.updated_by = UserService().user.user_id
+            file.note = note
+        else:
+            file.note.text = note_text
+            file.note.updated_by = UserService().user.user_id
 
         session.commit()
         session.close()

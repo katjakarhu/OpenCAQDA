@@ -54,14 +54,16 @@ class InfoAndNotePanel(QWidget):
             if note is not None:
                 self.note_area.setText(note.text)
         else:
-            pass
+            note = self.load_note_for_file(name)
+            if note is not None:
+                self.note_area.setText(note.text)
 
     def save_current_note(self):
         if self.selected_item is not None:
             if self.selected_item[1] == "code":
                 self.save_note_for_code(self.selected_item[0])
-            else:
-                pass
+            elif self.selected_item[1] == "file":
+                self.save_note_for_file(self.selected_item[0])
 
     def load_note_for_code(self, name):
         if self.selected_item is not None:
@@ -70,5 +72,16 @@ class InfoAndNotePanel(QWidget):
                 if self.note is not None:
                     self.note_area.setText(self.note.text)
 
+
+    def load_note_for_file(self, name):
+        if self.selected_item is not None:
+            if self.selected_item[1] == "file":
+                self.note = self.main_window.project_service.load_note_for_file(name)
+                if self.note is not None:
+                    self.note_area.setText(self.note.text)
+
     def save_note_for_code(self, name):
         self.main_window.project_service.save_note_for_code(name, self.note_area.toPlainText())
+
+    def save_note_for_file(self, name):
+        self.main_window.project_service.save_note_for_file(name, self.note_area.toPlainText())
