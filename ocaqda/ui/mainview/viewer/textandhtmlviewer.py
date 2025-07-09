@@ -82,6 +82,10 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         new_code_action.triggered.connect(lambda: self.add_new_code())
         menu.addSeparator()
 
+        invivo_code_action = menu.addAction("Code in-vivo")
+        invivo_code_action.triggered.connect(lambda: self.code_in_vivo())
+        menu.addSeparator()
+
         uncode_submenu = QMenu("Uncode", self)
         for a in uncode_submenu.actions():
             uncode_submenu.removeAction(a)
@@ -182,3 +186,8 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
     def add_new_code(self):
         dialog = AddCodeDialog(self.main_window, self)
         dialog.exec()
+
+    def code_in_vivo(self):
+        text = self.createMimeDataFromSelection().text()
+        self.main_window.code_tab.code_tree.add_and_save_code(text)
+        self.code_selection(text)

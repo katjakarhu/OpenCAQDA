@@ -28,6 +28,9 @@ class AddCodeDialog(QDialog):
 
     def on_button_click(self):
         text = self.line_edit.text()
+        if len(text) > 255:
+            text = text[:255]
+
         self.main_window.code_tab.code_tree.add_and_save_code(text)
         self.parent.code_selection(text)
         self.close()
