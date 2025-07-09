@@ -44,7 +44,6 @@ def set_ranges(sorted_ranges):
             if num in merged_dict:
                 # If the number is already in the dictionary, we need to merge the values
                 if isinstance(merged_dict[num], set):
-                    print(merged_dict[num])
                     merged_dict[num].add(value)
                 else:
                     # Convert the existing value to a set and add the new value

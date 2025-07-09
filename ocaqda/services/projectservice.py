@@ -270,6 +270,19 @@ class ProjectService:
         session.commit()
         session.close()
 
+    def get_code_from_coded_text(self, coded_text):
+        session = DatabaseConnectivity().create_new_db_session()
+        session.add(coded_text)
+        code = coded_text.code
+        session.close()
+        return code
+
+    def delete_coded_text(self, coded_text):
+        session = DatabaseConnectivity().create_new_db_session()
+        session.delete(coded_text)
+        session.commit()
+        session.close()
+
 
 def populate_projects():
     session = DatabaseConnectivity().create_new_db_session()

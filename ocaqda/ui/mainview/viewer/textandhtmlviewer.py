@@ -2,7 +2,7 @@
 A component for viewing text or HTML content
 """
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QTextCharFormat, QTextCursor, QColor, QUndoCommand, QAction
+from PySide6.QtGui import QTextCharFormat, QTextCursor, QColor, QUndoCommand, QAction, QColorConstants
 from PySide6.QtWidgets import QMenu, QTextBrowser, QWidget, QVBoxLayout, QLineEdit, QHBoxLayout, QPushButton
 
 from ocaqda.data.models import CodedText
@@ -83,9 +83,8 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
 
         c = self.get_used_codes_at_position()
         for code in c:
-            code_action = QAction(code, self.remove_code(code))
-            uncode_submenu.addAction(code_action)
-
+            action = uncode_submenu.addAction(code)
+            action.triggered.connect(lambda: self.remove_code(code))
         menu.addMenu(uncode_submenu)
 
         menu.exec(event.globalPos())
@@ -103,16 +102,17 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
 
         return used_codes
 
-    def remove_code(self, code):
+    def remove_code(self, code_name):
         cursor = self.textCursor()
-        if cursor.hasSelection():
-            for coded_text in self.coded_texts:
-                if coded_text.text == cursor.selectedText():
-                    print("TODO: remove code")
-        else:
-            for coded_text in self.coded_texts:
-                if coded_text.start_position <= cursor.position() <= coded_text.end_position:
-                    print("TODO: remove codes that match the cursor position")
+
+        for coded_text in self.coded_texts:
+            if coded_text.start_position <= cursor.position() <= coded_text.end_position:
+                code = self.main_window.project_service.get_code_from_coded_text(coded_text)
+                if code is not None and code.name == code_name:
+                    self.remove_highlight(coded_text)
+                    self.coded_texts.remove(coded_text)
+                    self.main_window.project_service.delete_coded_text(coded_text)
+                    self.refresh_coded_text_highlight()
 
     def dragEnterEvent(self, e):
         if e.mimeData().hasText():
@@ -160,3 +160,12 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
             cursor.setPosition(item[1], QTextCursor.MoveMode.KeepAnchor)
             string_format.setToolTip(str(item[2]))
             cursor.mergeCharFormat(string_format)
+
+    def remove_highlight(self, coded_text):
+        cursor = QTextCursor(self.document())
+        string_format = QTextCharFormat()
+        string_format.setBackground(QColorConstants.Transparent)
+        cursor.setPosition(coded_text.start_position)
+        cursor.setPosition(coded_text.end_position, QTextCursor.MoveMode.KeepAnchor)
+        string_format.setToolTip("")
+        cursor.mergeCharFormat(string_format)
