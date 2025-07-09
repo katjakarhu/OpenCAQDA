@@ -13,7 +13,8 @@ from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QTabWidget, QSplitter, Q
 from ocaqda.services.projectservice import ProjectService
 from ocaqda.ui.mainview.codes.codetab import CodeTab
 from ocaqda.ui.mainview.files.fileselectiontab import FileSelectionTab
-from ocaqda.ui.mainview.infoandnotepanel import InfoAndNotePanel
+from ocaqda.ui.mainview.infopanel import InfoPanel
+from ocaqda.ui.mainview.notepanel import NotePanel
 from ocaqda.ui.mainview.search.searchtab import SearchTab
 from ocaqda.ui.mainview.viewer.contenttabview import ContentTabView
 
@@ -23,7 +24,7 @@ class MainQAWindow(QMainWindow):
     def __init__(self, name):
         super().__init__()
 
-        self.info_tab = None
+        self.note_tab = None
         self.files_tab = None
         self.code_tab = None
         self.text_content_panel = ContentTabView(self)
@@ -63,10 +64,12 @@ class MainQAWindow(QMainWindow):
 
         # Right panel
         right_tab_widget = QTabWidget(self)
-        self.info_tab = InfoAndNotePanel(self)
+        self.note_tab = NotePanel(self)
+        self.info_tab = InfoPanel(self)
 
         search_tab = SearchTab(self)
-        right_tab_widget.addTab(self.info_tab, "Notes")
+        right_tab_widget.addTab(self.info_tab, "Info")
+        right_tab_widget.addTab(self.note_tab, "Notes")
         right_tab_widget.addTab(search_tab, "Search")
 
         right_tab_widget.setMaximumWidth(400)

@@ -38,6 +38,9 @@ class TextAndHTMLViewer(QWidget):
 
 
 class HTMLViewer(QTextBrowser, QUndoCommand):
+    """
+    For vieweing text, Markdown and HTML files
+    """
     def __init__(self, parent, main_window, data_file):
         super().__init__()
         self.parent = parent
@@ -56,7 +59,6 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.setMouseTracking(True)
 
         self.setOpenExternalLinks(False)
-        # self.setOpenLinks(False)
 
         self.refresh_coded_text_highlight()
 

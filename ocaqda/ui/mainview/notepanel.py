@@ -4,7 +4,7 @@ Panel on the right side of the screen displaying notes
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit
 
 
-class InfoAndNotePanel(QWidget):
+class NotePanel(QWidget):
     def __init__(self, main_window):
         super().__init__()
         self.note = None

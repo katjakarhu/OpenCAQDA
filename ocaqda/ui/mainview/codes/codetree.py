@@ -23,7 +23,6 @@ class CodeTree(QTreeWidget):
         self.setDropIndicatorShown(True)
         self.populate_code_list()
 
-
     def populate_code_list(self):
         self.clear()
 
@@ -100,7 +99,7 @@ class CodeTree(QTreeWidget):
     def mousePressEvent(self, event):
         self.setCurrentItem(self.itemAt(event.pos()))
         if self.itemAt(event.pos()) is not None:
-            self.main_window.info_tab.set_selected_item_info(self.itemAt(event.pos()).text(0), "code")
+            self.main_window.note_tab.set_selected_item_info(self.itemAt(event.pos()).text(0), "code")
 
         if event.button() == Qt.MouseButton.LeftButton:
             if self.currentItem():
@@ -126,3 +125,7 @@ class CodeTree(QTreeWidget):
                 iterator += 1
 
             self.main_window.project_service.update_code_relationships(relations)
+
+    def mouseDoubleClickEvent(self, event, /):
+        if self.itemAt(event.pos()) is not None:
+            self.main_window.info_tab.set_selected_item_info(self.itemAt(event.pos()).text(0), "code")

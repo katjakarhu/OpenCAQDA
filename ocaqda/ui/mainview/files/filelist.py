@@ -10,6 +10,7 @@ class FileList(QListWidget):
 
     def mousePressEvent(self, event):
         if self.itemAt(event.pos()) is not None:
-            self.main_window.info_tab.set_selected_item_info(self.itemAt(event.pos()).text(), "file")
+            self.main_window.note_tab.set_selected_item_info(self.itemAt(event.pos()).text(), "file")
 
         super().mousePressEvent(event)
+

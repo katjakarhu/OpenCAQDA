@@ -133,9 +133,6 @@ class ProjectService:
             new_file.file_as_text = result
         f.close()
 
-    def get_text_from_file(self, file_path, new_file):
-        pass
-
     def delete_file_from_db(self, file):
         session = DatabaseConnectivity().create_new_db_session()
 
@@ -161,9 +158,10 @@ class ProjectService:
         session.close()
         return result
 
-    def get_coded_texts_by_code(self, code_id, name):
+    def get_coded_texts_by_code_name(self, name):
         session = DatabaseConnectivity().create_new_db_session()
-        result = session.query(CodedText).filter(CodedText.code_id == code_id).all()
+        code = self.get_code_by_name(name)
+        result = session.query(CodedText).where(CodedText.code_id == code.code_id).all()
         session.close()
         return result
 
@@ -176,6 +174,12 @@ class ProjectService:
     def get_code(self, code_id):
         session = DatabaseConnectivity().create_new_db_session()
         result = session.query(Code).filter(Code.code_id == code_id).one()
+        session.close()
+        return result
+
+    def get_code_by_name(self, name):
+        session = DatabaseConnectivity().create_new_db_session()
+        result = session.query(Code).filter(Code.name == name).one()
         session.close()
         return result
 
@@ -294,6 +298,13 @@ class ProjectService:
         session.delete(coded_text)
         session.commit()
         session.close()
+
+    def get_file_by_id(self, file_id):
+        session = DatabaseConnectivity().create_new_db_session()
+        result = session.query(DataFile).where(DataFile.data_file_id == file_id).one()
+
+        session.close()
+        return result
 
 
 def populate_projects():
