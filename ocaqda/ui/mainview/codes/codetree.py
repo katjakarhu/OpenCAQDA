@@ -9,11 +9,13 @@ from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
 class CodeTree(QTreeWidget):
     def __init__(self, main_window, parent):
         super().__init__(parent)
+        self.coded_texts = None
         self.main_window = main_window
         self.parent = parent
-        self.setHeaderLabel("Code")
+        self.setColumnCount(2)
+        self.setHeaderLabels(["Code", "Usages"])
 
-        self.setHeaderHidden(True)
+        self.setHeaderHidden(False)
         self.setDragDropMode(QTreeWidget.DragDropMode.InternalMove)
         self.setSelectionMode(QTreeWidget.SelectionMode.SingleSelection)
         self.setDragEnabled(True)
@@ -21,11 +23,13 @@ class CodeTree(QTreeWidget):
         self.setDropIndicatorShown(True)
         self.populate_code_list()
 
+
     def populate_code_list(self):
         self.clear()
 
         code_relationships = self.main_window.project_service.get_parent_child_relationships()
         codes = self.main_window.project_service.get_project_codes()
+        self.coded_texts = self.main_window.project_service.get_coded_texts_for_current_project()
 
         tree = create_tree(code_relationships, codes)
 
@@ -33,6 +37,8 @@ class CodeTree(QTreeWidget):
         for node in tree:
             item = QTreeWidgetItem()
             item.setText(0, node.name)
+            count = len([x.coded_text_id for x in self.coded_texts if x.code_id == node.identifier])
+            item.setText(1, str(count))
             for c in node.children:
                 if c.name is not None:
                     child = QTreeWidgetItem()

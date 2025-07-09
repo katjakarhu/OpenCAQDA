@@ -37,8 +37,8 @@ class CodingTarget:
         cursor = self.textCursor()
         used_codes = set()
 
-        self.coded_texts = self.parent.project_service.get_coded_texts(self.data_file.data_file_id,
-                                                                       self.data_file.display_name)
+        self.coded_texts = self.parent.project_service.get_coded_texts_by_file(self.data_file.data_file_id,
+                                                                               self.data_file.display_name)
         for coded_text in self.coded_texts:
             if coded_text.start_position <= cursor.position() <= coded_text.end_position:
                 code = next(filter(lambda x: x.code_id == coded_text.code_id, self.codes), None)
@@ -79,12 +79,13 @@ class CodingTarget:
         coded_text.end_position = self.textCursor().selectionEnd()
         coded_text.created_by = UserService().user.user_id
         coded_text.updated_by = UserService().user.user_id
+        coded_text.project_id = self.parent.project_service.current_project.project_id
         self.parent.project_service.save_coded_text(coded_text)
         self.refresh_coded_text_highlight()
 
     def refresh_coded_text_highlight(self):
-        self.coded_texts = self.parent.project_service.get_coded_texts(self.data_file.data_file_id,
-                                                                       self.data_file.display_name)
+        self.coded_texts = self.parent.project_service.get_coded_texts_by_file(self.data_file.data_file_id,
+                                                                               self.data_file.display_name)
         self.setText(self.data_file.file_as_text)
         cursor = QTextCursor(self.document())
         self.highlight_and_set_codes_to_tooltip(cursor)

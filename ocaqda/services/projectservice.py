@@ -104,8 +104,8 @@ class ProjectService:
                 new_file.updated_by = user.user_id
                 new_file.project_id = self.current_project.project_id
                 session.add(new_file)
+                session.commit()
 
-        session.commit()
         session.close()
 
     def add_file_content(self, file_path, new_file, session, user):
@@ -155,7 +155,19 @@ class ProjectService:
         session.commit()
         session.close()
 
-    def get_coded_texts(self, data_file_id, name):
+    def get_coded_texts_for_current_project(self):
+        session = DatabaseConnectivity().create_new_db_session()
+        result = session.query(CodedText).where(CodedText.project_id == self.current_project.project_id).all()
+        session.close()
+        return result
+
+    def get_coded_texts_by_code(self, code_id, name):
+        session = DatabaseConnectivity().create_new_db_session()
+        result = session.query(CodedText).filter(CodedText.code_id == code_id).all()
+        session.close()
+        return result
+
+    def get_coded_texts_by_file(self, data_file_id, name):
         session = DatabaseConnectivity().create_new_db_session()
         result = session.query(CodedText).filter(CodedText.data_file_id == data_file_id).all()
         session.close()

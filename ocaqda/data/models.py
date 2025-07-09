@@ -90,7 +90,7 @@ class Code(Base, TimestampColumnMixin, UserColumnMixin):
     name = Column(String, nullable=False)
     note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=True)
     note = relationship("Note", backref=backref("Code", uselist=False))
-    project_id = Column(Integer, ForeignKey("projects.project_id"))
+    project_id = Column(Integer, ForeignKey("projects.project_id"), nullable=False)
     __table_args__ = (UniqueConstraint('name', 'project_id', name='_name_project_uc'),)
 
 
@@ -108,6 +108,8 @@ class CodeRelationship(Base, TimestampColumnMixin, UserColumnMixin):
     note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=True)
     note = relationship("Note", backref=backref("CodeRelationship", uselist=False))
 
+    project_id = Column(Integer, ForeignKey("projects.project_id"), nullable=False)
+
     __table_args__ = (UniqueConstraint('from_code_id', 'to_code_id', 'label', name='_from_to_label_uc'),)
 
 
@@ -123,6 +125,7 @@ class CodedText(Base, TimestampColumnMixin, UserColumnMixin):
     code = relationship("Code", backref=backref("CodedText", uselist=False))
 
     data_file_id = Column(Integer, ForeignKey("data_files.data_file_id"), nullable=False)
+    project_id = Column(Integer, ForeignKey("projects.project_id"), nullable=False)
 
 
 class Note(Base, TimestampColumnMixin, UserColumnMixin):

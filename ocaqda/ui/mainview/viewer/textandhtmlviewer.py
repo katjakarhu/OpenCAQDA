@@ -45,8 +45,8 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.data_file = data_file
 
         self.codes = self.main_window.project_service.get_project_codes()
-        self.coded_texts = self.main_window.project_service.get_coded_texts(self.data_file.data_file_id,
-                                                                            self.data_file.display_name)
+        self.coded_texts = self.main_window.project_service.get_coded_texts_by_file(self.data_file.data_file_id,
+                                                                                    self.data_file.display_name)
         self.update_text()
 
         self.highlighter = None
@@ -102,8 +102,8 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         cursor = self.textCursor()
         used_codes = set()
 
-        self.coded_texts = self.main_window.project_service.get_coded_texts(self.data_file.data_file_id,
-                                                                            self.data_file.display_name)
+        self.coded_texts = self.main_window.project_service.get_coded_texts_by_file(self.data_file.data_file_id,
+                                                                                    self.data_file.display_name)
         for coded_text in self.coded_texts:
             if coded_text.start_position <= cursor.position() <= coded_text.end_position:
                 code = next(filter(lambda x: x.code_id == coded_text.code_id, self.codes), None)
@@ -123,6 +123,8 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
                     self.main_window.project_service.delete_coded_text(coded_text)
                     self.refresh_coded_text_highlight()
 
+        self.main_window.code_tab.code_tree.populate_code_list()
+
     def dragEnterEvent(self, e):
         if e.mimeData().hasText():
             e.accept()
@@ -135,6 +137,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         current_selection = self.createMimeDataFromSelection().text()
         if current_selection != "":
             self.add_code_to_selected_text(current_selection, name)
+            self.main_window.code_tab.code_tree.populate_code_list()
 
     def add_code_to_selected_text(self, current_selection, name):
         coded_text = CodedText()
@@ -149,13 +152,14 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         coded_text.end_position = self.textCursor().selectionEnd()
         coded_text.created_by = UserService().user.user_id
         coded_text.updated_by = UserService().user.user_id
+        coded_text.project_id = self.main_window.project_service.current_project.project_id
         self.main_window.project_service.save_coded_text(coded_text)
         self.refresh_coded_text_highlight()
 
     def refresh_coded_text_highlight(self):
 
-        self.coded_texts = self.main_window.project_service.get_coded_texts(self.data_file.data_file_id,
-                                                                            self.data_file.display_name)
+        self.coded_texts = self.main_window.project_service.get_coded_texts_by_file(self.data_file.data_file_id,
+                                                                                    self.data_file.display_name)
         cursor = QTextCursor(self.document())
         string_format = QTextCharFormat()
         string_format.setBackground(QColor("yellow"))
