@@ -110,7 +110,8 @@ class CodeRelationship(Base, TimestampColumnMixin, UserColumnMixin):
 
     project_id = Column(Integer, ForeignKey("projects.project_id"), nullable=False)
 
-    __table_args__ = (UniqueConstraint('from_code_id', 'to_code_id', 'label', name='_from_to_label_uc'),)
+    __table_args__ = (UniqueConstraint('project_id', 'from_code_id', 'to_code_id', 'type', 'label',
+                                       name='_project_from_to_type_label_uc'),)
 
 
 class CodedText(Base, TimestampColumnMixin, UserColumnMixin):
