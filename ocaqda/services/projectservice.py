@@ -204,6 +204,7 @@ class ProjectService:
                     code_relationships.keys()))
 
         self.add_new_relationships(code_relationships, session)
+
         session.commit()
         session.close()
 
@@ -224,6 +225,7 @@ class ProjectService:
                 r.type = CodeRelationshipEnum.PARENT
                 r.created_by = UserService().user.user_id
                 r.updated_by = UserService().user.user_id
+                r.project_id = self.current_project.project_id
                 parent_child_list.append(r)
 
         if len(parent_child_list) > 0:

@@ -1,5 +1,5 @@
 """
-Panel on the right side of the screen displaying notes
+Panel on the right side of the screen displaying where codes have been used
 """
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTreeWidget, QTreeWidgetItem
 
