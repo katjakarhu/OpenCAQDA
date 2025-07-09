@@ -42,9 +42,7 @@ class CodeTree(QTreeWidget):
 
         self.insertTopLevelItems(0, items)
 
-    def add_and_save_code(self):
-        # Open a dialog to get text input
-        text = self.parent.add_code_field.text()
+    def add_and_save_code(self, text):
         if text:
             # Limit the text length to 512 characters
             if len(text) > 0 and len(self.findItems(text, Qt.MatchFlag.MatchExactly)) == 0:

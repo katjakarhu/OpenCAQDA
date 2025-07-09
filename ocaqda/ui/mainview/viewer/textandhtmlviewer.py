@@ -2,11 +2,12 @@
 A component for viewing text or HTML content
 """
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QTextCharFormat, QTextCursor, QColor, QUndoCommand, QAction, QColorConstants
+from PySide6.QtGui import QTextCharFormat, QTextCursor, QColor, QUndoCommand, QColorConstants
 from PySide6.QtWidgets import QMenu, QTextBrowser, QWidget, QVBoxLayout, QLineEdit, QHBoxLayout, QPushButton
 
 from ocaqda.data.models import CodedText
 from ocaqda.services.userservice import UserService
+from ocaqda.ui.mainview.codes.addcodedialog import AddCodeDialog
 from ocaqda.utils.coding_utils import convert_and_merge_ranges
 
 
@@ -77,6 +78,10 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         menu = self.createStandardContextMenu()
         menu.addSeparator()
 
+        new_code_action = menu.addAction("New code")
+        new_code_action.triggered.connect(lambda: self.add_new_code())
+        menu.addSeparator()
+
         uncode_submenu = QMenu("Uncode", self)
         for a in uncode_submenu.actions():
             uncode_submenu.removeAction(a)
@@ -117,18 +122,22 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
     def dragEnterEvent(self, e):
         if e.mimeData().hasText():
             e.accept()
-            current_selection = self.createMimeDataFromSelection().text()
-            if current_selection != "":
-                self.add_code_to_selected_text(current_selection, e)
+            name = e.mimeData().text()
+            self.code_selection(name)
         else:
             e.ignore()
 
-    def add_code_to_selected_text(self, current_selection, e):
+    def code_selection(self, name):
+        current_selection = self.createMimeDataFromSelection().text()
+        if current_selection != "":
+            self.add_code_to_selected_text(current_selection, name)
+
+    def add_code_to_selected_text(self, current_selection, name):
         coded_text = CodedText()
         coded_text.data_file_id = self.data_file.data_file_id
         self.codes = self.main_window.project_service.get_project_codes()
         for code in self.codes:
-            if code.name == e.mimeData().text():
+            if code.name == name:
                 coded_text.code_id = code.code_id
                 break
         coded_text.text = current_selection
@@ -169,3 +178,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         cursor.setPosition(coded_text.end_position, QTextCursor.MoveMode.KeepAnchor)
         string_format.setToolTip("")
         cursor.mergeCharFormat(string_format)
+
+    def add_new_code(self):
+        dialog = AddCodeDialog(self.main_window, self)
+        dialog.exec()

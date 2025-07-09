@@ -32,7 +32,7 @@ class CodeTab(QWidget):
         add_code_layout = QHBoxLayout()
         self.add_code_field = QLineEdit()
         self.add_button = QPushButton("Add code")
-        self.add_button.clicked.connect(self.code_tree.add_and_save_code)
+        self.add_button.clicked.connect(self.add_and_save_code)
         add_code_layout.addWidget(self.add_code_field)
         add_code_layout.addWidget(self.add_button)
         analysis_layout.addLayout(add_code_layout)
@@ -45,4 +45,6 @@ class CodeTab(QWidget):
     def manage_codes(self):
         raise "Implement me!"
 
-
+    def add_and_save_code(self):
+        text = self.add_code_field.text()
+        self.code_tree.add_and_save_code(text)
