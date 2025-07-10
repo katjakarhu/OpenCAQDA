@@ -11,19 +11,6 @@ def convert_and_merge_ranges(input_ranges):
     return merged_ranges
 
 
-def contains_labels(l, labels):
-    if isinstance(l, str):
-        if isinstance(labels, str):
-            return l == labels
-        else:
-            return l in labels
-    else:
-        if isinstance(labels, str):
-            return False
-        else:
-            return l.issubset(labels)
-
-
 def set_ranges(sorted_ranges):
     """
     Note that this method is vibe-coded with Mistral.ai

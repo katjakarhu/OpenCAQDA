@@ -124,7 +124,7 @@ class CodeTree(QTreeWidget):
                     relations[itm.parent().text(0)] = itm.text(0)
                 iterator += 1
 
-            self.main_window.project_service.update_code_relationships(relations)
+            self.main_window.project_service.update_code_parent_child_relationships(relations)
 
     def mouseDoubleClickEvent(self, event, /):
         if self.itemAt(event.pos()) is not None:

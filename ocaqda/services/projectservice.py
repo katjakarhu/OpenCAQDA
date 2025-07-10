@@ -6,8 +6,6 @@ Handles everything within the project: CRUD operations for files, codes and note
 
 from pathlib import Path
 
-from sqlalchemy import Table, MetaData
-
 from ocaqda.data.enums.coderelationshipenum import CodeRelationshipEnum
 from ocaqda.data.models import Project, Code, DataFile, FileContent, CodedText, CodeRelationship, Note
 from ocaqda.database.databaseconnectivity import DatabaseConnectivity
@@ -190,18 +188,18 @@ class ProjectService:
         session.close()
         return result.content
 
-    def update_code_relationships(self, code_relationships):
+    def update_code_parent_child_relationships(self, code_relationships):
+        """
+        Delete-insert operation: recreates all parent-child relationships after deleting old ones
+        """
         session = DatabaseConnectivity().create_new_db_session()
-        metadata_obj = MetaData()
-        code_relationship_table = Table(CodeRelationship.__tablename__, metadata_obj)
 
-        if isinstance(code_relationships, str):
-            code_relationship_table.delete().where(
-                CodeRelationship.type == CodeRelationshipEnum.PARENT and CodeRelationship.from_code_id == code_relationships.keys())
-        else:
-            code_relationship_table.delete().where(
-                CodeRelationship.type == CodeRelationshipEnum.PARENT and CodeRelationship.from_code_id.in_(
-                    code_relationships.keys()))
+        parent_child_relationships = session.query(CodeRelationship).filter(
+            (CodeRelationship.project_id == self.current_project.project_id) &
+            (CodeRelationship.type == CodeRelationshipEnum.PARENT)).all()
+
+        for rel in parent_child_relationships:
+            session.delete(rel)
 
         self.add_new_relationships(code_relationships, session)
 
