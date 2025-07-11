@@ -2,11 +2,12 @@ from PySide6.QtCore import QMimeData, Qt
 from PySide6.QtGui import QBrush, QColor, QDrag
 from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem, QTreeWidgetItemIterator
 
+from ocaqda.ui.mainview.codes.codetreewidgetitem import CodeTreeWidgetItem
 from ocaqda.utils.coding_utils import create_tree
 from ocaqda.utils.colorutils import STANDARD_BACKGROUND_COLOR, HIGHLIGHT_COLOR
 
 
-class CodeTree(QTreeWidget):
+class CodeTreeWidget(QTreeWidget):
     def __init__(self, main_window, parent):
         super().__init__(parent)
         self.coded_texts = None
@@ -23,6 +24,12 @@ class CodeTree(QTreeWidget):
         self.setDropIndicatorShown(True)
         self.populate_code_list()
 
+    def update_code_counts(self):
+        self.coded_texts = self.main_window.project_service.get_coded_texts_for_current_project()
+        for i in range(self.topLevelItemCount()):
+            item = self.topLevelItem(i)
+            count = len([x.coded_text_id for x in self.coded_texts if x.code_id == item.code.code_id])
+
     def populate_code_list(self):
         self.clear()
 
@@ -34,14 +41,16 @@ class CodeTree(QTreeWidget):
 
         items = []
         for node in tree:
-            item = QTreeWidgetItem()
-            item.setText(0, node.name)
-            count = len([x.coded_text_id for x in self.coded_texts if x.code_id == node.identifier])
+            item = CodeTreeWidgetItem(self, node.code)
+            item.setText(0, node.code.name)
+            count = len([x.coded_text_id for x in self.coded_texts if x.code_id == node.code.code_id])
             item.setText(1, str(count))
             for c in node.children:
-                if c.name is not None:
-                    child = QTreeWidgetItem()
-                    child.setText(0, c.name)
+                if c.code.name is not None:
+                    count = len([x.coded_text_id for x in self.coded_texts if x.code_id == c.code.code_id])
+                    child = CodeTreeWidgetItem(item, c.code)
+                    child.setText(0, c.code.name)
+                    child.setText(1, str(count))
                     item.addChild(child)
             items.append(item)
 
@@ -121,7 +130,10 @@ class CodeTree(QTreeWidget):
             while iterator.value():
                 itm = iterator.value()
                 if itm.parent():
-                    relations[itm.parent().text(0)] = itm.text(0)
+                    if itm.parent().code in relations.keys():
+                        relations[itm.parent().code].append(itm.code)
+                    else:
+                        relations[itm.parent().code] = [itm.code]
                 iterator += 1
 
             self.main_window.project_service.update_code_parent_child_relationships(relations)

@@ -9,7 +9,7 @@ Left mouse button: Coding is done by dragging the code over a selected text in t
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLineEdit, \
     QHBoxLayout
 
-from ocaqda.ui.mainview.codes.codetree import CodeTree
+from ocaqda.ui.mainview.codes.codetreewidget import CodeTreeWidget
 
 
 class CodeTab(QWidget):
@@ -19,7 +19,7 @@ class CodeTab(QWidget):
         self.main_window = main_window
         analysis_layout = QVBoxLayout()
         # Tree widget for analysis tab
-        self.code_tree = CodeTree(main_window, self)
+        self.code_tree = CodeTreeWidget(main_window, self)
         self.filter_field = QLineEdit()
         self.filter_field.setPlaceholderText("Filter codes...")
 

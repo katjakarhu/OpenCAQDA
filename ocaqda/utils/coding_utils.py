@@ -1,5 +1,5 @@
 from ocaqda.data.models import CodeRelationship
-from ocaqda.utils.tree import Tree
+from ocaqda.utils.codetree import CodeTree
 
 
 def convert_and_merge_ranges(input_ranges):
@@ -94,9 +94,9 @@ def build_tree(relationships, codes):
         from_code = list(filter(lambda x: x.code_id == from_code_id, codes))
         to_code = list(filter(lambda x: x.code_id == to_code_id, codes))
         if from_code_id not in node_map:
-            node_map[from_code_id] = Tree(from_code_id, from_code[0].name)
+            node_map[from_code_id] = CodeTree(from_code[0])
         if to_code_id is not None and to_code_id not in node_map:
-            node_map[to_code_id] = Tree(to_code_id, to_code[0].name)
+            node_map[to_code_id] = CodeTree(to_code[0])
 
     # Build the tree structure
     for record in relationships:

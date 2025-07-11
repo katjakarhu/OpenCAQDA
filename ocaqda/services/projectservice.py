@@ -209,17 +209,17 @@ class ProjectService:
     def add_new_relationships(self, code_relationships, session):
         parent_child_list = []
         for parent_item in code_relationships.keys():
-            parent_id = session.query(Code).filter(Code.name == parent_item).one()
+            parent_id = parent_item.code_id
             children = code_relationships[parent_item]
-            if isinstance(children, str):
-                child_ids = session.query(Code.code_id).filter(Code.name == children).all()
+            if isinstance(children, Code):
+                child_ids = [children.code_id]
             else:
-                child_ids = session.query(Code.code_id).filter(Code.name.in_(children)).all()
+                child_ids = [x.code_id for x in children]
 
             for child_id in child_ids:
                 r = CodeRelationship()
-                r.from_code_id = parent_id.code_id
-                r.to_code_id = child_id[0]
+                r.from_code_id = parent_id
+                r.to_code_id = child_id
                 r.type = CodeRelationshipEnum.PARENT
                 r.created_by = UserService().user.user_id
                 r.updated_by = UserService().user.user_id

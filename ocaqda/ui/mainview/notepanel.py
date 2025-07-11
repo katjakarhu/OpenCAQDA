@@ -30,7 +30,7 @@ class NotePanel(QWidget):
         note_header_label.setStyleSheet(header_style)
 
         self.note_instruction_label = QLabel(
-            "Please select a file or a code to attach notes to")
+            "Please select a file or a code to attach notes")
         self.note_instruction_label.setWordWrap(True)
 
         layout.addWidget(note_header_label)
@@ -71,7 +71,6 @@ class NotePanel(QWidget):
                 self.note = self.main_window.project_service.load_note_for_code(name)
                 if self.note is not None:
                     self.note_area.setText(self.note.text)
-
 
     def load_note_for_file(self, name):
         if self.selected_item is not None:
