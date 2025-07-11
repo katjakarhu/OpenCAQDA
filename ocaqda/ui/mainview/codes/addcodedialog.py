@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QDialog, QLineEdit, QPushButton, QHBoxLayout
+from PySide6.QtWidgets import QDialog, QPushButton, QHBoxLayout, QComboBox
 
 
 class AddCodeDialog(QDialog):
@@ -7,15 +7,19 @@ class AddCodeDialog(QDialog):
         self.main_window = main_window
         self.parent = parent
 
-        self.setWindowTitle("Add code")
+        self.setWindowTitle("Add Code")
         self.setGeometry(100, 100, 400, 100)
 
         # Create QLineEdit
-        self.line_edit = QLineEdit(self)
-        self.line_edit.setPlaceholderText("...")
+        self.line_edit = QComboBox(self)
+        self.line_edit.setEditable(True)
+        self.line_edit.setInsertPolicy(QComboBox.InsertPolicy.InsertAtTop)
+
+        for item in self.main_window.project_service.get_project_codes():
+            self.line_edit.addItem(item.name, item)
 
         # Create QPushButton
-        self.button = QPushButton("Add code", self)
+        self.button = QPushButton("Add", self)
         self.button.clicked.connect(self.on_button_click)
 
         # Create layout and add widgets
@@ -27,7 +31,7 @@ class AddCodeDialog(QDialog):
         self.setLayout(layout)
 
     def on_button_click(self):
-        text = self.line_edit.text()
+        text = self.line_edit.currentText()
         if len(text) > 255:
             text = text[:255]
 

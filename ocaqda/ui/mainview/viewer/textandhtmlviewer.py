@@ -80,8 +80,8 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         menu = self.createStandardContextMenu()
         menu.addSeparator()
 
-        new_code_action = menu.addAction("New code")
-        new_code_action.triggered.connect(lambda: self.add_new_code())
+        new_code_action = menu.addAction("Add code")
+        new_code_action.triggered.connect(lambda: self.add_code_to_selection())
         menu.addSeparator()
 
         invivo_code_action = menu.addAction("Code in-vivo")
@@ -189,7 +189,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         string_format.setToolTip("")
         cursor.mergeCharFormat(string_format)
 
-    def add_new_code(self):
+    def add_code_to_selection(self):
         dialog = AddCodeDialog(self.main_window, self)
         dialog.exec()
 
