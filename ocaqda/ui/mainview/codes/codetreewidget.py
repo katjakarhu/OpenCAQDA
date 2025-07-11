@@ -29,6 +29,7 @@ class CodeTreeWidget(QTreeWidget):
         for i in range(self.topLevelItemCount()):
             item = self.topLevelItem(i)
             count = len([x.coded_text_id for x in self.coded_texts if x.code_id == item.code.code_id])
+            item.setText(1, str(count))
 
     def populate_code_list(self):
         self.clear()
@@ -117,6 +118,7 @@ class CodeTreeWidget(QTreeWidget):
 
                 drag = QDrag(self)
                 drag.setMimeData(mime_data)
+
                 drag.exec(Qt.DropAction.CopyAction)
         else:
             super().mousePressEvent(event)

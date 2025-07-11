@@ -41,6 +41,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
     """
     For vieweing text, Markdown and HTML files
     """
+
     def __init__(self, parent, main_window, data_file):
         super().__init__()
         self.parent = parent
@@ -125,7 +126,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
                     self.main_window.project_service.delete_coded_text(coded_text)
                     self.refresh_coded_text_highlight()
 
-        self.main_window.code_tab.code_tree.populate_code_list()
+        self.main_window.code_tab.code_tree.update_code_counts()
 
     def dragEnterEvent(self, e):
         if e.mimeData().hasText():
@@ -139,7 +140,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         current_selection = self.createMimeDataFromSelection().text()
         if current_selection != "":
             self.add_code_to_selected_text(current_selection, name)
-            self.main_window.code_tab.code_tree.populate_code_list()
+            self.main_window.code_tab.code_tree.update_code_counts()
 
     def add_code_to_selected_text(self, current_selection, name):
         coded_text = CodedText()
