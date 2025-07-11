@@ -5,8 +5,7 @@ Entities stored in database
 import bcrypt
 from sqlalchemy import Column, Integer, String, ForeignKey, LargeBinary, Sequence, UniqueConstraint, Text, DateTime, \
     func, Boolean, Enum
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import declared_attr, relationship, backref
+from sqlalchemy.orm import declared_attr, relationship, backref, declarative_base
 
 from ocaqda.data.enums.coderelationshipenum import CodeRelationshipEnum
 
