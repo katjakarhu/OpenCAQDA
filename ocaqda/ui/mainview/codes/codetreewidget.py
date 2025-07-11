@@ -31,6 +31,15 @@ class CodeTreeWidget(QTreeWidget):
             count = len([x.coded_text_id for x in self.coded_texts if x.code_id == item.code.code_id])
             item.setText(1, str(count))
 
+            self.update_child_code_count(item)
+
+    def update_child_code_count(self, item):
+        for j in range(item.childCount()):
+            count = len([x.coded_text_id for x in self.coded_texts if x.code_id == item.child(j).code.code_id])
+            item.child(j).setText(1, str(count))
+            if item.child(j).childCount() > 0:
+                self.update_child_code_count(item.child(j))
+
     def populate_code_list(self):
         self.clear()
 
@@ -46,16 +55,22 @@ class CodeTreeWidget(QTreeWidget):
             item.setText(0, node.code.name)
             count = len([x.coded_text_id for x in self.coded_texts if x.code_id == node.code.code_id])
             item.setText(1, str(count))
-            for c in node.children:
-                if c.code.name is not None:
-                    count = len([x.coded_text_id for x in self.coded_texts if x.code_id == c.code.code_id])
-                    child = CodeTreeWidgetItem(item, c.code)
-                    child.setText(0, c.code.name)
-                    child.setText(1, str(count))
-                    item.addChild(child)
+            if node.children is not None:
+                self.add_children_to_parent(item, node)
             items.append(item)
 
         self.insertTopLevelItems(0, items)
+
+    def add_children_to_parent(self, item, node):
+        for c in node.children:
+            if c.code.name is not None:
+                count = len([x.coded_text_id for x in self.coded_texts if x.code_id == c.code.code_id])
+                child = CodeTreeWidgetItem(item, c.code)
+                child.setText(0, c.code.name)
+                child.setText(1, str(count))
+                item.addChild(child)
+                if c.children is not None:
+                    self.add_children_to_parent(child, c)
 
     def add_and_save_code(self, text):
         if text:
@@ -108,6 +123,7 @@ class CodeTreeWidget(QTreeWidget):
 
     def mousePressEvent(self, event):
         self.setCurrentItem(self.itemAt(event.pos()))
+
         if self.itemAt(event.pos()) is not None:
             self.main_window.note_tab.set_selected_item_info(self.itemAt(event.pos()).text(0), "code")
 

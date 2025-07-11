@@ -96,7 +96,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         c = self.get_used_codes_at_position()
         for code in c:
             action = uncode_submenu.addAction(code)
-            action.triggered.connect(lambda: self.remove_code(code))
+            action.triggered.connect(lambda: self.uncode(code))
         menu.addMenu(uncode_submenu)
 
         menu.exec(event.globalPos())
@@ -114,7 +114,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
 
         return used_codes
 
-    def remove_code(self, code_name):
+    def uncode_text_under_cursor(self, code_name):
         cursor = self.textCursor()
 
         for coded_text in self.coded_texts:
@@ -128,7 +128,13 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
 
         self.main_window.code_tab.code_tree.update_code_counts()
 
+    def dragMoveEvent(self, e):
+        e.accept()
+
     def dragEnterEvent(self, e):
+        e.accept()
+
+    def dropEvent(self, e):
         if e.mimeData().hasText():
             e.accept()
             name = e.mimeData().text()
