@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QListWidget
+from PySide6.QtWidgets import QListWidget, QListWidgetItem
 
 
 class FileList(QListWidget):
@@ -10,7 +10,14 @@ class FileList(QListWidget):
 
     def mousePressEvent(self, event):
         if self.itemAt(event.pos()) is not None:
-            self.main_window.note_tab.set_selected_item_info(self.itemAt(event.pos()).text(), "file")
+            data_file = self.itemAt(event.pos()).data_file
+            self.main_window.note_tab.set_selected_item_info(data_file.data_file_id, data_file.display_name, "file")
 
         super().mousePressEvent(event)
 
+
+class FileListItem(QListWidgetItem):
+    def __init__(self, file):
+        super().__init__()
+
+        self.data_file = file

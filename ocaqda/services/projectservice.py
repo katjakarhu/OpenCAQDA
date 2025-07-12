@@ -70,9 +70,7 @@ class ProjectService:
         for name in code_list:
             code = Code()
             code.name = name
-            code.project_id = self.current_project.project_id
-            code.created_by = UserService().user.user_id
-            code.updated_by = UserService().user.user_id
+            code = self.set_audit_data(code)
             session.add(code)
 
         session.commit()
@@ -98,9 +96,7 @@ class ProjectService:
                 new_file.url = str(file_path.absolute())
                 new_file.file_extension = file_path.suffix
                 self.add_file_content(file_path, new_file, session, user)
-                new_file.created_by = user.user_id
-                new_file.updated_by = user.user_id
-                new_file.project_id = self.current_project.project_id
+                new_file = self.set_audit_data(new_file)
                 session.add(new_file)
                 session.commit()
 
@@ -146,6 +142,8 @@ class ProjectService:
 
     def save_coded_text(self, coded_text):
         session = DatabaseConnectivity().create_new_db_session()
+        coded_text = self.set_audit_data(coded_text)
+
         session.add(coded_text)
         session.commit()
         session.close()
@@ -156,10 +154,9 @@ class ProjectService:
         session.close()
         return result
 
-    def get_coded_texts_by_code_name(self, name):
+    def get_coded_texts_by_code_id(self, id):
         session = DatabaseConnectivity().create_new_db_session()
-        code = self.get_code_by_name(name)
-        result = session.query(CodedText).where(CodedText.code_id == code.code_id).all()
+        result = session.query(CodedText).where(CodedText.code_id == id).all()
         session.close()
         return result
 
@@ -172,12 +169,6 @@ class ProjectService:
     def get_code(self, code_id):
         session = DatabaseConnectivity().create_new_db_session()
         result = session.query(Code).filter(Code.code_id == code_id).one()
-        session.close()
-        return result
-
-    def get_code_by_name(self, name):
-        session = DatabaseConnectivity().create_new_db_session()
-        result = session.query(Code).filter(Code.name == name).one()
         session.close()
         return result
 
@@ -221,9 +212,7 @@ class ProjectService:
                 r.from_code_id = parent_id
                 r.to_code_id = child_id
                 r.type = CodeRelationshipEnum.PARENT
-                r.created_by = UserService().user.user_id
-                r.updated_by = UserService().user.user_id
-                r.project_id = self.current_project.project_id
+                r = self.set_audit_data(r)
                 parent_child_list.append(r)
 
         if len(parent_child_list) > 0:
@@ -236,31 +225,30 @@ class ProjectService:
         session.close()
         return result
 
-    def load_note_for_code(self, name):
+    def load_note_for_code(self, id):
         session = DatabaseConnectivity().create_new_db_session()
         code = session.query(Code).where(
-            Code.project_id == self.current_project.project_id).filter(Code.name == name).one()
+            Code.project_id == self.current_project.project_id).filter(Code.code_id == id).one()
         note = code.note
         session.close()
         return note
 
-    def load_note_for_file(self, name):
+    def load_note_for_file(self, id):
         session = DatabaseConnectivity().create_new_db_session()
-        code = session.query(DataFile).where(
-            DataFile.project_id == self.current_project.project_id).filter(DataFile.display_name == name).one()
-        note = code.note
+        file = session.query(DataFile).where(
+            DataFile.project_id == self.current_project.project_id).filter(DataFile.data_file_id == id).one()
+        note = file.note
         session.close()
         return note
 
-    def save_note_for_code(self, name, note_text):
+    def save_note_for_code(self, id, note_text):
         session = DatabaseConnectivity().create_new_db_session()
         code = session.query(Code).where(
-            Code.project_id == self.current_project.project_id).filter(Code.name == name).one()
+            Code.project_id == self.current_project.project_id).filter(Code.code_id == id).one()
         if code.note is None:
             note = Note()
             note.text = note_text
-            note.created_by = UserService().user.user_id
-            note.updated_by = UserService().user.user_id
+            note = self.set_audit_data(note)
             code.note = note
         else:
             code.note.text = note_text
@@ -269,10 +257,10 @@ class ProjectService:
         session.commit()
         session.close()
 
-    def save_note_for_file(self, name, note_text):
+    def save_note_for_file(self, id, note_text):
         session = DatabaseConnectivity().create_new_db_session()
         file = session.query(DataFile).where(
-            DataFile.project_id == self.current_project.project_id).filter(DataFile.display_name == name).one()
+            DataFile.project_id == self.current_project.project_id).filter(DataFile.data_file_id == id).one()
         if file.note is None:
             note = Note()
             note.text = note_text
@@ -305,6 +293,12 @@ class ProjectService:
 
         session.close()
         return result
+
+    def set_audit_data(self, entity):
+        entity.created_by = UserService().user.user_id
+        entity.updated_by = UserService().user.user_id
+        entity.project_id = self.current_project.project_id
+        return entity
 
 
 def populate_projects():

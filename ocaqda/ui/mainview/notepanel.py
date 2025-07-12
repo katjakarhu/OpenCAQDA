@@ -38,23 +38,23 @@ class NotePanel(QWidget):
         layout.addWidget(self.note_area)
         self.setLayout(layout)
 
-    def set_selected_item_info(self, name, type):
+    def set_selected_item_info(self, id, name, type):
         self.save_current_note()
 
-        self.selected_item = [name, type]
+        self.selected_item = [id, type]
         self.info_label.setText("Selected " + type + " : " + name)
         self.note_instruction_label.setText("")
 
         self.note_area.clear()
-        self.load_note(name)
+        self.load_note(id)
 
-    def load_note(self, name):
+    def load_note(self, id):
         if self.selected_item[1] == "code":
-            note = self.load_note_for_code(name)
+            note = self.load_note_for_code(id)
             if note is not None:
                 self.note_area.setText(note.text)
         else:
-            note = self.load_note_for_file(name)
+            note = self.load_note_for_file(id)
             if note is not None:
                 self.note_area.setText(note.text)
 
@@ -65,22 +65,22 @@ class NotePanel(QWidget):
             elif self.selected_item[1] == "file":
                 self.save_note_for_file(self.selected_item[0])
 
-    def load_note_for_code(self, name):
+    def load_note_for_code(self, id):
         if self.selected_item is not None:
             if self.selected_item[1] == "code":
-                self.note = self.main_window.project_service.load_note_for_code(name)
+                self.note = self.main_window.project_service.load_note_for_code(id)
                 if self.note is not None:
                     self.note_area.setText(self.note.text)
 
-    def load_note_for_file(self, name):
+    def load_note_for_file(self, id):
         if self.selected_item is not None:
             if self.selected_item[1] == "file":
-                self.note = self.main_window.project_service.load_note_for_file(name)
+                self.note = self.main_window.project_service.load_note_for_file(id)
                 if self.note is not None:
                     self.note_area.setText(self.note.text)
 
-    def save_note_for_code(self, name):
-        self.main_window.project_service.save_note_for_code(name, self.note_area.toPlainText())
+    def save_note_for_code(self, id):
+        self.main_window.project_service.save_note_for_code(id, self.note_area.toPlainText())
 
-    def save_note_for_file(self, name):
-        self.main_window.project_service.save_note_for_file(name, self.note_area.toPlainText())
+    def save_note_for_file(self, id):
+        self.main_window.project_service.save_note_for_file(id, self.note_area.toPlainText())

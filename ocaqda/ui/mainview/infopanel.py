@@ -30,11 +30,11 @@ class InfoPanel(QWidget):
 
         self.setLayout(layout)
 
-    def set_selected_item_info(self, name, type):
+    def set_selected_item_info(self, id, name, type):
         self.result_list.clear()
-        self.selected_item = [name, type]
+        self.selected_item = [id, type]
         self.info_label.setText("Selected " + type + " : " + name)
-        coded_texts = self.main_window.project_service.get_coded_texts_by_code_name(name)
+        coded_texts = self.main_window.project_service.get_coded_texts_by_code_id(id)
 
         for c in coded_texts:
             file = self.main_window.project_service.get_file_by_id(c.data_file_id)

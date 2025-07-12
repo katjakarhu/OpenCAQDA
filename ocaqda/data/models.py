@@ -127,6 +127,8 @@ class CodedText(Base, TimestampColumnMixin, UserColumnMixin):
     data_file_id = Column(Integer, ForeignKey("data_files.data_file_id"), nullable=False)
     project_id = Column(Integer, ForeignKey("projects.project_id"), nullable=False)
 
+    __table_args__ = (UniqueConstraint('project_id', 'text', 'code_id', name='_project_text_code_uc'),)
+
 
 class Note(Base, TimestampColumnMixin, UserColumnMixin):
     __tablename__ = "notes"

@@ -125,7 +125,9 @@ class CodeTreeWidget(QTreeWidget):
         self.setCurrentItem(self.itemAt(event.pos()))
 
         if self.itemAt(event.pos()) is not None:
-            self.main_window.note_tab.set_selected_item_info(self.itemAt(event.pos()).text(0), "code")
+            code = self.itemAt(event.pos()).code
+            self.main_window.note_tab.set_selected_item_info(code.code_id,
+                                                             code.name, "code")
 
         if event.button() == Qt.MouseButton.LeftButton:
             if self.currentItem():
@@ -158,4 +160,6 @@ class CodeTreeWidget(QTreeWidget):
 
     def mouseDoubleClickEvent(self, event, /):
         if self.itemAt(event.pos()) is not None:
-            self.main_window.info_tab.set_selected_item_info(self.itemAt(event.pos()).text(0), "code")
+            code = self.itemAt(event.pos()).code
+            self.main_window.info_tab.set_selected_item_info(code.code_id,
+                                                             code.name, "code")

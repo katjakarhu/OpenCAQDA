@@ -6,7 +6,7 @@ from pathlib import Path
 from PySide6.QtCore import QStandardPaths, QEvent
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QMenu
 
-from ocaqda.ui.mainview.files.filelist import FileList
+from ocaqda.ui.mainview.files.filelist import FileList, FileListItem
 
 
 class FileSelectionTab(QWidget):
@@ -74,12 +74,14 @@ class FileSelectionTab(QWidget):
     def populate_file_list(self):
         self.file_list.clear()
         for f in self.main_window.project_service.get_project_files():
-            self.file_list.addItem(f.display_name)
+            item = FileListItem(f)
+            item.setText(f.display_name)
+            self.file_list.addItem(item)
 
     def open_file(self):
-        selected_file = self.file_list.currentItem().text()
+        selected_file = self.file_list.currentItem()
         for f in self.main_window.project_service.get_project_files():
-            if f.display_name == selected_file:
+            if f.data_file_id == selected_file.data_file.data_file_id:
                 self.main_window.text_content_panel.add_file_viewer(f)
 
     def manage_files(self):
@@ -89,9 +91,9 @@ class FileSelectionTab(QWidget):
         raise "Implement me!"
 
     def delete_file(self):
-
+        selected_file = self.file_list.currentItem()
         for f in self.main_window.project_service.get_project_files():
-            if f.display_name == self.file_list.currentItem().text():
+            if f.data_file_id == selected_file.data_file.data_file_id:
                 self.main_window.text_content_panel.close_tab(f.display_name)
                 self.main_window.project_service.delete_file_from_db(f)
                 break

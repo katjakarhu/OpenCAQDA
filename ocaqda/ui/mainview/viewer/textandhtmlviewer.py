@@ -6,7 +6,6 @@ from PySide6.QtGui import QTextCharFormat, QTextCursor, QColor, QUndoCommand, QC
 from PySide6.QtWidgets import QMenu, QTextBrowser, QWidget, QVBoxLayout, QLineEdit, QHBoxLayout, QPushButton
 
 from ocaqda.data.models import CodedText
-from ocaqda.services.userservice import UserService
 from ocaqda.ui.mainview.codes.addcodedialog import AddCodeDialog
 from ocaqda.utils.coding_utils import convert_and_merge_ranges
 
@@ -149,6 +148,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
             self.main_window.code_tab.code_tree.update_code_counts()
 
     def add_code_to_selected_text(self, current_selection, name):
+
         coded_text = CodedText()
         coded_text.data_file_id = self.data_file.data_file_id
         self.codes = self.main_window.project_service.get_project_codes()
@@ -159,11 +159,12 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         coded_text.text = current_selection
         coded_text.start_position = self.textCursor().selectionStart()
         coded_text.end_position = self.textCursor().selectionEnd()
-        coded_text.created_by = UserService().user.user_id
-        coded_text.updated_by = UserService().user.user_id
-        coded_text.project_id = self.main_window.project_service.current_project.project_id
-        self.main_window.project_service.save_coded_text(coded_text)
-        self.refresh_coded_text_highlight()
+
+        y = list(filter(lambda x: x.code_id == coded_text.code_id and x.text == coded_text.text, self.coded_texts))
+
+        if len(y) == 0:
+            self.main_window.project_service.save_coded_text(coded_text)
+            self.refresh_coded_text_highlight()
 
     def refresh_coded_text_highlight(self):
 
