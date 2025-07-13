@@ -72,7 +72,13 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
 
     def mousePressEvent(self, e):
         if e.button() == Qt.MouseButton.RightButton:
-            self.textCursor().select(QTextCursor.SelectionType.WordUnderCursor)
+            if self.textCursor().hasSelection():
+                pass
+            else:
+                cursor = self.cursorForPosition(e.pos())
+                position = cursor.position()
+                cursor.setPosition(position)
+                self.setTextCursor(cursor)
 
         super().mousePressEvent(e)
 
@@ -95,7 +101,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         c = self.get_used_codes_at_position()
         for code in c:
             action = uncode_submenu.addAction(code)
-            action.triggered.connect(lambda: self.uncode(code))
+            action.triggered.connect(lambda: self.uncode_text_under_cursor(code))
         menu.addMenu(uncode_submenu)
 
         menu.exec(event.globalPos())
