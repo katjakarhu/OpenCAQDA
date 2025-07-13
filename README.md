@@ -8,7 +8,7 @@ features: https://github.com/katjakarhu/OpenCAQDA/issues
 If you would like to participate, feel free to tackle unassigned issues!
 
 OpenCAQDA is an easy-to-use open source desktop application for qualitative data analysis. The goal is to provide the
-user with high visibility and control over the coding process, and therefore no AI feature are planned.
+user with high visibility and control over the coding process.
 
 You can:
 
@@ -101,13 +101,13 @@ See also "Issues" for open issues.
 
 ### Maybe some day
 
-- Codes to word cloud
-- Notes to word cloud
+- Word cloud
 - Sentiment analysis
-- Investigate other data analysis possibilities with Python that could be added here
+- Investigate other data analysis possibilities with Python
 - Image coding support (e.g. image to text, or other)
 - Video file coding support
 - CSV and Excel file coding (can be circumvented by converting to PDF or txt)
 - DOCX coding (can be circumvented by converting to PDF or txt)
 - RTF file coding (can be circumvented by converting to PDF ot txt)
 - Many projects open at the same time
+- AI-assistant based on a local finetuned SLM
