@@ -69,39 +69,38 @@ See also "Issues" for open issues.
 
 ### Mandatory
 
-- Better user flow when:
-    - Settings file does not exist
-    - Database does not exist
-- Coding functionality
-    - Managing codes: TODO, see issues
-- Configuration
-    - User configuration: preliminary version exists
-    - Database configuration: preliminary version exists
-- More unit tests
-
-### High priority:
-
-- Multi-user projects (with shared database)
-    - Editable DB settings
-    - Storing DB credentials
-    - Other than SQLite support (MySQL, Postgres, etc.)
 - Code relationships: visualization and editing
-
-### Nice to have:
-
+- Coding functionality
+    - Managing code (delete, rename)
 - Importing and exporting:
     - Codes
     - Notes/memos
     - Projects
+
+### High priority:
+
+- Better user flow when:
+    - Settings file does not exist
+    - Database does not exist
+- App configuration
+    - User configuration: preliminary version exists
+    - Database configuration: preliminary version exists
+- More unit tests
+- Multi-user projects (with shared database)
+    - Editable DB settings
+    - Storing DB credentials
+    - Other than SQLite support (MySQL, Postgres, etc.)
+
+### Nice to have:
+
 - Activity log:
-    - Who did what
-    - Can be used as a basis for reporting your analysis process
+    - Who did what (added notes, files, codes, edited codes, notes)
+    - Can be used for reporting your analysis process
 - Case study features:
     - Cross case analysis view: compare the codes in cases
 
 ### Maybe some day
 
-- Many projects open at the same time
 - Codes to word cloud
 - Notes to word cloud
 - Sentiment analysis
@@ -111,3 +110,4 @@ See also "Issues" for open issues.
 - CSV and Excel file coding (can be circumvented by converting to PDF or txt)
 - DOCX coding (can be circumvented by converting to PDF or txt)
 - RTF file coding (can be circumvented by converting to PDF ot txt)
+- Many projects open at the same time
