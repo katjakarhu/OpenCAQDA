@@ -134,3 +134,16 @@ class Note(Base, TimestampColumnMixin, UserColumnMixin):
     __tablename__ = "notes"
     note_id = Column(Integer, Sequence('note_id_seq'), primary_key=True)
     text = Column(Text, nullable=False)
+
+
+class Visualization(Base, TimestampColumnMixin, UserColumnMixin):
+    __tablename__ = "visualizations"
+    visualization_id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    codes = relationship("Code", backref=backref("Visualization"))
+    code_relationships = relationship("CodeRelationship", backref=backref("Visualization"))
+
+    note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=True)
+    note = relationship("Note", backref=backref("Visualization", uselist=False))
+
+    project_id = Column(Integer, ForeignKey("projects.project_id"), nullable=False)
