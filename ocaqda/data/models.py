@@ -1,11 +1,12 @@
 """
 Entities stored in database
 """
+from typing import List
 
 import bcrypt
 from sqlalchemy import Column, Integer, String, ForeignKey, LargeBinary, Sequence, UniqueConstraint, Text, DateTime, \
     func, Boolean, Enum
-from sqlalchemy.orm import declared_attr, relationship, backref, declarative_base
+from sqlalchemy.orm import declared_attr, relationship, backref, declarative_base, Mapped
 
 from ocaqda.data.enums.coderelationshipenum import CodeRelationshipEnum
 
@@ -89,6 +90,9 @@ class Code(Base, TimestampColumnMixin, UserColumnMixin):
     name = Column(String, nullable=False)
     note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=True)
     note = relationship("Note", backref=backref("Code", uselist=False))
+
+    visualization_id = Column(Integer, ForeignKey('visualizations.visualization_id'))
+
     project_id = Column(Integer, ForeignKey("projects.project_id"), nullable=False)
     __table_args__ = (UniqueConstraint('name', 'project_id', name='_name_project_uc'),)
 
@@ -106,6 +110,8 @@ class CodeRelationship(Base, TimestampColumnMixin, UserColumnMixin):
 
     note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=True)
     note = relationship("Note", backref=backref("CodeRelationship", uselist=False))
+
+    visualization_id = Column(Integer, ForeignKey('visualizations.visualization_id'))
 
     project_id = Column(Integer, ForeignKey("projects.project_id"), nullable=False)
 
@@ -140,8 +146,8 @@ class Visualization(Base, TimestampColumnMixin, UserColumnMixin):
     __tablename__ = "visualizations"
     visualization_id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    codes = relationship("Code", backref=backref("Visualization"))
-    code_relationships = relationship("CodeRelationship", backref=backref("Visualization"))
+    codes: Mapped[List["Code"]] = relationship()
+    codes_relationships: Mapped[List["CodeRelationship"]] = relationship()
 
     note_id = Column(Integer, ForeignKey("notes.note_id"), nullable=True)
     note = relationship("Note", backref=backref("Visualization", uselist=False))
