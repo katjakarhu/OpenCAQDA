@@ -71,7 +71,7 @@ See also "Issues" for open issues.
 
 - Code relationships: visualization and editing
 - Coding functionality
-    - Managing code (delete, rename)
+    - Managing codes (delete, rename)
 - Importing and exporting:
     - Codes
     - Notes/memos
