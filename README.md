@@ -7,16 +7,18 @@ features: https://github.com/katjakarhu/OpenCAQDA/issues
 
 If you would like to participate, feel free to tackle unassigned issues!
 
+## Background
+
 OpenCAQDA is an easy-to-use open source desktop application for qualitative data analysis. The goal is to provide the
-user with high visibility and control over the coding process.
+user with visibility, traceability, and control over the coding processs.
 
-You can:
-
-- Code plain text, PDF and HTML files
 
 <img width="1000" alt="Screenshot 2025-06-12 at 12 08 01" src="https://github.com/user-attachments/assets/601e591b-51cb-4665-a2a5-3bd7fe3233bc" />
 
 ## Features
+
+Supported file formats are plain text, MD, PDF and HTML files
+
 
 Create research projects, that contain a set of files and codes.
 
