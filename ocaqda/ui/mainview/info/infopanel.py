@@ -34,6 +34,7 @@ class InfoPanel(QWidget):
         self.result_list.clear()
         self.selected_item = [id, type]
         self.info_label.setText("Selected " + type + " : " + name)
+
         coded_texts = self.main_window.project_service.get_coded_texts_by_code_id(id)
 
         for c in coded_texts:

@@ -72,9 +72,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
 
     def mousePressEvent(self, e):
         if e.button() == Qt.MouseButton.RightButton:
-            if self.textCursor().hasSelection():
-                pass
-            else:
+            if not self.textCursor().hasSelection():
                 cursor = self.cursorForPosition(e.pos())
                 position = cursor.position()
                 cursor.setPosition(position)

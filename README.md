@@ -47,13 +47,16 @@ shared database use)
 
 You will need to have Python 3 installed.
 
+Set directory to Python path:
+`export PYTHONPATH=$PYTHONPATH:.`
+
 Install requirements:
 
 `pip install -r requirements.txt`
 
 Run app:
 
-`python main.py`
+`python3 main.py`
 
 ### Architecture
 

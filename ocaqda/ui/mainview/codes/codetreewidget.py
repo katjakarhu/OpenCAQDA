@@ -158,8 +158,14 @@ class CodeTreeWidget(QTreeWidget):
 
             self.main_window.project_service.update_code_parent_child_relationships(relations)
 
-    def mouseDoubleClickEvent(self, event, /):
-        if self.itemAt(event.pos()) is not None:
-            code = self.itemAt(event.pos()).code
+    # def mouseDoubleClickEvent(self, event, /):
+    # if self.itemAt(event.pos()):
+    #    code = self.itemAt(event.pos()).code
+    #    self.main_window.info_tab.set_selected_item_info(code.code_id,
+    #                                                     code.name, "code")
+
+    def selectionChanged(self, selected, deselected, /):
+        if selected:
+            code = self.selectedItems()[0].code
             self.main_window.info_tab.set_selected_item_info(code.code_id,
                                                              code.name, "code")

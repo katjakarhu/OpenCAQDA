@@ -53,10 +53,13 @@ class NotePanel(QWidget):
             note = self.load_note_for_code(id)
             if note is not None:
                 self.note_area.setText(note.text)
-        else:
+        elif self.selected_item[1] == "file":
             note = self.load_note_for_file(id)
             if note is not None:
                 self.note_area.setText(note.text)
+        elif self.selected_item[1] == "project":
+            #TODO
+            pass
 
     def save_current_note(self):
         if self.selected_item is not None:

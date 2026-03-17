@@ -136,7 +136,7 @@ class ProjectService:
 
     def get_project_codes(self):
         session = DatabaseConnectivity().create_new_db_session()
-        result = session.query(Code).filter(Code.project_id == self.current_project.project_id).all()
+        result = session.query(Code).where(Code.project_id == self.current_project.project_id).all()
         session.close()
         return result
 
@@ -185,8 +185,8 @@ class ProjectService:
         """
         session = DatabaseConnectivity().create_new_db_session()
 
-        parent_child_relationships = session.query(CodeRelationship).filter(
-            (CodeRelationship.project_id == self.current_project.project_id) &
+        parent_child_relationships = session.query(CodeRelationship).where(
+            (CodeRelationship.project_id == self.current_project.project_id)).filter(
             (CodeRelationship.type == CodeRelationshipEnum.PARENT)).all()
 
         for rel in parent_child_relationships:
@@ -220,7 +220,9 @@ class ProjectService:
 
     def get_parent_child_relationships(self):
         session = DatabaseConnectivity().create_new_db_session()
-        result = session.query(CodeRelationship.from_code_id, CodeRelationship.to_code_id).filter(
+
+        result = session.query(CodeRelationship.from_code_id, CodeRelationship.to_code_id).where(
+            CodeRelationship.project_id == self.current_project.project_id).filter(
             CodeRelationship.type == CodeRelationshipEnum.PARENT).all()
         session.close()
         return result

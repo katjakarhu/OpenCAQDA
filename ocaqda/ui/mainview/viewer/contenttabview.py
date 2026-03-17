@@ -34,26 +34,25 @@ class ContentTabView(QTabWidget):
     def focus_tab_by_name(self, name):
         self.setCurrentIndex(self.get_tab_index(name))
 
-    def is_tab_open(self, display_name):
+    def is_tab_open(self, name):
         for i in range(self.count()):
-            if display_name == self.tabText(i):
+            if name == self.tabText(i):
                 return True
         return False
 
-    def get_tab_index(self, display_name):
+    def get_tab_index(self, name):
         for i in range(self.count()):
-            if display_name == self.tabText(i):
+            if name == self.tabText(i):
                 return int(i)
         return None
 
-    def close_tab(self, display_name):
+    def close_tab(self, name):
         for i in range(self.count()):
-            if display_name == self.tabText(i):
+            if name == self.tabText(i):
                 self.removeTab(i)
 
     def get_file_name_from_open_tab(self):
         return self.tabText(self.currentIndex())
-
 
     def get_open_tab(self):
         return self.currentWidget()
