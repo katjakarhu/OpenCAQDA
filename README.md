@@ -13,7 +13,7 @@ OpenCAQDA is an easy-to-use open source desktop application for qualitative data
 user with visibility, traceability, and control over the coding process.
 
 
-<img width="1000" alt="Screenshot" src="[https://github.com/katjakarhu/OpenCaqda/screenshot.png](https://raw.githubusercontent.com/katjakarhu/OpenCAQDA/refs/heads/main/screenshot.png)" />
+<img width="1000" alt="Screenshot" src="https://raw.githubusercontent.com/katjakarhu/OpenCAQDA/refs/heads/main/screenshot.png" />
 
 ## Features
 
