@@ -10,7 +10,7 @@ If you would like to participate, feel free to tackle unassigned issues!
 ## Background
 
 OpenCAQDA is an easy-to-use open source desktop application for qualitative data analysis. The goal is to provide the
-user with visibility, traceability, and control over the coding processs.
+user with visibility, traceability, and control over the coding process.
 
 
 <img width="1000" alt="Screenshot 2025-06-12 at 12 08 01" src="https://github.com/user-attachments/assets/601e591b-51cb-4665-a2a5-3bd7fe3233bc" />
@@ -49,7 +49,7 @@ shared database use)
 
 You will need to have Python 3 installed.
 
-Set directory to Python path:
+Set the application directory to Python path:
 `export PYTHONPATH=$PYTHONPATH:.`
 
 Install requirements:
@@ -115,4 +115,3 @@ See also "Issues" for open issues.
 - DOCX coding (can be circumvented by converting to PDF or txt)
 - RTF file coding (can be circumvented by converting to PDF ot txt)
 - Many projects open at the same time
-- AI-assistant based on a local finetuned SLM
