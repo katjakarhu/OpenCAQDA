@@ -142,6 +142,7 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
             e.accept()
             name = e.mimeData().text()
             self.code_selection(name)
+            self.refresh_coded_text_highlight()
         else:
             e.ignore()
 
@@ -168,7 +169,6 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
 
         if len(y) == 0:
             self.main_window.project_service.save_coded_text(coded_text)
-            self.refresh_coded_text_highlight()
 
     def refresh_coded_text_highlight(self):
 
@@ -209,3 +209,4 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         text = self.createMimeDataFromSelection().text()
         self.main_window.code_tab.code_tree.add_and_save_code(text)
         self.code_selection(text)
+        self.refresh_coded_text_highlight()
