@@ -48,3 +48,9 @@ class ConvertAndMergeRangesTest(unittest.TestCase):
         result = convert_and_merge_ranges(l)
         TestCase.assertListEqual(self, result,
                                  [[20, 134, 'Lorem'], [135, 135, {'Dolor', 'Lorem'}], [136, 200, 'Dolor']])
+
+
+    def test_convert_and_merge_ranges6(self):
+        l = [[357, 1185, 'work experience'], [1187, 2057, 'software development and testing organization'], [1187, 3472, 'current state of testing'], [3473, 3750, 'current state of testing'], [3751, 4436, 'domain'], [3868, 4063, 'regulation'], [3868, 4438, 'regulation']]
+        result = convert_and_merge_ranges(l)
+        TestCase.assertListEqual(self, result, [[357, 1185, 'work experience'], [1187, 2057, {'software development and testing organization',  'current state of testing'}], [2058, 3750, 'current state of testing'], [3751, 4436, 'domain'], [3868, 4438, 'regulation']])

@@ -2,62 +2,48 @@ from ocaqda.data.models import CodeRelationship
 from ocaqda.utils.codetree import CodeTree
 
 
-def convert_and_merge_ranges(input_ranges):
-    # Sort the ranges based on the start position
-    sorted_ranges = sorted(input_ranges, key=lambda x: x[0])
+def convert_and_merge_ranges(l):
+    from collections import defaultdict
 
-    merged_ranges = set_ranges(sorted_ranges)
+    # Step 1: Create a dictionary to map each point to its labels
+    point_to_labels = defaultdict(set)
 
-    return merged_ranges
+    for start, end, label in l:
+        for point in range(start, end + 1):
+            point_to_labels[point].add(label)
 
+    if not point_to_labels:
+        return []
 
-def set_ranges(sorted_ranges):
-    """
-    Note that this method is vibe-coded with Mistral.ai
-    """
-    # Let's separate the overlapping ranges from non-overlapping ones
-    overlapped_ranges, not_overlapped_ranges = find_overlap(sorted_ranges)
+    # Step 2: Sort the points
+    sorted_points = sorted(point_to_labels.keys())
 
-    # Initialize a dictionary to hold the merged data
-    merged_dict = {}
-
-    # Iterate over each range in the input list
-    for start, end, value in overlapped_ranges:
-        # Ensure the range is correctly ordered
-        low, high = sorted([start, end])
-
-        # For each number in the range, add the value to the dictionary
-        for num in range(low, high + 1):
-            if num in merged_dict:
-                # If the number is already in the dictionary, we need to merge the values
-                if isinstance(merged_dict[num], set):
-                    merged_dict[num].add(value)
-                else:
-                    # Convert the existing value to a set and add the new value
-                    merged_dict[num] = {merged_dict[num], value}
-            else:
-                # If the number is not in the dictionary, add it with the current value
-                merged_dict[num] = value
-
-    # Convert the dictionary back to a list of lists and merge consecutive ranges with the same value
+    # Step 3: Merge consecutive points with the same labels
     result = []
-    if merged_dict:
-        start_num = min(merged_dict.keys())
-        current_value = merged_dict[start_num]
+    current_start = sorted_points[0]
+    current_labels = point_to_labels[current_start]
 
-        for num in range(start_num + 1, max(merged_dict.keys()) + 1):
-            if merged_dict.get(num) != current_value:
-                result.append([start_num, num - 1, current_value])
-                start_num = num
-                current_value = merged_dict[num]
+    for point in sorted_points[1:]:
+        if point_to_labels[point] == current_labels:
+            continue
+        else:
+            # Add the current range to the result
+            if len(current_labels) == 1:
+                label = next(iter(current_labels))
+            else:
+                label = current_labels
+            result.append([current_start, point - 1, label])
+            current_start = point
+            current_labels = point_to_labels[point]
 
-        result.append([start_num, max(merged_dict.keys()), current_value])
+    # Add the last range
+    if len(current_labels) == 1:
+        label = next(iter(current_labels))
+    else:
+        label = current_labels
+    result.append([current_start, sorted_points[-1], label])
 
-    # Add not overlapping ranges back to the mix and sort
-    result = result + not_overlapped_ranges
-    merged_ranges = sorted(result, key=lambda x: x[0])
-
-    return merged_ranges
+    return result
 
 
 def find_overlap(sorted_ranges):
