@@ -41,6 +41,11 @@ class CodeTreeWidget(QTreeWidget):
                 self.update_child_code_count(item.child(j))
 
     def populate_code_list(self):
+        previously_expanded = []
+        for i in range(self.topLevelItemCount()-1):
+            previously_expanded.append((self.topLevelItem(i).text(0), self.topLevelItem(i).isExpanded()))
+
+
         self.clear()
 
         code_relationships = self.main_window.project_service.get_parent_child_relationships()
@@ -59,7 +64,14 @@ class CodeTreeWidget(QTreeWidget):
                 self.add_children_to_parent(item, node)
             items.append(item)
 
+        for item in items:
+            for t, e in previously_expanded:
+                if item.text(0) == t:
+                    item.setExpanded(e)
+
         self.insertTopLevelItems(0, items)
+
+
 
     def add_children_to_parent(self, item, node):
         for c in node.children:
@@ -157,6 +169,10 @@ class CodeTreeWidget(QTreeWidget):
                 iterator += 1
 
             self.main_window.project_service.update_code_parent_child_relationships(relations)
+        else:
+            # TODO: drag and drop text to code
+            pass
+
 
     # def mouseDoubleClickEvent(self, event, /):
     # if self.itemAt(event.pos()):
