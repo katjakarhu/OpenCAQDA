@@ -63,7 +63,7 @@ class CodedSection(object):
 
 def set_ranges(sorted_ranges):
     """
-    Note that this method is vibe-coded with Mistral.ai
+    Note that this method is partially vibe-coded with Mistral.ai
     """
     # Let's separate the overlapping ranges from non-overlapping ones
     overlapped_ranges, not_overlapped_ranges = find_overlap(sorted_ranges)
@@ -91,17 +91,24 @@ def set_ranges(sorted_ranges):
 
     # Convert the dictionary back to a list of lists and merge consecutive ranges with the same value
     result = []
+
     if merged_dict:
         start_num = min(merged_dict.keys())
         current_value = merged_dict[start_num]
+        previous_key = start_num
+        i = 0
 
-        for num in range(start_num + 1, max(merged_dict.keys()) + 1):
-            if merged_dict.get(num) != current_value:
-                result.append([start_num, num - 1, current_value])
-                start_num = num
-                current_value = merged_dict[num]
+        for key in merged_dict.keys():
+            if merged_dict[key] != current_value:
+                result.append([start_num, previous_key, current_value])
+                start_num = key
 
-        result.append([start_num, max(merged_dict.keys()), current_value])
+            if i == len(merged_dict.keys()) - 1:
+                result.append([start_num, key, merged_dict[key]])
+
+            previous_key = key
+            current_value = merged_dict[key]
+            i = i + 1
 
     # Add not overlapping ranges back to the mix and sort
     result = result + not_overlapped_ranges

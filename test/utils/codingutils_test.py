@@ -54,3 +54,10 @@ class ConvertAndMergeRangesTest(unittest.TestCase):
         l = [[357, 1185, 'work experience'], [1187, 2057, 'software development and testing organization'], [1187, 3472, 'current state of testing'], [3473, 3750, 'current state of testing'], [3751, 4436, 'domain'], [3868, 4063, 'regulation'], [3868, 4438, 'regulation']]
         result = convert_and_merge_ranges(l)
         TestCase.assertListEqual(self, result, [[357, 1185, 'work experience'], [1187, 2057, {'software development and testing organization',  'current state of testing'}], [2058, 3750, 'current state of testing'], [3751, 3867, 'domain'], [3868, 4436, {'domain', 'regulation'} ], [4437, 4438, 'regulation']])
+
+    def test_convert_and_merge_ranges7(self):
+        l = [[3751, 4436, 'domain'], [3868, 4063, 'regulation'], [3868, 4438, 'regulation'], [4506, 5607, 'current status of AI adoption'], [4506, 5607, 'researching AI adoption'], [5609, 6125, 'lack of strategy'], [6127, 6658, 'current status of AI adoption'], [6728, 7413, 'document generation use case']]
+        result = convert_and_merge_ranges(l)
+        TestCase.assertListEqual(self, result,
+                                 [[3751, 3867, 'domain'], [3868, 4436, {'domain', 'regulation'} ], [4437, 4438, 'regulation'], [4506, 5607, {'current status of AI adoption', 'researching AI adoption'}], [5609, 6125, 'lack of strategy'], [6127, 6658, 'current status of AI adoption'], [6728, 7413, 'document generation use case']])
+
