@@ -17,23 +17,15 @@ def convert_and_merge_ranges(input_ranges):
     for cs in coded_sections:
         codes_with_ranges.setdefault(cs.codename, []).append([cs.start, cs.end])
 
-    print(sorted_ranges)
-
-
     for k in codes_with_ranges.keys():
         codes_with_ranges[k] = sorted(codes_with_ranges[k], key=lambda x: [x[0],x[1]])
         codes_with_ranges[k] = remove_overlap(codes_with_ranges[k])
 
-
-    print(codes_with_ranges)
-
     rnages = []
     for k in codes_with_ranges.keys():
-        print("ehwjkehwjqk", k, codes_with_ranges[k])
         for j in range(len(codes_with_ranges[k])):
             rnages.append([codes_with_ranges[k][j][0], codes_with_ranges[k][j][1], k])
 
-    print(rnages)
     sorted_ranges = sorted(rnages, key=lambda x: x[0])
 
     merged_ranges = set_ranges(sorted_ranges)
