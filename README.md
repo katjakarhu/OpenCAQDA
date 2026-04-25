@@ -48,7 +48,8 @@ shared database use)
 
 You will need to have Python 3 installed.
 
-Set the application directory to Python path:
+Go to project directory.Set the application directory to Python path:
+
 `export PYTHONPATH=$PYTHONPATH:.`
 
 Install requirements:
@@ -57,7 +58,7 @@ Install requirements:
 
 Run app:
 
-`python3 main.py`
+`python3 ocaqda/main.py`
 
 ### Architecture
 
