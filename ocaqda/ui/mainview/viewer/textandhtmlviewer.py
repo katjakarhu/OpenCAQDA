@@ -7,6 +7,7 @@ from PySide6.QtWidgets import QMenu, QTextBrowser, QWidget, QVBoxLayout, QLineEd
 
 from ocaqda.data.models import CodedText
 from ocaqda.ui.mainview.codes.addcodedialog import AddCodeDialog
+from ocaqda.ui.mainview.codes.codetreewidget import CodeTreeWidget
 from ocaqda.utils.coding_utils import convert_and_merge_ranges
 
 
@@ -77,8 +78,14 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
                 position = cursor.position()
                 cursor.setPosition(position)
                 self.setTextCursor(cursor)
+            super().mousePressEvent(e)
 
-        super().mousePressEvent(e)
+        elif e.button() == Qt.MouseButton.LeftButton:
+            super().mousePressEvent(e)
+            p = self.textCursor().position()
+            #coded_texts = self.main_window.project_service.get_coded_texts_by_file_and_position(self.data_file.data_file_id, p)
+
+
 
     def contextMenuEvent(self, event):
         menu = self.createStandardContextMenu()
@@ -138,9 +145,10 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         e.accept()
 
     def dropEvent(self, e):
-        if e.mimeData().hasText():
+
+        if isinstance(e.source(), CodeTreeWidget):
             e.accept()
-            name = e.mimeData().text()
+            name = e.source().currentItem().text(0)
             self.code_selection(name)
             self.refresh_coded_text_highlight()
         else:
@@ -175,8 +183,6 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.coded_texts = self.main_window.project_service.get_coded_texts_by_file(self.data_file.data_file_id,
                                                                                     self.data_file.display_name)
         cursor = QTextCursor(self.document())
-        string_format = QTextCharFormat()
-        string_format.setBackground(QColor("yellow"))
 
         positions = []
 
@@ -187,6 +193,13 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         merged_positions = convert_and_merge_ranges(positions)
 
         for item in merged_positions:
+            string_format = QTextCharFormat()
+            string_format.setBackground(QColor("yellow"))
+            if type(item[2]) is set and len(item[2]) > 1:
+                string_format.setBackground(QColor("orange"))
+            elif type(item[2]) is set and len(item[2]) > 5:
+                string_format.setBackground(QColor("red"))
+
             cursor.setPosition(item[0])
             cursor.setPosition(item[1], QTextCursor.MoveMode.KeepAnchor)
             string_format.setToolTip(str(item[2]))
@@ -210,3 +223,4 @@ class HTMLViewer(QTextBrowser, QUndoCommand):
         self.main_window.code_tab.code_tree.add_and_save_code(text)
         self.code_selection(text)
         self.refresh_coded_text_highlight()
+

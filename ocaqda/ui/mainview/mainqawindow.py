@@ -46,6 +46,11 @@ class MainQAWindow(QMainWindow):
         file_menu.addAction(save_action)
         file_menu.addSeparator()
 
+        export_codes_action = QAction('&Export codes', self)
+        export_memos_action = QAction('&Export memos', self)
+        #export_codes_action.triggered.connect()
+        tools_menu.addAction(export_codes_action)
+
         visualize_action = QAction('&Visualize project', self)
         # tools_menu.addAction(visualize_action)
 

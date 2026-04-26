@@ -141,17 +141,9 @@ class CodeTreeWidget(QTreeWidget):
             self.main_window.note_tab.set_selected_item_info(code.code_id,
                                                              code.name, "code")
 
-        if event.button() == Qt.MouseButton.LeftButton:
-            if self.currentItem():
-                mime_data = QMimeData()
-                mime_data.setText(self.currentItem().text(0))
 
-                drag = QDrag(self)
-                drag.setMimeData(mime_data)
+        super().mousePressEvent(event)
 
-                drag.exec(Qt.DropAction.CopyAction)
-        else:
-            super().mousePressEvent(event)
 
     def dropEvent(self, event):
         if event.source() == self:
@@ -180,7 +172,7 @@ class CodeTreeWidget(QTreeWidget):
     #    self.main_window.info_tab.set_selected_item_info(code.code_id,
     #                                                     code.name, "code")
 
-    def selectionChanged(self, selected, deselected, /):
+    def selectionChanged(self, selected, deselected):
         if selected:
             code = self.selectedItems()[0].code
             self.main_window.info_tab.set_selected_item_info(code.code_id,
