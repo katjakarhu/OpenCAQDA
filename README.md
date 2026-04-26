@@ -19,7 +19,6 @@ user with visibility, traceability, and control over the coding process.
 
 Supported file formats are plain text, MD, PDF and HTML files
 
-
 Create research projects, that contain a set of files and codes.
 
 Drag and drop coding: select text and drag code over it (left mouse button).
@@ -31,7 +30,7 @@ Quick filter codes: find the relevant codes easily
 
 Searching within one or multiple files
 
-You can attach notes to codes or files in the "Notes" tab
+You can attach memos to codes or files in the "Memos" tab
 
 ### Supported file formats:
 
@@ -49,7 +48,8 @@ shared database use)
 
 You will need to have Python 3 installed.
 
-Set the application directory to Python path:
+Go to project directory.Set the application directory to Python path:
+
 `export PYTHONPATH=$PYTHONPATH:.`
 
 Install requirements:
@@ -58,7 +58,7 @@ Install requirements:
 
 Run app:
 
-`python3 main.py`
+`python3 ocaqda/main.py`
 
 ### Architecture
 
@@ -79,7 +79,7 @@ See also "Issues" for open issues.
     - Managing codes (delete, rename)
 - Importing and exporting:
     - Codes
-    - Notes/memos
+    - Memos
     - Projects
 
 ### High priority:
@@ -99,7 +99,7 @@ See also "Issues" for open issues.
 ### Nice to have:
 
 - Activity log:
-    - Who did what (added notes, files, codes, edited codes, notes)
+    - Who did what (added memos, files, codes, edited codes, memos)
     - Can be used for reporting your analysis process
 - Case study features:
     - Cross case analysis view: compare the codes in cases
