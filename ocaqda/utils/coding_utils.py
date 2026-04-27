@@ -36,18 +36,18 @@ def remove_overlap(cr):
     is_sorted = False
     while not is_sorted:
         merged = False
-        for i in range(len(cr)-2):
-            if cr[i][1] + 1 >= cr[i+1][0]:
-                if cr[i][1] >= cr[i+1][1]:
-                    cr.remove(cr[i + 1])
-                    i -= 1
-                    merged = True
-                elif cr[i][1] < cr[i + 1][1]:
-                    cr[i][1] = cr[i + 1][1]
-                    cr.remove(cr[i + 1])
-                    i -= 1
-                    merged = True
-
+        for i in range(len(cr)-1):
+            if i + 1 < len(cr):
+                if cr[i][1] + 1 >= cr[i+1][0]:
+                    if cr[i][1] >= cr[i+1][1]:
+                        cr.remove(cr[i + 1])
+                        i -= 1
+                        merged = True
+                    elif cr[i][1] < cr[i + 1][1]:
+                        cr[i][1] = cr[i + 1][1]
+                        cr.remove(cr[i + 1])
+                        i -= 1
+                        merged = True
             i+=1
         if not merged:
             is_sorted = True
